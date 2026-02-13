@@ -45,6 +45,7 @@
         #loginScreen {
             flex-direction: column;
             text-align: center;
+            z-index: 10;
         }
         .login-container {
             background: rgba(255,255,255,0.08);
@@ -113,6 +114,7 @@
             flex-direction: column;
             background-color: #0f2f3b;
             padding: 0;
+            z-index: 5;
         }
         .full-frame {
             width: 100%;
@@ -154,24 +156,6 @@
             z-index: 10000;
             pointer-events: none;
         }
-        /* instruksi kecil */
-        .instruction-box {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            right: 20px;
-            background: rgba(255,215,0,0.9);
-            color: #0b2a3c;
-            padding: 16px;
-            border-radius: 24px;
-            font-weight: bold;
-            text-align: center;
-            box-shadow: 0 4px 10px black;
-            z-index: 2000;
-            pointer-events: none;
-            border: 2px solid white;
-            transition: opacity 0.5s;
-        }
     </style>
 </head>
 <body>
@@ -202,7 +186,6 @@
         (function() {
             "use strict";
 
-            // Elemen utama
             const loginScreen = document.getElementById('loginScreen');
             const formScreen = document.getElementById('formScreen');
             const tokenInput = document.getElementById('tokenInput');
@@ -210,20 +193,28 @@
             const cheatOverlay = document.getElementById('cheatOverlay');
             const formIframe = document.getElementById('googleFormEmbed');
 
-            // Token yang benar
             const CORRECT_TOKEN = "Sosiologi";
 
-            // State
             let isCheating = false;
             let isLoggedIn = false;
-            
-            // Variabel aktivitas
-            let lastActivityTime = Date.now();
-            let isInteractingWithForm = false;
+            let securityActive = false; // Flag baru untuk menunda deteksi keamanan
 
-            // Fungsi kembali ke login
+            // PERBAIKAN: Fungsi Fullscreen
+            function activateFullscreen() {
+                const docElm = document.documentElement;
+                if (docElm.requestFullscreen) {
+                    docElm.requestFullscreen();
+                } else if (docElm.mozRequestFullScreen) {
+                    docElm.mozRequestFullScreen();
+                } else if (docElm.webkitRequestFullScreen) {
+                    docElm.webkitRequestFullScreen();
+                } else if (docElm.msRequestFullscreen) {
+                    docElm.msRequestFullscreen();
+                }
+            }
+
             function forceBackToLogin(reason = 'cheat') {
-                if (isCheating) return;
+                if (isCheating || !securityActive) return; // Jangan trigger jika keamanan belum siap
                 isCheating = true;
 
                 cheatOverlay.classList.remove('hidden');
@@ -231,32 +222,39 @@
                 setTimeout(() => {
                     loginScreen.classList.remove('hidden');
                     formScreen.classList.add('hidden');
-                    
                     tokenInput.value = '';
                     cheatOverlay.classList.add('hidden');
                     
                     isCheating = false;
                     isLoggedIn = false;
-                    isInteractingWithForm = false;
+                    securityActive = false;
 
+                    // Keluar dari fullscreen jika terjadi kecurangan
+                    if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+                    
                     setTimeout(() => tokenInput.focus(), 100);
                 }, 1200);
             }
 
-            // Fungsi login berhasil
             function enterFormScreen() {
                 if (isLoggedIn) return;
-                isLoggedIn = true;
+                
+                // Minta Fullscreen saat klik tombol masuk
+                activateFullscreen();
 
+                isLoggedIn = true;
                 loginScreen.classList.add('hidden');
                 formScreen.classList.remove('hidden');
                 
-                lastActivityTime = Date.now();
-                
+                // PERBAIKAN: Berikan jeda 1 detik agar browser menstabilkan fokus
+                // Ini mencegah deteksi kecurangan palsu saat transisi
+                setTimeout(() => {
+                    securityActive = true;
+                }, 1000);
+
                 if (navigator.vibrate) navigator.vibrate(20);
             }
 
-            // Event login
             loginBtn.addEventListener('click', function(e) {
                 e.preventDefault();
                 const token = tokenInput.value.trim();
@@ -278,110 +276,52 @@
 
             tokenInput.focus();
 
-            // ================== SISTEM PENGAMANAN ==================
+            // ================== KEAMANAN ==================
             
-            // Anti klik kanan
-            document.addEventListener('contextmenu', function(e) {
-                e.preventDefault();
-                return false;
-            });
+            document.addEventListener('contextmenu', e => e.preventDefault());
 
-            // Anti pindah tab
             document.addEventListener('visibilitychange', function() {
-                if (document.hidden && isLoggedIn && !isCheating) {
+                if (document.hidden && isLoggedIn && securityActive) {
                     forceBackToLogin('tab switch');
                 }
             });
 
-            // Anti blur window
             window.addEventListener('blur', function() {
-                if (isLoggedIn && !isCheating) {
-                    forceBackToLogin('window blur');
+                if (isLoggedIn && securityActive && !isCheating) {
+                    // Cek apakah fokus pindah ke iframe (bukan curang)
+                    if (document.activeElement !== formIframe) {
+                        forceBackToLogin('window blur');
+                    }
                 }
             });
 
-            // Deteksi load iframe
-            formIframe.addEventListener('load', function() {
-                console.log('Form loaded');
-            });
-
-            // Deteksi interaksi layar
-            document.addEventListener('touchstart', function() {
-                if (isLoggedIn && !isCheating) {
-                    lastActivityTime = Date.now();
-                    isInteractingWithForm = true;
-                    setTimeout(() => { isInteractingWithForm = false; }, 500);
-                }
-            });
-
-            // Variabel gesture
-            let touchStartTime = 0;
-            let touchStartX = 0, touchStartY = 0;
-            
-            document.addEventListener('touchstart', function(e) {
-                if (isLoggedIn && !isCheating) {
-                    touchStartTime = Date.now();
-                    touchStartX = e.touches[0].clientX;
-                    touchStartY = e.touches[0].clientY;
-                }
-            });
-
-            document.addEventListener('touchend', function(e) {
-                if (isLoggedIn && !isCheating && e.touches.length === 0) {
-                    // Placeholder untuk logika durasi sentuhan jika diperlukan
-                }
-            });
-
-            // Deteksi multi-touch (3 jari atau lebih)
+            // Deteksi multi-touch
             document.addEventListener('touchmove', function(e) {
-                if (e.touches.length >= 3 && isLoggedIn && !isCheating && !isInteractingWithForm) {
+                if (e.touches.length >= 3 && isLoggedIn && securityActive) {
                     forceBackToLogin('multi touch');
                 }
             }, { passive: false });
 
-            // Deteksi resize (split screen)
+            // Deteksi resize signifikan
             let lastWidth = window.innerWidth;
-            let lastHeight = window.innerHeight;
-            let resizeCount = 0;
-            
             window.addEventListener('resize', function() {
-                if (isLoggedIn && !isCheating) {
+                if (isLoggedIn && securityActive) {
                     let newWidth = window.innerWidth;
-                    let newHeight = window.innerHeight;
-                    
                     if (Math.abs(newWidth - lastWidth) > 100) {
-                        resizeCount++;
-                        if (resizeCount > 2) {
-                            forceBackToLogin('resize width');
-                        }
-                    } else {
-                        resizeCount = 0;
+                        forceBackToLogin('resize');
                     }
-                    
                     lastWidth = newWidth;
-                    lastHeight = newHeight;
-                } else {
-                    lastWidth = window.innerWidth;
-                    lastHeight = window.innerHeight;
                 }
             });
 
-            // Anti copy/cut/paste
-            document.addEventListener('copy', (e) => { if (isLoggedIn) e.preventDefault(); });
-            document.addEventListener('cut', (e) => { if (isLoggedIn) e.preventDefault(); });
-            document.addEventListener('paste', (e) => { if (isLoggedIn) e.preventDefault(); });
+            document.addEventListener('copy', e => { if (isLoggedIn) e.preventDefault(); });
+            document.addEventListener('cut', e => { if (isLoggedIn) e.preventDefault(); });
+            document.addEventListener('paste', e => { if (isLoggedIn) e.preventDefault(); });
+            document.addEventListener('selectstart', e => { if (isLoggedIn) e.preventDefault(); });
+            document.addEventListener('dragstart', e => e.preventDefault());
 
-            // Mencegah seleksi teks
-            document.addEventListener('selectstart', (e) => {
-                if (isLoggedIn) e.preventDefault();
-            });
-
-            // Anti drag
-            document.addEventListener('dragstart', (e) => e.preventDefault());
-
-            // Deteksi DevTools Shortcut
             document.addEventListener('keydown', function(e) {
-                if (isLoggedIn && !isCheating) {
+                if (isLoggedIn && securityActive) {
                     if (e.key === 'F12' || 
                         (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
                         (e.ctrlKey && e.key === 'U')) {
@@ -391,50 +331,32 @@
                 }
             });
 
-            // Handle tombol back browser/mobile
             history.pushState(null, null, location.href);
             window.onpopstate = function() {
-                if (isLoggedIn && !isCheating) {
+                if (isLoggedIn && securityActive) {
                     forceBackToLogin('back button');
                 } else {
                     history.pushState(null, null, location.href);
                 }
             };
 
-            // Deteksi Pull-to-Refresh
+            // Anti Pull-to-Refresh
             let startY = 0;
-            let pullThreshold = 150;
-            
             document.addEventListener('touchstart', (e) => {
-                if (isLoggedIn) {
-                    startY = e.touches[0].clientY;
-                }
+                startY = e.touches[0].clientY;
             }, { passive: true });
             
             document.addEventListener('touchmove', (e) => {
-                if (isLoggedIn && !isCheating) {
+                if (isLoggedIn) {
                     const currentY = e.touches[0].clientY;
                     const diffY = currentY - startY;
-                    
-                    if (window.scrollY <= 5 && diffY > pullThreshold) {
+                    if (window.scrollY <= 5 && diffY > 150) {
                         e.preventDefault();
-                        forceBackToLogin('pull refresh');
+                        if(securityActive) forceBackToLogin('pull refresh');
                     }
                 }
             }, { passive: false });
 
-            // Helper check iframe event
-            function isEventFromIframe(e) {
-                const path = e.composedPath();
-                for (let el of path) {
-                    if (el === formIframe || el.tagName === 'IFRAME') {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            console.log('Sistem keamanan aktif - interaksi form diizinkan');
         })();
     </script>
 </body>
