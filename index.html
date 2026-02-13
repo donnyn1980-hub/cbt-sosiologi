@@ -18,9 +18,8 @@
             background-color: #0b2a3c;
             font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
             overflow: hidden;
-            touch-action: pan-y pinch-zoom;
+            touch-action: none; /* Mencegah zoom dan scroll liar */
         }
-        /* LAYAR PENUH FLEX */
         .screen {
             position: absolute;
             top: 0;
@@ -41,12 +40,9 @@
             pointer-events: none !important;
             visibility: hidden !important;
         }
+
         /* TAMPILAN LOGIN */
-        #loginScreen {
-            flex-direction: column;
-            text-align: center;
-            z-index: 20;
-        }
+        #loginScreen { flex-direction: column; text-align: center; z-index: 20; }
         .login-container {
             background: rgba(255,255,255,0.08);
             backdrop-filter: blur(8px);
@@ -58,19 +54,6 @@
             max-width: 340px;
             box-shadow: 0 25px 40px -10px black;
         }
-        .login-container h1 {
-            font-size: 2.2rem;
-            font-weight: 300;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
-        }
-        .login-container p {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-bottom: 28px;
-            border-bottom: 1px dashed rgba(255,255,255,0.3);
-            padding-bottom: 16px;
-        }
         .token-input {
             background: rgba(0,0,0,0.35);
             border: 2px solid #3fa9b0;
@@ -81,12 +64,10 @@
             color: white;
             outline: none;
             text-align: center;
-            letter-spacing: 2px;
-            caret-color: #7fd1d7;
             margin-bottom: 24px;
         }
 
-        /* TAMPILAN FORM (EMBED) */
+        /* TAMPILAN FORM */
         #formScreen {
             display: flex;
             flex-direction: column;
@@ -98,6 +79,8 @@
             flex: 1;
             width: 100%;
             position: relative;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
         }
         .full-frame {
             width: 100%;
@@ -106,83 +89,77 @@
             background: white;
         }
 
-        /* KEYBOARD VIRTUAL (Diletakkan di bawah form) */
+        /* KEYBOARD VIRTUAL FIX */
         .v-keyboard-container {
             width: 100%;
-            background: #1a1a1a;
-            padding: 10px 5px;
-            border-top: 2px solid #3fa9b0;
+            background: #111;
+            padding: 8px 4px;
+            border-top: 3px solid #3fa9b0;
+            z-index: 2000;
         }
         .v-keyboard {
             display: grid;
             grid-template-columns: repeat(10, 1fr);
             gap: 4px;
-            max-width: 600px;
+            max-width: 500px;
             margin: 0 auto;
         }
         .v-key {
-            background: #333;
+            background: #2c2c2c;
             border: 1px solid #444;
-            padding: 12px 2px;
+            padding: 14px 0;
             border-radius: 6px;
             color: white;
-            font-size: 0.9rem;
+            font-size: 1rem;
             font-weight: bold;
             text-align: center;
             cursor: pointer;
             user-select: none;
+            touch-action: manipulation;
         }
-        .v-key:active {
-            background: #3fa9b0;
-            color: #0b2a3c;
-        }
-        .v-key.wide { grid-column: span 1.5; background: #444; }
-        .v-key.space { grid-column: span 5; }
+        .v-key:active { background: #3fa9b0; }
+        .v-key.wide { grid-column: span 1.5; }
+        .v-key.space { grid-column: span 4; }
 
-        /* TOMBOL X POJOK KANAN ATAS */
+        /* TOMBOL X */
         .btn-close-exam {
             position: absolute;
             top: 10px;
             right: 10px;
             width: 35px;
             height: 35px;
-            background: rgba(255, 0, 0, 0.7);
+            background: rgba(255, 0, 0, 0.8);
             color: white;
             border: 2px solid white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
-            z-index: 1000;
+            z-index: 3000;
             cursor: pointer;
         }
 
-        /* OVERLAY CHEATING */
         .cheat-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.95);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             z-index: 9999;
-            backdrop-filter: blur(5px);
             flex-direction: column;
             text-align: center;
-            padding: 20px;
         }
         .btn-login {
             background: #3fa9b0; border: none; border-radius: 60px; padding: 16px 32px;
             width: 100%; font-size: 1.4rem; font-weight: 600; color: #0b2a3c;
-            box-shadow: 0 8px 0 #1e5f64; transition: all 0.05s linear;
-            text-transform: uppercase; letter-spacing: 2px;
+            box-shadow: 0 6px 0 #1e5f64;
         }
-        .btn-login:active { transform: translateY(5px); box-shadow: 0 3px 0 #1e5f64; }
     </style>
 </head>
 <body>
+
     <div id="loginScreen" class="screen">
         <div class="login-container">
             <h1>✧ SOSIOLOGI ✧</h1>
@@ -195,7 +172,7 @@
     <div id="formScreen" class="screen hidden">
         <div id="btnClose" class="btn-close-exam">✕</div>
         
-        <div class="iframe-container">
+        <div class="iframe-container" id="scrollArea">
             <iframe id="googleFormEmbed" class="full-frame" 
                 src="https://docs.google.com/forms/d/e/1FAIpQLSc85_F7-3tEVaA24WFICtwOmonjKzRSEt82UcfO1vIx2cjF5Q/viewform?embedded=true">
             </iframe>
@@ -203,30 +180,23 @@
 
         <div class="v-keyboard-container">
             <div class="v-keyboard">
-                <div class="v-key">1</div><div class="v-key">2</div><div class="v-key">3</div><div class="v-key">4</div><div class="v-key">5</div>
-                <div class="v-key">6</div><div class="v-key">7</div><div class="v-key">8</div><div class="v-key">9</div><div class="v-key">0</div>
-                
                 <div class="v-key">Q</div><div class="v-key">W</div><div class="v-key">E</div><div class="v-key">R</div><div class="v-key">T</div>
                 <div class="v-key">Y</div><div class="v-key">U</div><div class="v-key">I</div><div class="v-key">O</div><div class="v-key">P</div>
-                
                 <div class="v-key">A</div><div class="v-key">S</div><div class="v-key">D</div><div class="v-key">F</div><div class="v-key">G</div>
-                <div class="v-key">H</div><div class="v-key">J</div><div class="v-key">K</div><div class="v-key">L</div><div class="v-key">@</div>
-                
-                <div class="v-key wide" id="shiftBtn">UP</div>
+                <div class="v-key">H</div><div class="v-key">J</div><div class="v-key">K</div><div class="v-key">L</div><div class="v-key">M</div>
+                <div class="v-key wide">UP</div>
                 <div class="v-key">Z</div><div class="v-key">X</div><div class="v-key">C</div><div class="v-key">V</div><div class="v-key">B</div>
-                <div class="v-key">N</div><div class="v-key">M</div>
-                <div class="v-key wide" id="backspaceBtn">DEL</div>
-
-                <div class="v-key space" id="spaceBtn">SPACE</div>
-                <div class="v-key wide" style="grid-column: span 2.5; background: #3fa9b0; color: #0b2a3c;" id="tabBtn">TAB</div>
-                <div class="v-key wide" style="grid-column: span 2.5; background: #ffd166; color: #0b2a3c;" id="enterBtn">ENTER</div>
+                <div class="v-key">N</div>
+                <div class="v-key wide">DEL</div>
+                <div class="v-key space">SPACE</div>
+                <div class="v-key wide" style="grid-column: span 3; background: #3fa9b0;">ENTER</div>
+                <div class="v-key wide" style="grid-column: span 3; background: #ffd166;">TAB</div>
             </div>
         </div>
 
         <div id="cheatOverlay" class="cheat-overlay hidden">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">⚠️</div>
-            <div>TERDETEKSI KECURANGAN</div>
-            <div style="font-size: 1rem; margin-top: 1rem;">kembali ke login ...</div>
+            <div style="font-size: 3rem;">⚠️</div>
+            <div>KECURANGAN TERDETEKSI</div>
         </div>
     </div>
 
@@ -243,29 +213,19 @@
             const formIframe = document.getElementById('googleFormEmbed');
 
             const CORRECT_TOKEN = "Sosiologi";
-            let isCheating = false;
             let isLoggedIn = false;
             let securityActive = false;
-            let isUpperCase = true;
 
-            // LOGIKA KEYBOARD VIRTUAL UNTUK GOOGLE FORM
-            // Catatan: Keyboard virtual tidak bisa langsung mengetik ke DALAM iframe Google Form 
-            // karena batasan keamanan browser (Cross-Origin). 
-            // Namun, keyboard ini akan membantu mencegah keyboard sistem muncul 
-            // jika siswa menggunakan trik copy-paste atau jika form memperbolehkan input eksternal.
-            // Di sini keyboard dibuat untuk simulasi input atau instruksi.
-            
-            document.querySelectorAll('.v-key').forEach(key => {
-                key.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const val = key.innerText;
-                    if (navigator.vibrate) navigator.vibrate(10);
-                    
-                    // Karena kita tidak bisa akses DOM di dalam iframe Google Form, 
-                    // Keyboard ini berfungsi sebagai "Safe Input Overlay" atau sekadar pemanis 
-                    // agar sistem mendeteksi ada interaksi aktif di luar iframe.
-                    console.log("Key pressed: " + val);
-                });
+            // --- PERBAIKAN KEYBOARD BAWAAN ---
+            // Trik: Fokuskan kembali ke elemen non-input secara paksa setiap kali iframe disentuh
+            // Ini akan mencoba menutup keyboard sistem yang muncul secara otomatis.
+            window.addEventListener('blur', () => {
+                if (isLoggedIn && securityActive) {
+                    // Beri jeda sangat singkat agar keyboard sistem tidak sempat naik penuh
+                    setTimeout(() => {
+                        window.focus();
+                    }, 50);
+                }
             });
 
             function activateFullscreen() {
@@ -275,79 +235,50 @@
             }
 
             function forceBackToLogin() {
-                if (isCheating || !securityActive) return;
-                isCheating = true;
+                if (!securityActive) return;
                 securityActive = false;
                 cheatOverlay.classList.remove('hidden');
-
                 setTimeout(() => {
-                    loginScreen.classList.remove('hidden');
-                    formScreen.classList.add('hidden');
-                    tokenInput.value = '';
-                    cheatOverlay.classList.add('hidden');
-                    isCheating = false;
-                    isLoggedIn = false;
-                    if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
-                }, 1200);
+                    location.reload(); // Reload adalah cara teraman untuk reset state
+                }, 1500);
             }
 
             btnClose.addEventListener('click', () => {
-                if(confirm("Kembali ke menu login? Semua progres yang belum disubmit mungkin hilang.")) {
-                    forceBackToLogin();
-                }
+                if(confirm("Kembali ke login?")) forceBackToLogin();
             });
-
-            function enterFormScreen() {
-                if (isLoggedIn) return;
-                activateFullscreen();
-                isLoggedIn = true;
-                loginScreen.classList.add('hidden');
-                formScreen.classList.remove('hidden');
-                
-                // Delay keamanan agar tidak langsung trigger saat fullscreen aktif
-                setTimeout(() => { securityActive = true; }, 2000);
-            }
 
             loginBtn.addEventListener('click', () => {
                 if (tokenInput.value.trim() === CORRECT_TOKEN) {
-                    enterFormScreen();
+                    activateFullscreen();
+                    isLoggedIn = true;
+                    loginScreen.classList.add('hidden');
+                    formScreen.classList.remove('hidden');
+                    setTimeout(() => { securityActive = true; }, 2000);
                 } else {
                     alert('Token salah!');
-                    tokenInput.value = '';
                 }
             });
 
-            // --- SISTEM KEAMANAN ---
+            // Deteksi Kecurangan
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden && securityActive) forceBackToLogin();
+            });
+
+            // Mencegah menu konteks
             document.addEventListener('contextmenu', e => e.preventDefault());
 
-            document.addEventListener('visibilitychange', () => {
-                if (document.hidden && isLoggedIn && securityActive) forceBackToLogin();
-            });
-
-            window.addEventListener('blur', () => {
-                if (isLoggedIn && securityActive && !isCheating) {
-                    // Jika yang difokuskan bukan iframe, maka dianggap curang
-                    setTimeout(() => {
-                        if (document.activeElement !== formIframe) {
-                            forceBackToLogin();
-                        }
-                    }, 200);
-                }
-            });
-
-            // Deteksi resize (split screen / ganti resolusi)
+            // Deteksi Resize (Keyboard sistem biasanya merubah tinggi layar secara drastis)
+            let initialHeight = window.innerHeight;
             window.addEventListener('resize', () => {
                 if (isLoggedIn && securityActive) {
-                    if (window.innerHeight < 200) forceBackToLogin();
+                    // Jika tinggi berkurang drastis (>150px), kemungkinan keyboard sistem muncul
+                    if (initialHeight - window.innerHeight > 150) {
+                        // Paksa blur untuk mencoba menutup keyboard
+                        document.activeElement.blur();
+                        window.focus();
+                    }
                 }
             });
-
-            // Prevent browser back
-            history.pushState(null, null, location.href);
-            window.onpopstate = () => {
-                if (isLoggedIn && securityActive) forceBackToLogin();
-                else history.pushState(null, null, location.href);
-            };
 
         })();
     </script>
