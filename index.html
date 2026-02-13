@@ -175,7 +175,6 @@
     </style>
 </head>
 <body>
-    <!-- LAYAR LOGIN -->
     <div id="loginScreen" class="screen">
         <div class="login-container">
             <h1>✧ SOSIOLOGI ✧</h1>
@@ -185,15 +184,12 @@
         </div>
     </div>
 
-    <!-- LAYAR FORM DENGAN LINK GOOGLE FORM YANG SUDAH DISESUAIKAN -->
     <div id="formScreen" class="screen hidden">
-        <!-- LINK GOOGLE FORM (SUDAH DIGANTI DENGAN LINK YANG DIBERIKAN) -->
         <iframe id="googleFormEmbed" class="full-frame" 
             src="https://docs.google.com/forms/d/e/1FAIpQLSc85_F7-3tEVaA24WFICtwOmonjKzRSEt82UcfO1vIx2cjF5Q/viewform?embedded=true"
             title="Google Form Ujian">
         </iframe>
 
-        <!-- OVERLAY CHEATING -->
         <div id="cheatOverlay" class="cheat-overlay hidden">
             <div style="font-size: 3rem; margin-bottom: 1rem;">⚠️</div>
             <div>TERDETEKSI KECURANGAN</div>
@@ -212,6 +208,7 @@
             const tokenInput = document.getElementById('tokenInput');
             const loginBtn = document.getElementById('loginBtn');
             const cheatOverlay = document.getElementById('cheatOverlay');
+            const formIframe = document.getElementById('googleFormEmbed');
 
             // Token yang benar
             const CORRECT_TOKEN = "Sosiologi";
@@ -220,7 +217,7 @@
             let isCheating = false;
             let isLoggedIn = false;
             
-            // Variabel untuk membedakan interaksi yang sah
+            // Variabel aktivitas
             let lastActivityTime = Date.now();
             let isInteractingWithForm = false;
 
@@ -254,7 +251,6 @@
                 loginScreen.classList.add('hidden');
                 formScreen.classList.remove('hidden');
                 
-                // Reset aktivitas
                 lastActivityTime = Date.now();
                 
                 if (navigator.vibrate) navigator.vibrate(20);
@@ -282,7 +278,7 @@
 
             tokenInput.focus();
 
-            // ================== SISTEM PENGAMANAN YANG DIPERBAIKI ==================
+            // ================== SISTEM PENGAMANAN ==================
             
             // Anti klik kanan
             document.addEventListener('contextmenu', function(e) {
@@ -290,43 +286,35 @@
                 return false;
             });
 
-            // Anti pindah tab (tetap aktif karena ini indikasi curang yang valid)
+            // Anti pindah tab
             document.addEventListener('visibilitychange', function() {
                 if (document.hidden && isLoggedIn && !isCheating) {
                     forceBackToLogin('tab switch');
                 }
             });
 
-            // Anti blur window (tetap aktif)
+            // Anti blur window
             window.addEventListener('blur', function() {
                 if (isLoggedIn && !isCheating) {
                     forceBackToLogin('window blur');
                 }
             });
 
-            // PERBAIKAN: Deteksi interaksi dengan iframe (menggunakan focus event)
-            // Ini untuk membedakan interaksi normal dengan kecurangan
-            const formIframe = document.getElementById('googleFormEmbed');
-            
-            // Saat iframe mendapat fokus (user mengklik form)
+            // Deteksi load iframe
             formIframe.addEventListener('load', function() {
-                // Coba deteksi focus pada iframe (terbatas karena same-origin policy)
-                // Tapi kita bisa menggunakan window blur/focus dengan cara berbeda
                 console.log('Form loaded');
             });
 
-            // PERBAIKAN: Event untuk mendeteksi interaksi dengan layar
+            // Deteksi interaksi layar
             document.addEventListener('touchstart', function() {
                 if (isLoggedIn && !isCheating) {
                     lastActivityTime = Date.now();
                     isInteractingWithForm = true;
-                    // Reset flag setelah beberapa saat
                     setTimeout(() => { isInteractingWithForm = false; }, 500);
                 }
             });
 
-            // PERBAIKAN: Hapus deteksi pinch yang terlalu sensitif
-            // Ganti dengan deteksi yang lebih spesifik untuk kecurangan
+            // Variabel gesture
             let touchStartTime = 0;
             let touchStartX = 0, touchStartY = 0;
             
@@ -340,23 +328,18 @@
 
             document.addEventListener('touchend', function(e) {
                 if (isLoggedIn && !isCheating && e.touches.length === 0) {
-                    // Hitung durasi sentuhan
-                    const touchDuration = Date.now() - touchStartTime;
-                    
-                    // Jika sentuhan terlalu singkat (mungkin bot) atau terlalu panjang (mencurigakan)
-                    // Tapi ini hanya contoh, kita tidak perlu trigger cheat untuk ini
+                    // Placeholder untuk logika durasi sentuhan jika diperlukan
                 }
             });
 
-            // PERBAIKAN: Nonaktifkan deteksi pinch zoom yang menyebabkan false positive
-            // Hanya deteksi jika jumlah jari >= 3 (kemungkinan gesture aneh)
+            // Deteksi multi-touch (3 jari atau lebih)
             document.addEventListener('touchmove', function(e) {
                 if (e.touches.length >= 3 && isLoggedIn && !isCheating && !isInteractingWithForm) {
                     forceBackToLogin('multi touch');
                 }
             }, { passive: false });
 
-            // PERBAIKAN: Deteksi resize yang lebih akurat
+            // Deteksi resize (split screen)
             let lastWidth = window.innerWidth;
             let lastHeight = window.innerHeight;
             let resizeCount = 0;
@@ -366,7 +349,6 @@
                     let newWidth = window.innerWidth;
                     let newHeight = window.innerHeight;
                     
-                    // Perubahan lebar yang signifikan (kemungkinan split screen)
                     if (Math.abs(newWidth - lastWidth) > 100) {
                         resizeCount++;
                         if (resizeCount > 2) {
@@ -384,18 +366,12 @@
                 }
             });
 
-            // Anti copy/paste di luar form (tetap dipertahankan)
-            document.addEventListener('copy', (e) => {
-                if (isLoggedIn) e.preventDefault();
-            });
-            document.addEventListener('cut', (e) => {
-                if (isLoggedIn) e.preventDefault();
-            });
-            document.addEventListener('paste', (e) => {
-                if (isLoggedIn) e.preventDefault();
-            });
+            // Anti copy/cut/paste
+            document.addEventListener('copy', (e) => { if (isLoggedIn) e.preventDefault(); });
+            document.addEventListener('cut', (e) => { if (isLoggedIn) e.preventDefault(); });
+            document.addEventListener('paste', (e) => { if (isLoggedIn) e.preventDefault(); });
 
-            // Mencegah seleksi teks hanya saat login
+            // Mencegah seleksi teks
             document.addEventListener('selectstart', (e) => {
                 if (isLoggedIn) e.preventDefault();
             });
@@ -403,7 +379,7 @@
             // Anti drag
             document.addEventListener('dragstart', (e) => e.preventDefault());
 
-            // Deteksi keyboard shortcut untuk devtools
+            // Deteksi DevTools Shortcut
             document.addEventListener('keydown', function(e) {
                 if (isLoggedIn && !isCheating) {
                     if (e.key === 'F12' || 
@@ -415,7 +391,7 @@
                 }
             });
 
-            // Handle tombol back
+            // Handle tombol back browser/mobile
             history.pushState(null, null, location.href);
             window.onpopstate = function() {
                 if (isLoggedIn && !isCheating) {
@@ -425,7 +401,7 @@
                 }
             };
 
-            // PERBAIKAN: Deteksi pull-to-refresh yang lebih akurat
+            // Deteksi Pull-to-Refresh
             let startY = 0;
             let pullThreshold = 150;
             
@@ -440,7 +416,6 @@
                     const currentY = e.touches[0].clientY;
                     const diffY = currentY - startY;
                     
-                    // Jika scroll di top dan menarik ke bawah melebihi threshold
                     if (window.scrollY <= 5 && diffY > pullThreshold) {
                         e.preventDefault();
                         forceBackToLogin('pull refresh');
@@ -448,13 +423,8 @@
                 }
             }, { passive: false });
 
-            // PERBAIKAN: Izinkan interaksi normal dengan iframe
-            // Dengan memberikan pengecualian untuk event yang berasal dari iframe
-            
-            // Fungsi untuk mengecek apakah event berasal dari iframe
+            // Helper check iframe event
             function isEventFromIframe(e) {
-                // Cara sederhana: jika target adalah iframe atau di dalam iframe
-                // Ini terbatas karena same-origin policy, tapi cukup untuk mencegah false positive
                 const path = e.composedPath();
                 for (let el of path) {
                     if (el === formIframe || el.tagName === 'IFRAME') {
@@ -463,11 +433,6 @@
                 }
                 return false;
             }
-
-            // Modifikasi event listener untuk mengecualikan interaksi iframe
-            const originalForceBack = forceBackToLogin;
-            
-            // Override sementara untuk keperluan debug (tidak perlu diubah)
 
             console.log('Sistem keamanan aktif - interaksi form diizinkan');
         })();
