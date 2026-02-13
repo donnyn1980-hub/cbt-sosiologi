@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Aplikasi Ujian Sosiologi (Mobile)</title>
+    <style>
+        /* RESET & DASAR */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none; /* disable callout */
+            -webkit-user-select: none;   /* disable text selection */
+            user-select: none;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: #0b2a3c;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            overflow: hidden; /* mencegah scroll pada body */
+            touch-action: pan-y pinch-zoom; /* minimal, tapi kami kunci pinch nanti */
+        }
+        /* LAYAR PENUH FLEX */
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            transition: opacity 0.2s ease;
+            background: linear-gradient(145deg, #0b2a3c 0%, #123b4e 100%);
+            color: white;
+            overflow: hidden;
+        }
+        /* HIDDEN STATE (awalnya form tersembunyi) */
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+            visibility: hidden; /* tambahan */
+        }
+        /* TAMPILAN LOGIN */
+        #loginScreen {
+            flex-direction: column;
+            text-align: center;
+            backdrop-filter: blur(2px);
+        }
+        .login-container {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 36px;
+            padding: 32px 24px;
+            width: 100%;
+            max-width: 340px;
+            box-shadow: 0 25px 40px -10px black;
+        }
+        .login-container h1 {
+            font-size: 2.2rem;
+            font-weight: 300;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+        .login-container p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 28px;
+            border-bottom: 1px dashed rgba(255,255,255,0.3);
+            padding-bottom: 16px;
+        }
+        .token-input {
+            background: rgba(0,0,0,0.35);
+            border: 2px solid #3fa9b0;
+            border-radius: 60px;
+            padding: 16px 22px;
+            width: 100%;
+            font-size: 1.2rem;
+            color: white;
+            outline: none;
+            text-align: center;
+            letter-spacing: 2px;
+            caret-color: #7fd1d7; /* kursor tetap terlihat */
+            margin-bottom: 24px;
+            transition: border 0.2s;
+        }
+        .token-input:focus {
+            border-color: #ffd166;
+        }
+        .btn-login {
+            background: #3fa9b0;
+            border: none;
+            border-radius: 60px;
+            padding: 16px 32px;
+            width: 100%;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #0b2a3c;
+            box-shadow: 0 8px 0 #1e5f64;
+            transition: all 0.05s linear;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+        .btn-login:active {
+            transform: translateY(5px);
+            box-shadow: 0 3px 0 #1e5f64;
+        }
+        /* TAMPILAN FORM (EMBED) */
+        #formScreen {
+            flex-direction: column;
+            background-color: #0f2f3b;
+            padding: 0;  /* fullscreen */
+        }
+        .full-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+        }
+        /* pesan error / cheating overlay */
+        .cheat-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            z-index: 9999;
+            backdrop-filter: blur(5px);
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+            pointer-events: none; /* biar tidak mengganggu deteksi, tetapi muncul */
+        }
+        .cheat-overlay.hidden {
+            display: none;
+        }
+        .small-note {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #cccccc90;
+            z-index: 10000;
+            pointer-events: none;
+        }
+        /* placeholder untuk embed link — TANDAI LOKASI */
+        .instruction-box {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(255,215,0,0.9);
+            color: #0b2a3c;
+            padding: 16px;
+            border-radius: 24px;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 4px 10px black;
+            z-index: 2000;
+            pointer-events: none;
+            border: 2px solid white;
+        }
+    </style>
+</head>
+<body>
+    <!-- LAYAR LOGIN (AWAL) -->
+    <div id="loginScreen" class="screen">
+        <div class="login-container">
+            <h1>✧ SOSIOLOGI ✧</h1>
+            <p>masukkan token untuk memulai</p>
+            <input type="text" id="tokenInput" class="token-input" placeholder="Token" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            <button id="loginBtn" class="btn-login">MASUK</button>
+        </div>
+    </div>
+
+    <!-- LAYAR FORM (EMBED GOOGLE FORM) + TANDAI LOKASI -->
+    <div id="formScreen" class="screen hidden">
+        <!-- LETAKKAN LINK GOOGLE FORM DI BAWAH: GANTI 'src' DENGAN LINK FORM -->
+        <iframe id="googleFormEmbed" class="full-frame" 
+            src="https://docs.google.com/forms/d/e/1FAIpQLSc85_F7-3tEVaA24WFICtwOmonjKzRSEt82UcfO1vIx2cjF5Q/viewform?embedded=true"
+            title="Google Form Ujian">
+        </iframe>
+        <!-- TANDA LOKASI: 1. ganti src di atas dengan link form-mu -->
+        <!-- TANDA LOKASI: 2. Jika ingin embed form responsif, pastikan link menggunakan ?embedded=true -->
+
+        <!-- INSTRUKSI LOKASI (hanya sebagai penanda, bisa dihapus jika sudah ganti link) -->
+        <div class="instruction-box" id="lokasiTandai">
+            ⚡ TANDAI LOKASI: ganti atribut src iframe dengan link google form-mu (embedded)
+        </div>
+
+        <!-- OVERLAY CHEATING (muncul jika terdeteksi) -->
+        <div id="cheatOverlay" class="cheat-overlay hidden">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">⚠️</div>
+            <div>TERDETEKSI KECURANGAN</div>
+            <div style="font-size: 1rem; margin-top: 1rem;">kembali ke login ...</div>
+        </div>
+        <div class="small-note">🔒 mode aman aktif</div>
+    </div>
+
+    <script>
+        (function() {
+            "use strict";
+
+            // Elemen utama
+            const loginScreen = document.getElementById('loginScreen');
+            const formScreen = document.getElementById('formScreen');
+            const tokenInput = document.getElementById('tokenInput');
+            const loginBtn = document.getElementById('loginBtn');
+            const cheatOverlay = document.getElementById('cheatOverlay');
+            const lokasiTandai = document.getElementById('lokasiTandai');
+
+            // Token yang benar
+            const CORRECT_TOKEN = "Sosiologi";
+
+            // State untuk menghindari multiple redirect
+            let isCheating = false;
+            let isLoggedIn = false;
+
+            // Fungsi kembali ke login dengan efek cheat (overlay muncul)
+            function forceBackToLogin(reason = 'cheat') {
+                if (isCheating) return; // sudah dalam proses
+                isCheating = true;
+
+                // Tampilkan overlay cheating
+                cheatOverlay.classList.remove('hidden');
+
+                // Sembunyikan jika ada instruksi
+                if (lokasiTandai) lokasiTandai.style.display = 'none';
+
+                // Setelah 1.2 detik, kembali ke login dan reset state
+                setTimeout(() => {
+                    // Pindah layar
+                    loginScreen.classList.remove('hidden');
+                    formScreen.classList.add('hidden');
+                    
+                    // Reset input
+                    tokenInput.value = '';
+                    
+                    // Sembunyikan overlay
+                    cheatOverlay.classList.add('hidden');
+                    
+                    // Reset state
+                    isCheating = false;
+                    isLoggedIn = false;
+
+                    // Tampilkan lagi instruksi jika ada (opsional)
+                    if (lokasiTandai) lokasiTandai.style.display = 'block';
+
+                    // Fokus ke input (aman)
+                    setTimeout(() => tokenInput.focus(), 100);
+                }, 1200); // biar kelihatan warningnya
+            }
+
+            // Fungsi login berhasil (masuk ke layar form)
+            function enterFormScreen() {
+                if (isLoggedIn) return; // sudah login
+                isLoggedIn = true;
+
+                // Sembunyikan login, tampilkan form
+                loginScreen.classList.add('hidden');
+                formScreen.classList.remove('hidden');
+
+                // Hapus instruksi lokasi setelah beberapa detik? biarkan saja sebagai penanda
+                // Bisa juga disembunyikan otomatis setelah 4 detik agar tidak mengganggu
+                if (lokasiTandai) {
+                    setTimeout(() => {
+                        if (lokasiTandai) lokasiTandai.style.opacity = '0';
+                    }, 4000);
+                    setTimeout(() => {
+                        if (lokasiTandai) lokasiTandai.style.display = 'none';
+                    }, 5000);
+                }
+
+                // Sedikit getaran (opsional)
+                if (navigator.vibrate) navigator.vibrate(20);
+            }
+
+            // Event login
+            loginBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const token = tokenInput.value.trim();
+                if (token === CORRECT_TOKEN) {
+                    enterFormScreen();
+                } else {
+                    alert('Token salah!');
+                    tokenInput.value = '';
+                    tokenInput.focus();
+                }
+            });
+
+            // Juga izinkan enter di input
+            tokenInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    loginBtn.click();
+                }
+            });
+
+            // Fokus otomatis ke input saat layar login tampil
+            tokenInput.focus();
+
+            // ================== SISTEM PENGAMANAN ==================
+            // Anti klik kanan
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // Anti pindah tab / visibility (jika pengguna pindah tab, dianggap curang)
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden && isLoggedIn && !isCheating) {
+                    forceBackToLogin('tab switch');
+                }
+            });
+
+            // Anti blur: ketika window kehilangan fokus (misal alt+tab, pindah app)
+            window.addEventListener('blur', function() {
+                if (isLoggedIn && !isCheating) {
+                    forceBackToLogin('window blur');
+                }
+            });
+
+            // Deteksi devtools / inspect element (sederhana, namun bisa diakali)
+            // Menggunakan timer untuk memeriksa lebar layar / keanehan (jika terlalu kecil)
+            let devtoolsOpen = false;
+            const checkDevTools = function() {
+                // Trik konvensional: memeriksa objek console (tidak selalu akurat di mobile)
+                // namun mobile biasanya tidak ada devtools kecuali remote debug. Tambahan keamanan:
+                if (window.outerHeight - window.innerHeight > 200) {
+                    // kemungkinan devtools terbuka (di desktop), tapi di mobile jarang.
+                    if (isLoggedIn && !isCheating) {
+                        forceBackToLogin('devtools');
+                    }
+                }
+
+                // Deteksi performa: jika terjadi debugger terpaut (tidak terlalu berguna di mobile)
+                // kita skip, karena dapat memicu false positive.
+            };
+            // Jalankan tiap detik
+            setInterval(checkDevTools, 2000);
+
+            // Anti pinch zoom / zoom berlebih (membatasi skalasi)
+            document.addEventListener('touchmove', function(e) {
+                // Jika jumlah jari dua (pinch) dan sedang login, bisa dicurigai sebagai usaha cheat
+                if (e.touches.length >= 2 && isLoggedIn && !isCheating) {
+                    forceBackToLogin('pinch detected');
+                }
+            }, { passive: false });
+
+            // Juga cegah gesture zoom bawaan (opsional)
+            document.addEventListener('gesturestart', function(e) {
+                e.preventDefault();
+                if (isLoggedIn && !isCheating) forceBackToLogin('gesture');
+            });
+
+            // Anti screenshot / record (tidak bisa total, tapi tambahkan event)
+            // Beberapa browser mengirim 'visibilitychange' saat screenshot di Android? tidak selalu.
+            // Namun tambahkan event 'resize' mencurigakan (misal keyboard muncul -> aman, tapi jika ukuran layar berubah drastis)
+            let lastWidth = window.innerWidth;
+            let lastHeight = window.innerHeight;
+            window.addEventListener('resize', function() {
+                // Jika perubahan ukuran signifikan dan tidak disebabkan oleh keyboard (biasa keyboard naik, tinggi berkurang)
+                // di mobile, jika tinggi berkurang > 200 dan lebar tetap, mungkin keyboard. Kita abaikan.
+                // Namun jika lebar berubah drastis, mungkin orientasi atau windowing mencurigakan.
+                if (isLoggedIn && !isCheating) {
+                    let newWidth = window.innerWidth;
+                    let newHeight = window.innerHeight;
+
+                    // Deteksi apakah perubahan karena keyboard (height turun, width tetap)
+                    let heightDiff = lastHeight - newHeight;
+                    if (Math.abs(newWidth - lastWidth) > 50) {
+                        // Lebar berubah banyak -> mungkin window drag atau split view -> curang
+                        forceBackToLogin('resize width');
+                    } else if (heightDiff > 300) {
+                        // kemungkinan keyboard muncul, jangan reset, just ignore. Tapi kami tidak melakukan reset
+                        // karena keyboard normal. Namun jika height bertambah (keyboard turun) juga normal.
+                        // Kami tambahkan pengecekan bahwa height bertambah drastis tanpa input -> curang? resiko false positive.
+                        // Untuk aman, kami hanya trigger jika width berubah atau height bertambah > 300 (misal bar navigation muncul)
+                        if (newHeight > lastHeight + 150) {
+                            // kemungkinan bar navigation menghilang, tapi bisa juga jepretan. Abaikan dulu.
+                        }
+                    }
+                    // update last
+                    lastWidth = newWidth;
+                    lastHeight = newHeight;
+                } else {
+                    lastWidth = window.innerWidth;
+                    lastHeight = window.innerHeight;
+                }
+            });
+
+            // Anti paste / cut / copy di dalam form? kita sudah disable user-select, tapi tambahan:
+            document.addEventListener('copy', (e) => e.preventDefault());
+            document.addEventListener('cut', (e) => e.preventDefault());
+            document.addEventListener('paste', (e) => {
+                // izinkan paste di input token saja, tapi di form tidak bisa karena disable.
+                if (!isLoggedIn) return true; // boleh di login
+                e.preventDefault(); // ketika di formScreen, cegah
+            });
+
+            // Mencegah pemilihan teks ganda (selectstart)
+            document.addEventListener('selectstart', (e) => e.preventDefault());
+
+            // Menonaktifkan drag
+            document.addEventListener('dragstart', (e) => e.preventDefault());
+
+            // Deteksi multiple windows / tab? sudah di visibilitychange.
+
+            // Deteksi jika pengguna mencoba keluar dari aplikasi (blur sudah menangani)
+            // Tambahan: screenshot di ios? tidak ada event spesifik, namun blur sudah cukup.
+
+            // Tambahan untuk mencegah inspeksi via keyboard eksternal (Ctrl+Shift+I, F12) di Android? sulit.
+            // Kita bisa tangkap keydown kombinasi tertentu.
+            document.addEventListener('keydown', function(e) {
+                // Deteksi F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+                    (e.ctrlKey && e.key === 'U')) {
+                    e.preventDefault();
+                    if (isLoggedIn && !isCheating) forceBackToLogin('inspector');
+                }
+            });
+
+            // Pastikan jika sudah login, user tidak bisa kembali ke login dengan tombol back
+            history.pushState(null, null, location.href);
+            window.onpopstate = function() {
+                if (isLoggedIn && !isCheating) {
+                    forceBackToLogin('back button');
+                } else {
+                    history.pushState(null, null, location.href);
+                }
+            };
+
+            // Cegah pull-to-refresh (bisa dianggap curang jika menarik)
+            let startY = 0;
+            document.addEventListener('touchstart', (e) => {
+                startY = e.touches[0].clientY;
+            }, { passive: false });
+            document.addEventListener('touchmove', (e) => {
+                // Jika di bagian paling atas dan scroll ke bawah, cegah dan curiga
+                if (window.scrollY <= 0 && e.touches[0].clientY > startY) {
+                    e.preventDefault();
+                    if (isLoggedIn && !isCheating) forceBackToLogin('pull refresh');
+                }
+            }, { passive: false });
+
+            // Mencegah interaksi dengan iframe yang mencurigakan? iframe google form aman.
+            // Jika iframe mencoba navigasi keluar? tidak akan karena kita menggunakan domain google.
+
+            // Sebagai final, pastikan bahwa instruksi penanda lokasi bisa dihilangkan setelah form aktif.
+        })();
+    </script>
+</body>
+</html>
