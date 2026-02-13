@@ -4,144 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Aplikasi Ujian Sosiologi - Ultra Secure</title>
-    <style>
-        /* RESET & LAYOUT */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
-        body, html {
-            width: 100%;
-            height: 100%;
-            background-color: #0b2a3c;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            overflow: hidden;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-
-        .screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            transition: opacity 0.3s ease;
-        }
-
-        /* LOGIN SCREEN */
-        #loginScreen {
-            background: linear-gradient(145deg, #0b2a3c 0%, #123b4e 100%);
-            z-index: 100;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .login-box {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 40px 25px;
-            border-radius: 30px;
-            text-align: center;
-            width: 85%;
-            max-width: 360px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
-        }
-        .login-box h2 { 
-            color: #7fd1d7; 
-            margin-bottom: 10px; 
-            font-weight: 300;
-            letter-spacing: 3px;
-        }
-        
-        /* FIX AUTOFILL: Menggunakan kombinasi inputmode dan name acak */
-        .token-input {
-            width: 100%;
-            padding: 16px;
-            border-radius: 50px;
-            border: 2px solid #3fa9b0;
-            background: rgba(0,0,0,0.3);
-            color: white;
-            text-align: center;
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            outline: none;
-            /* Mencegah asisten browser */
-            autocomplete: off;
-        }
-
-        .btn-login {
-            width: 100%;
-            padding: 16px;
-            border-radius: 50px;
-            border: none;
-            background: #3fa9b0;
-            color: #0b2a3c;
-            font-weight: bold;
-            font-size: 1.1rem;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 8px 0 #1e5f64;
-            transition: all 0.1s;
-        }
-
-        /* EXAM SCREEN */
-        #formScreen {
-            z-index: 50;
-            background: white;
-            display: none;
-            flex-direction: column;
-        }
-        iframe {
-            flex: 1;
-            width: 100%;
-            border: none;
-        }
-
-        /* FLOATING CLOSE BUTTON */
-        #btnClose {
-            position: absolute;
-            top: 25px; 
-            right: 20px;
-            width: 45px;
-            height: 45px;
-            background: rgba(231, 76, 60, 1);
-            color: white;
-            border: 2px solid white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            font-weight: bold;
-            z-index: 2000;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        }
-
-        /* CHEAT OVERLAY */
-        #cheatOverlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.98);
-            color: white;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .hidden { display: none !important; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -171,94 +34,19 @@
     </div>
 
     <div id="formScreen" class="screen">
-        <div id="btnClose">✕</div>
+        <div class="exam-header">
+            <div id="timerDisplay">Sisa Waktu: --:--</div>
+            <div id="btnClose">✕</div>
+        </div>
         <iframe id="examIframe" src="https://docs.google.com/forms/d/e/1FAIpQLSccyegs8tm5kDfDpn7FwwU6Mr1-myYUdTPwkVlszFY7B0H4Gw/viewform?embedded=true"></iframe>
     </div>
 
     <div id="cheatOverlay">
         <h1 style="color: #ff4757;">⚠️ KECURANGAN TERDETEKSI</h1>
         <p style="margin-top: 15px;">Anda meninggalkan area ujian.</p>
-        <p>Memuat ulang...</p>
+        <p>Akses Anda telah ditangguhkan. Memuat ulang...</p>
     </div>
 
-    <script>
-        (function() {
-            "use strict";
-
-            const loginScreen = document.getElementById('loginScreen');
-            const formScreen = document.getElementById('formScreen');
-            const tokenInput = document.getElementById('tokenInput');
-            const loginBtn = document.getElementById('loginBtn');
-            const btnClose = document.getElementById('btnClose');
-            const cheatOverlay = document.getElementById('cheatOverlay');
-            const iframe = document.getElementById('examIframe');
-
-            const TOKEN_VALID = "Sosiologi";
-            let isLoggedIn = false;
-            let securityActive = false;
-
-            function enableFullscreen() {
-                const doc = document.documentElement;
-                if (doc.requestFullscreen) doc.requestFullscreen();
-                else if (doc.webkitRequestFullscreen) doc.webkitRequestFullscreen();
-            }
-
-            loginBtn.addEventListener('click', function() {
-                if (tokenInput.value.trim() === TOKEN_VALID) {
-                    enableFullscreen();
-                    loginScreen.classList.add('hidden');
-                    formScreen.style.display = 'flex';
-                    isLoggedIn = true;
-                    setTimeout(() => { securityActive = true; }, 3000);
-                } else {
-                    alert("Token tidak valid!");
-                    tokenInput.value = "";
-                }
-            });
-
-            btnClose.addEventListener('click', function() {
-                if (confirm("Yakin ingin kembali ke login?")) {
-                    location.reload();
-                }
-            });
-
-            function onCheatDetected() {
-                if (!securityActive || !isLoggedIn) return;
-                securityActive = false;
-                cheatOverlay.style.display = 'flex';
-                setTimeout(() => { location.reload(); }, 2500);
-            }
-
-            document.addEventListener("visibilitychange", function() {
-                if (document.hidden && securityActive) onCheatDetected();
-            });
-
-            window.addEventListener("blur", function() {
-                setTimeout(() => {
-                    if (document.activeElement !== iframe && securityActive) {
-                        onCheatDetected();
-                    }
-                }, 800);
-            });
-
-            document.addEventListener("contextmenu", e => e.preventDefault());
-            document.addEventListener("copy", e => { if(isLoggedIn) e.preventDefault(); });
-            document.addEventListener("paste", e => { if(isLoggedIn) e.preventDefault(); });
-
-            history.pushState(null, null, location.href);
-            window.onpopstate = function() {
-                if (isLoggedIn) {
-                    history.pushState(null, null, location.href);
-                    onCheatDetected();
-                }
-            };
-
-            // Hack tambahan: Disable autofill bar dengan memanipulasi fokus
-            tokenInput.addEventListener('focus', function() {
-                this.setAttribute('autocomplete', 'off');
-            });
-
-        })();
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
