@@ -111,11 +111,11 @@
             border: none;
         }
 
-        /* FLOATING CLOSE BUTTON */
+        /* FLOATING CLOSE BUTTON (Posisi Diperbaiki) */
         #btnClose {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 25px; /* Turun sedikit agar tidak tertutup bar sistem */
+            right: 20px;
             width: 42px;
             height: 42px;
             background: rgba(231, 76, 60, 0.9);
@@ -157,7 +157,13 @@
         <div class="login-box">
             <h2>SOSIOLOGI</h2>
             <p>Sistem Ujian Terintegrasi Aman</p>
-            <input type="text" id="tokenInput" class="token-input" placeholder="Token" autocomplete="off" spellcheck="false">
+            <input type="text" id="tokenInput" class="token-input" 
+                   placeholder="Token" 
+                   autocomplete="off" 
+                   autocorrect="off" 
+                   autocapitalize="off" 
+                   spellcheck="false"
+                   name="field_random_8273x">
             <button id="loginBtn" class="btn-login">MASUK</button>
         </div>
     </div>
@@ -192,30 +198,24 @@
             let isLoggedIn = false;
             let securityActive = false;
 
-            // 1. FUNGSI FULLSCREEN (Layar Penuh)
+            // FUNGSI FULLSCREEN
             function enableFullscreen() {
                 const doc = document.documentElement;
                 if (doc.requestFullscreen) doc.requestFullscreen();
                 else if (doc.webkitRequestFullscreen) doc.webkitRequestFullscreen();
-                else if (doc.mozRequestFullScreen) doc.mozRequestFullScreen();
-                else if (doc.msRequestFullscreen) doc.msRequestFullscreen();
             }
 
-            // 2. SISTEM LOGIN
+            // SISTEM LOGIN
             loginBtn.addEventListener('click', function() {
                 if (tokenInput.value.trim() === TOKEN_VALID) {
-                    // Masuk mode layar penuh
                     enableFullscreen();
-
-                    // Switch Screen
                     loginScreen.classList.add('hidden');
                     formScreen.style.display = 'flex';
                     isLoggedIn = true;
 
-                    // GRACE PERIOD: Jeda 3 detik agar transisi stabil (Anti-False Alarm)
+                    // GRACE PERIOD 3 DETIK
                     setTimeout(() => {
                         securityActive = true;
-                        console.log("Security System: ACTIVE");
                     }, 3000);
                 } else {
                     alert("Token tidak valid!");
@@ -223,38 +223,27 @@
                 }
             });
 
-            // 3. TOMBOL CLOSE MANUAL
+            // TOMBOL CLOSE MANUAL
             btnClose.addEventListener('click', function() {
-                if (confirm("Perhatian: Progres ujian mungkin hilang. Yakin ingin kembali ke Login?")) {
+                if (confirm("Progres ujian mungkin hilang. Yakin ingin kembali ke Login?")) {
                     location.reload();
                 }
             });
 
-            // 4. SISTEM ANTI-KECURANGAN (CORE SECURITY)
+            // SISTEM ANTI-KECURANGAN
             function onCheatDetected() {
                 if (!securityActive || !isLoggedIn) return;
-                
-                securityActive = false; // Nonaktifkan agar tidak looping
+                securityActive = false;
                 cheatOverlay.style.display = 'flex';
-                
-                // Getar perangkat jika didukung
                 if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
-
-                setTimeout(() => {
-                    location.reload();
-                }, 2500);
+                setTimeout(() => { location.reload(); }, 2500);
             }
 
-            // A. Deteksi Ganti Tab / Aplikasi
             document.addEventListener("visibilitychange", function() {
-                if (document.hidden && securityActive) {
-                    onCheatDetected();
-                }
+                if (document.hidden && securityActive) onCheatDetected();
             });
 
-            // B. Deteksi Blur (Panel Notifikasi / Split Screen)
             window.addEventListener("blur", function() {
-                // Memberikan toleransi jika klik terjadi di dalam iframe
                 setTimeout(() => {
                     if (document.activeElement !== iframe && securityActive) {
                         onCheatDetected();
@@ -262,13 +251,13 @@
                 }, 600);
             });
 
-            // C. Blokir Klik Kanan & Copy-Paste
+            // BLOKIR INTERAKSI LUAR
             document.addEventListener("contextmenu", e => e.preventDefault());
             document.addEventListener("copy", e => { if(isLoggedIn) e.preventDefault(); });
             document.addEventListener("cut", e => { if(isLoggedIn) e.preventDefault(); });
             document.addEventListener("paste", e => { if(isLoggedIn) e.preventDefault(); });
 
-            // D. Blokir Tombol Kembali (Back Button)
+            // BLOKIR TOMBOL BACK
             history.pushState(null, null, location.href);
             window.onpopstate = function() {
                 if (isLoggedIn) {
@@ -277,11 +266,9 @@
                 }
             };
 
-            // E. Deteksi Keyboard Shortcut (F12, Ctrl+U, dll)
+            // BLOKIR KEYBOARD SHORTCUT
             document.addEventListener("keydown", function(e) {
-                if (e.key === "F12" || 
-                   (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) || 
-                   (e.ctrlKey && e.key === "U")) {
+                if (e.key === "F12" || (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) || (e.ctrlKey && e.key === "U")) {
                     e.preventDefault();
                     if(securityActive) onCheatDetected();
                 }
