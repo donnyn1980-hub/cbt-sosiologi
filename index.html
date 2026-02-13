@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Aplikasi Ujian Sosiologi - Secure Mode</title>
+    <title>Aplikasi Ujian Sosiologi - Ultra Secure</title>
     <style>
         /* RESET & LAYOUT */
         * {
@@ -59,11 +59,8 @@
             font-weight: 300;
             letter-spacing: 3px;
         }
-        .login-box p {
-            color: rgba(255,255,255,0.6);
-            font-size: 0.85rem;
-            margin-bottom: 25px;
-        }
+        
+        /* FIX AUTOFILL: Menggunakan trick font-size 0 untuk mencegah zoom dan asisten browser */
         .token-input {
             width: 100%;
             padding: 16px;
@@ -75,9 +72,12 @@
             font-size: 1.2rem;
             margin-bottom: 20px;
             outline: none;
-            transition: border-color 0.3s;
+            /* Tambahan untuk mematikan saran browser */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
         }
-        .token-input:focus { border-color: #ffd166; }
+
         .btn-login {
             width: 100%;
             padding: 16px;
@@ -93,10 +93,6 @@
             box-shadow: 0 8px 0 #1e5f64;
             transition: all 0.1s;
         }
-        .btn-login:active {
-            transform: translateY(4px);
-            box-shadow: 0 4px 0 #1e5f64;
-        }
 
         /* EXAM SCREEN */
         #formScreen {
@@ -111,25 +107,25 @@
             border: none;
         }
 
-        /* FLOATING CLOSE BUTTON (Posisi Diperbaiki) */
+        /* FLOATING CLOSE BUTTON */
         #btnClose {
             position: absolute;
-            top: 25px; /* Turun sedikit agar tidak tertutup bar sistem */
+            top: 30px; 
             right: 20px;
-            width: 42px;
-            height: 42px;
-            background: rgba(231, 76, 60, 0.9);
+            width: 45px;
+            height: 45px;
+            background: rgba(231, 76, 60, 1);
             color: white;
             border: 2px solid white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 22px;
             font-weight: bold;
-            z-index: 1000;
+            z-index: 2000;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
         /* CHEAT OVERLAY */
@@ -146,7 +142,6 @@
             text-align: center;
             padding: 20px;
         }
-        .cheat-icon { font-size: 80px; margin-bottom: 20px; }
 
         .hidden { display: none !important; }
     </style>
@@ -154,32 +149,32 @@
 <body>
 
     <div id="loginScreen" class="screen">
+        <form style="display:none;"><input type="text"/><input type="password"/></form>
+        
         <div class="login-box">
             <h2>SOSIOLOGI</h2>
-            <p>Sistem Ujian Terintegrasi Aman</p>
-            <input type="text" id="tokenInput" class="token-input" 
+            <p>Mode Ujian Aman Aktif</p>
+            
+            <input type="search" id="tokenInput" class="token-input" 
                    placeholder="Token" 
                    autocomplete="off" 
                    autocorrect="off" 
                    autocapitalize="off" 
                    spellcheck="false"
-                   name="field_random_8273x">
+                   name="q_random_exam">
+                   
             <button id="loginBtn" class="btn-login">MASUK</button>
         </div>
     </div>
 
     <div id="formScreen" class="screen">
-        <div id="btnClose" title="Keluar">✕</div>
+        <div id="btnClose">✕</div>
         <iframe id="examIframe" src="https://docs.google.com/forms/d/e/1FAIpQLSc85_F7-3tEVaA24WFICtwOmonjKzRSEt82UcfO1vIx2cjF5Q/viewform?embedded=true"></iframe>
     </div>
 
     <div id="cheatOverlay">
-        <div class="cheat-icon">⚠️</div>
         <h1 style="color: #ff4757;">KECURANGAN TERDETEKSI</h1>
-        <p style="margin-top: 15px; font-size: 1.1rem; opacity: 0.8;">
-            Anda terdeteksi meninggalkan layar ujian atau melakukan tindakan terlarang.
-        </p>
-        <p style="margin-top: 10px; font-style: italic; color: #ffd166;">Memuat ulang sistem...</p>
+        <p style="margin-top: 15px;">Sistem akan memuat ulang...</p>
     </div>
 
     <script>
@@ -198,44 +193,36 @@
             let isLoggedIn = false;
             let securityActive = false;
 
-            // FUNGSI FULLSCREEN
             function enableFullscreen() {
                 const doc = document.documentElement;
                 if (doc.requestFullscreen) doc.requestFullscreen();
                 else if (doc.webkitRequestFullscreen) doc.webkitRequestFullscreen();
             }
 
-            // SISTEM LOGIN
             loginBtn.addEventListener('click', function() {
                 if (tokenInput.value.trim() === TOKEN_VALID) {
                     enableFullscreen();
                     loginScreen.classList.add('hidden');
                     formScreen.style.display = 'flex';
                     isLoggedIn = true;
-
-                    // GRACE PERIOD 3 DETIK
-                    setTimeout(() => {
-                        securityActive = true;
-                    }, 3000);
+                    // Jeda agar transisi layar stabil
+                    setTimeout(() => { securityActive = true; }, 3000);
                 } else {
                     alert("Token tidak valid!");
                     tokenInput.value = "";
                 }
             });
 
-            // TOMBOL CLOSE MANUAL
             btnClose.addEventListener('click', function() {
-                if (confirm("Progres ujian mungkin hilang. Yakin ingin kembali ke Login?")) {
+                if (confirm("Progres akan hilang. Yakin ingin keluar?")) {
                     location.reload();
                 }
             });
 
-            // SISTEM ANTI-KECURANGAN
             function onCheatDetected() {
                 if (!securityActive || !isLoggedIn) return;
                 securityActive = false;
                 cheatOverlay.style.display = 'flex';
-                if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
                 setTimeout(() => { location.reload(); }, 2500);
             }
 
@@ -248,16 +235,15 @@
                     if (document.activeElement !== iframe && securityActive) {
                         onCheatDetected();
                     }
-                }, 600);
+                }, 800);
             });
 
-            // BLOKIR INTERAKSI LUAR
+            // Blokir interaksi standar
             document.addEventListener("contextmenu", e => e.preventDefault());
             document.addEventListener("copy", e => { if(isLoggedIn) e.preventDefault(); });
-            document.addEventListener("cut", e => { if(isLoggedIn) e.preventDefault(); });
             document.addEventListener("paste", e => { if(isLoggedIn) e.preventDefault(); });
 
-            // BLOKIR TOMBOL BACK
+            // Blokir Back Button
             history.pushState(null, null, location.href);
             window.onpopstate = function() {
                 if (isLoggedIn) {
@@ -265,14 +251,6 @@
                     onCheatDetected();
                 }
             };
-
-            // BLOKIR KEYBOARD SHORTCUT
-            document.addEventListener("keydown", function(e) {
-                if (e.key === "F12" || (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) || (e.ctrlKey && e.key === "U")) {
-                    e.preventDefault();
-                    if(securityActive) onCheatDetected();
-                }
-            });
 
         })();
     </script>
