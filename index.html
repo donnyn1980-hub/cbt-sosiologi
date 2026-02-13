@@ -22,7 +22,6 @@
             -webkit-user-select: none;
         }
 
-        /* SCREEN MANAGEMENT */
         .screen {
             position: absolute;
             top: 0;
@@ -60,7 +59,7 @@
             letter-spacing: 3px;
         }
         
-        /* FIX AUTOFILL: Menggunakan trick font-size 0 untuk mencegah zoom dan asisten browser */
+        /* FIX AUTOFILL: Menggunakan kombinasi inputmode dan name acak */
         .token-input {
             width: 100%;
             padding: 16px;
@@ -72,10 +71,8 @@
             font-size: 1.2rem;
             margin-bottom: 20px;
             outline: none;
-            /* Tambahan untuk mematikan saran browser */
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
+            /* Mencegah asisten browser */
+            autocomplete: off;
         }
 
         .btn-login {
@@ -110,7 +107,7 @@
         /* FLOATING CLOSE BUTTON */
         #btnClose {
             position: absolute;
-            top: 30px; 
+            top: 25px; 
             right: 20px;
             width: 45px;
             height: 45px;
@@ -149,19 +146,25 @@
 <body>
 
     <div id="loginScreen" class="screen">
-        <form style="display:none;"><input type="text"/><input type="password"/></form>
-        
+        <div style="position: absolute; opacity: 0; height: 0; width: 0; overflow: hidden;">
+            <input type="text" name="username" tabindex="-1">
+            <input type="password" name="password" tabindex="-1">
+            <input type="email" name="email" tabindex="-1">
+            <input type="text" name="address" tabindex="-1">
+            <input type="text" name="card" tabindex="-1">
+        </div>
+
         <div class="login-box">
             <h2>SOSIOLOGI</h2>
             <p>Mode Ujian Aman Aktif</p>
             
-            <input type="search" id="tokenInput" class="token-input" 
+            <input type="text" id="tokenInput" class="token-input" 
                    placeholder="Token" 
                    autocomplete="off" 
                    autocorrect="off" 
                    autocapitalize="off" 
                    spellcheck="false"
-                   name="q_random_exam">
+                   name="nothing_to_see_here_123">
                    
             <button id="loginBtn" class="btn-login">MASUK</button>
         </div>
@@ -173,8 +176,9 @@
     </div>
 
     <div id="cheatOverlay">
-        <h1 style="color: #ff4757;">KECURANGAN TERDETEKSI</h1>
-        <p style="margin-top: 15px;">Sistem akan memuat ulang...</p>
+        <h1 style="color: #ff4757;">⚠️ KECURANGAN TERDETEKSI</h1>
+        <p style="margin-top: 15px;">Anda meninggalkan area ujian.</p>
+        <p>Memuat ulang...</p>
     </div>
 
     <script>
@@ -205,7 +209,6 @@
                     loginScreen.classList.add('hidden');
                     formScreen.style.display = 'flex';
                     isLoggedIn = true;
-                    // Jeda agar transisi layar stabil
                     setTimeout(() => { securityActive = true; }, 3000);
                 } else {
                     alert("Token tidak valid!");
@@ -214,7 +217,7 @@
             });
 
             btnClose.addEventListener('click', function() {
-                if (confirm("Progres akan hilang. Yakin ingin keluar?")) {
+                if (confirm("Yakin ingin kembali ke login?")) {
                     location.reload();
                 }
             });
@@ -238,12 +241,10 @@
                 }, 800);
             });
 
-            // Blokir interaksi standar
             document.addEventListener("contextmenu", e => e.preventDefault());
             document.addEventListener("copy", e => { if(isLoggedIn) e.preventDefault(); });
             document.addEventListener("paste", e => { if(isLoggedIn) e.preventDefault(); });
 
-            // Blokir Back Button
             history.pushState(null, null, location.href);
             window.onpopstate = function() {
                 if (isLoggedIn) {
@@ -251,6 +252,11 @@
                     onCheatDetected();
                 }
             };
+
+            // Hack tambahan: Disable autofill bar dengan memanipulasi fokus
+            tokenInput.addEventListener('focus', function() {
+                this.setAttribute('autocomplete', 'off');
+            });
 
         })();
     </script>
