@@ -541,9 +541,138 @@
             flex: 1;
         }
         
-        /* Emoji icons for materi */
-        .materi-icon {
-            margin-right: 5px;
+        .student-list {
+            margin-top: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .student-list.show {
+            display: block;
+        }
+        
+        .student-list .student-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .student-list .student-item:hover {
+            background: #f0f7ff;
+        }
+        
+        .student-list .student-item:last-child {
+            border-bottom: none;
+        }
+        
+        .student-list .student-item .nis {
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        .student-list .student-item .name {
+            flex: 1;
+            margin-left: 10px;
+            color: #333;
+        }
+        
+        .student-list .student-item .class {
+            color: #888;
+            font-size: 12px;
+            background: #f0f0f0;
+            padding: 2px 10px;
+            border-radius: 12px;
+        }
+        
+        .student-list .student-item .select-btn {
+            padding: 4px 12px;
+            font-size: 11px;
+            min-width: auto;
+            background: #4facfe;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .student-list .student-item .select-btn:hover {
+            background: #667eea;
+        }
+        
+        .student-list-header {
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e0e0e0;
+            font-weight: 600;
+            color: #555;
+            display: flex;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            background: #f8f9fa;
+            z-index: 1;
+        }
+        
+        .student-list .loading-students {
+            padding: 20px;
+            text-align: center;
+            color: #888;
+        }
+        
+        .refresh-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .refresh-btn:hover {
+            background: #218838;
+        }
+        
+        .debug-info {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 12px;
+            font-family: monospace;
+            display: none;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+        }
+        
+        .debug-info.show {
+            display: block;
+        }
+        
+        .debug-info .debug-line {
+            padding: 3px 0;
+            border-bottom: 1px solid #eee;
+            color: #333;
+        }
+        
+        .debug-info .debug-line.error {
+            color: #dc3545;
+        }
+        
+        .debug-info .debug-line.success {
+            color: #28a745;
+        }
+        
+        .debug-info .debug-line.info {
+            color: #17a2b8;
         }
         
         @media (max-width: 600px) {
@@ -580,6 +709,23 @@
             
             .column-status {
                 grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .student-list .student-item {
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+            
+            .student-list .student-item .name {
+                margin-left: 0;
+                width: 100%;
+                order: 3;
+            }
+            
+            .student-list .student-item .select-btn {
+                order: 4;
+                width: 100%;
+                margin-top: 5px;
             }
         }
     </style>
@@ -667,18 +813,28 @@
             <div id="columnStatusGrid" class="column-status"></div>
         </div>
         
+        <!-- Student List -->
+        <div id="studentList" class="student-list">
+            <div class="student-list-header">
+                <span>📋 Daftar Siswa</span>
+                <button class="refresh-btn" id="refreshStudentList">🔄 Refresh</button>
+            </div>
+            <div id="studentListContent">
+                <div class="loading-students">⏳ Memuat data siswa...</div>
+            </div>
+        </div>
+        
         <!-- Input Form -->
         <div id="inputForm" style="display: none;">
             <div class="form-group">
                 <label for="nilaiInput">📝 Nilai (0-100)</label>
-                <input type="number" id="nilaiInput" placeholder="Masukkan nilai" min="0" max="100">
+                <input type="number" id="nilaiInput" placeholder="Masukkan nilai" min="0" max="100" step="1">
             </div>
             
             <div class="form-group">
                 <label for="materiSelect">📚 Materi</label>
                 <select id="materiSelect">
                     <option value="">Pilih Materi</option>
-                    <!-- Materi akan diisi oleh JavaScript -->
                 </select>
             </div>
             
@@ -689,6 +845,14 @@
                 <button id="clearBtn" class="danger" style="flex:1;">
                     🗑️ Hapus
                 </button>
+            </div>
+            
+            <button id="debugToggleBtn" style="margin-top: 10px; background: #6c757d; font-size: 12px; padding: 6px 12px; min-width: auto;">
+                🔍 Toggle Debug
+            </button>
+            
+            <div id="debugInfo" class="debug-info">
+                <div class="debug-line info">📊 Debug Info</div>
             </div>
         </div>
         
@@ -755,31 +919,115 @@
         const columnStatusText = document.getElementById('columnStatusText');
         const columnStatusGrid = document.getElementById('columnStatusGrid');
         
+        // Student List Elements
+        const studentList = document.getElementById('studentList');
+        const studentListContent = document.getElementById('studentListContent');
+        const refreshStudentListBtn = document.getElementById('refreshStudentList');
+        
         // Input Form Elements
         const inputForm = document.getElementById('inputForm');
         const nilaiInput = document.getElementById('nilaiInput');
         const materiSelect = document.getElementById('materiSelect');
         const submitBtn = document.getElementById('submitBtn');
         const clearBtn = document.getElementById('clearBtn');
+        const debugToggleBtn = document.getElementById('debugToggleBtn');
+        const debugInfo = document.getElementById('debugInfo');
         
         // Manual Input
         const manualNis = document.getElementById('manualNis');
         const manualSubmitBtn = document.getElementById('manualSubmitBtn');
 
+        // Debug function
+        function addDebug(message, type = 'info') {
+            const line = document.createElement('div');
+            line.className = `debug-line ${type}`;
+            line.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            debugInfo.appendChild(line);
+            debugInfo.scrollTop = debugInfo.scrollHeight;
+            console.log(`[DEBUG] ${message}`);
+        }
+
         // ========== MATERI FUNCTIONS ==========
         function populateMateriDropdown() {
-            // Clear existing options (keep first option)
             materiSelect.innerHTML = '<option value="">Pilih Materi</option>';
-            
-            // Add materi options with emojis
             DAFTAR_MATERI.forEach(materi => {
                 const option = document.createElement('option');
                 option.value = materi.value;
                 option.textContent = `${materi.emoji} ${materi.value}`;
                 materiSelect.appendChild(option);
             });
+            addDebug('Materi dropdown populated', 'info');
+        }
+
+        // ========== STUDENT LIST FUNCTIONS ==========
+        async function loadAllStudents() {
+            try {
+                studentListContent.innerHTML = '<div class="loading-students">⏳ Memuat data siswa...</div>';
+                studentList.classList.add('show');
+                addDebug('Loading student list...', 'info');
+                
+                const response = await fetch(`${API_BASE}/api/students`);
+                const result = await response.json();
+                addDebug(`Response status: ${response.status}`, 'info');
+                
+                if (result.success && result.data && result.data.length > 0) {
+                    addDebug(`Found ${result.data.length} students`, 'success');
+                    renderStudentList(result.data);
+                } else {
+                    addDebug('No students found', 'error');
+                    studentListContent.innerHTML = `
+                        <div class="loading-students" style="color: #721c24;">
+                            ❌ Tidak ada data siswa ditemukan.<br>
+                            <small style="color: #888;">Pastikan tabel daftar_murid memiliki data.</small>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading students:', error);
+                addDebug(`Error: ${error.message}`, 'error');
+                studentListContent.innerHTML = `
+                    <div class="loading-students" style="color: #721c24;">
+                        ❌ Gagal memuat data siswa.<br>
+                        <small style="color: #888;">${error.message}</small>
+                    </div>
+                `;
+            }
+        }
+
+        function renderStudentList(students) {
+            let html = '';
+            students.forEach(student => {
+                const scoreCount = student.scores ? student.scores.length : 0;
+                html += `
+                    <div class="student-item" data-nis="${student.nis}">
+                        <span class="nis">${student.nis}</span>
+                        <span class="name">${student.nama}</span>
+                        <span class="class">${student.kelas}</span>
+                        <button class="select-btn" data-nis="${student.nis}">Pilih</button>
+                    </div>
+                `;
+            });
             
-            console.log('✅ Materi dropdown populated with', DAFTAR_MATERI.length, 'items');
+            studentListContent.innerHTML = html;
+            
+            document.querySelectorAll('.student-item .select-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const nis = this.dataset.nis;
+                    cariSiswa(nis);
+                    studentList.classList.remove('show');
+                });
+            });
+            
+            document.querySelectorAll('.student-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const nis = this.dataset.nis;
+                    cariSiswa(nis);
+                    studentList.classList.remove('show');
+                });
+            });
+            
+            addDebug(`Rendered ${students.length} students`, 'success');
         }
 
         // ========== CAMERA FUNCTIONS ==========
@@ -924,9 +1172,11 @@
                 updateStatus('active', 'Kamera aktif - Scan QR Code NISN');
                 showMessage('info', '📸 Arahkan ke QR Code NISN siswa.');
                 retryCount = 0;
+                addDebug('Scanner started successfully', 'success');
                 
             } catch (error) {
                 console.error('Error starting scanner:', error);
+                addDebug(`Scanner error: ${error.message}`, 'error');
                 let errorMsg = 'Gagal mengakses kamera';
                 
                 if (error.message.includes('Permission') || error.message.includes('NotAllowed')) {
@@ -970,9 +1220,11 @@
                         if (torchEnabled) {
                             toggleTorch();
                         }
+                        addDebug('Scanner stopped', 'info');
                     })
                     .catch(err => {
                         console.error('Error stopping scanner:', err);
+                        addDebug(`Stop error: ${err.message}`, 'error');
                     });
             }
         }
@@ -1068,21 +1320,17 @@
         // ========== SCAN SUCCESS ==========
         function onScanSuccess(decodedText, decodedResult) {
             try {
-                // Coba parse sebagai JSON (QR Code dari sistem)
                 let nis = decodedText;
                 try {
                     const data = JSON.parse(decodedText);
                     if (data.nis) {
                         nis = data.nis;
                     }
-                } catch (e) {
-                    // Bukan JSON, gunakan sebagai NISN
-                }
+                } catch (e) {}
                 
-                console.log('Scan NISN:', nis);
+                addDebug(`QR Code scanned: ${nis}`, 'info');
                 cariSiswa(nis);
                 
-                // Visual feedback
                 const reader = document.getElementById('reader');
                 if (reader) {
                     reader.style.boxShadow = '0 0 20px #00ff00';
@@ -1097,6 +1345,7 @@
                 
             } catch (error) {
                 console.error('Error:', error);
+                addDebug(`Scan error: ${error.message}`, 'error');
                 showMessage('error', '❌ Gagal memproses QR Code.');
             }
         }
@@ -1114,49 +1363,54 @@
 
             try {
                 showMessage('info', '⏳ Mencari data siswa...');
+                addDebug(`Searching for student: ${nis}`, 'info');
                 
                 const response = await fetch(`${API_BASE}/api/student?nis=${nis}`);
                 const result = await response.json();
+                
+                addDebug(`Response status: ${response.status}`, 'info');
+                addDebug(`Response data: ${JSON.stringify(result)}`, 'info');
 
                 if (result.success) {
                     currentStudent = result.data;
                     displayStudentInfo(currentStudent);
-                    
-                    // Stop scanning after successful scan
+                    studentList.classList.remove('show');
                     stopScanning();
-                    
                     showMessage('success', `✅ Siswa ditemukan: ${currentStudent.nama}`);
+                    addDebug(`Student found: ${currentStudent.nama} (${currentStudent.nis})`, 'success');
                 } else {
-                    showMessage('error', '❌ Siswa tidak ditemukan. Periksa NISN.');
+                    showMessage('error', '❌ Siswa tidak ditemukan. Menampilkan daftar siswa...');
+                    addDebug(`Student not found: ${nis}`, 'error');
                     clearStudentInfo();
+                    await loadAllStudents();
                 }
             } catch (error) {
                 console.error('Error:', error);
+                addDebug(`Error: ${error.message}`, 'error');
                 showMessage('error', '❌ Gagal menghubungi server.');
+                await loadAllStudents();
             }
         }
 
         function displayStudentInfo(data) {
-            // Tampilkan informasi siswa
             welcomeText.textContent = `Selamat datang, ${data.nama}`;
             studentNis.textContent = data.nis;
             studentName.textContent = data.nama;
             studentClass.textContent = data.kelas;
             
-            // Tampilkan status kolom
             updateColumnStatus(data);
             
             studentInfo.classList.add('show');
             inputForm.style.display = 'block';
             
-            // Enable form
             nilaiInput.disabled = false;
             materiSelect.disabled = false;
             submitBtn.disabled = false;
             
-            // Clear previous values
             nilaiInput.value = '';
             materiSelect.value = '';
+            
+            addDebug(`Student info displayed: ${data.nama}`, 'info');
         }
 
         function updateColumnStatus(data) {
@@ -1177,7 +1431,6 @@
                 }
             }
             
-            // Update status text
             if (emptyColumns.length === 0) {
                 columnStatusText.textContent = '⚠️ Semua kolom terisi!';
                 columnStatusText.style.color = '#721c24';
@@ -1186,7 +1439,6 @@
                 columnStatusText.style.color = '#155724';
             }
             
-            // Render grid
             let html = '';
             for (let i = 1; i <= 9; i++) {
                 const isFilled = filledColumns.includes(i);
@@ -1227,27 +1479,32 @@
         // ========== SUBMIT FUNCTIONS ==========
         async function submitNilai() {
             if (!currentStudent) {
-                showMessage('error', '❌ Silakan scan NISN terlebih dahulu.');
+                showMessage('error', '❌ Silakan scan atau pilih NISN terlebih dahulu.');
+                addDebug('Submit attempted without student', 'error');
                 return;
             }
 
             const nilai = nilaiInput.value.trim();
             const materi = materiSelect.value;
 
+            addDebug(`Submit attempt: nilai=${nilai}, materi=${materi}`, 'info');
+
             if (!nilai || isNaN(nilai) || nilai < 0 || nilai > 100) {
                 showMessage('error', '❌ Masukkan nilai yang valid (0-100).');
                 nilaiInput.focus();
+                addDebug(`Invalid nilai: ${nilai}`, 'error');
                 return;
             }
 
             if (!materi) {
                 showMessage('error', '❌ Pilih materi.');
                 materiSelect.focus();
+                addDebug('No materi selected', 'error');
                 return;
             }
 
-            // Cek apakah ada kolom kosong
             let hasEmptyColumn = false;
+            let emptyColumnIndex = 0;
             for (let i = 1; i <= 9; i++) {
                 const nilaiKey = i.toString();
                 const materiKey = `m${i}`;
@@ -1255,65 +1512,69 @@
                 const materiEmpty = currentStudent[materiKey] === null || currentStudent[materiKey] === '';
                 if (nilaiEmpty && materiEmpty) {
                     hasEmptyColumn = true;
+                    emptyColumnIndex = i;
                     break;
                 }
             }
 
             if (!hasEmptyColumn) {
                 showMessage('error', '❌ Semua kolom sudah terisi. Tidak dapat menambah data.');
+                addDebug('No empty columns available', 'error');
                 return;
             }
 
-            // Konfirmasi dengan SweetAlert2
-            const confirmed = await Swal.fire({
-                title: 'Konfirmasi',
-                html: `
-                    <p>Submit nilai <strong>${nilai}</strong> untuk:</p>
-                    <p><strong>${currentStudent.nama}</strong> (${currentStudent.nis})</p>
-                    <p>Materi: <strong>${materi}</strong></p>
-                `,
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: '✅ Ya, Submit',
-                cancelButtonText: '❌ Batal',
-                confirmButtonColor: '#4facfe',
-                cancelButtonColor: '#f5576c'
-            });
+            addDebug(`Will use column ${emptyColumnIndex}`, 'info');
 
-            if (!confirmed.isConfirmed) return;
+            // Konfirmasi menggunakan confirm bawaan
+            const confirmed = confirm(`Submit nilai ${nilai} untuk ${currentStudent.nama} (${currentStudent.nis})?`);
+            if (!confirmed) {
+                addDebug('Submit cancelled by user', 'info');
+                return;
+            }
 
-            // Disable button
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span class="loading"></span> Memproses...';
 
             try {
+                const payload = {
+                    nis: currentStudent.nis,
+                    nilai: parseInt(nilai),
+                    materi: materi
+                };
+                
+                addDebug(`Sending payload: ${JSON.stringify(payload)}`, 'info');
+                
                 const response = await fetch(`${API_BASE}/api/submit`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        nis: currentStudent.nis,
-                        nilai: nilai,
-                        materi: materi
-                    })
+                    headers: { 
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
                 });
 
+                addDebug(`Response status: ${response.status}`, 'info');
+                
                 const result = await response.json();
+                addDebug(`Response data: ${JSON.stringify(result)}`, 'info');
 
                 if (result.success) {
                     showMessage('success', `✅ Berhasil! Data disimpan di kolom ke-${result.column}`);
+                    addDebug(`Successfully saved to column ${result.column}`, 'success');
                     
                     // Refresh data siswa
                     await cariSiswa(currentStudent.nis);
                     
-                    // Clear form
                     nilaiInput.value = '';
                     materiSelect.value = '';
                 } else {
-                    showMessage('error', result.error || '❌ Gagal menyimpan data.');
+                    const errorMsg = result.error || '❌ Gagal menyimpan data.';
+                    showMessage('error', errorMsg);
+                    addDebug(`Submit failed: ${errorMsg}`, 'error');
                 }
             } catch (error) {
-                console.error('Error:', error);
-                showMessage('error', '❌ Terjadi kesalahan saat menghubungi server.');
+                console.error('Error submitting:', error);
+                addDebug(`Submit error: ${error.message}`, 'error');
+                showMessage('error', `❌ Terjadi kesalahan: ${error.message}`);
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '✅ Submit Nilai';
@@ -1336,7 +1597,9 @@
             clearStudentInfo();
             nilaiInput.value = '';
             materiSelect.value = '';
+            studentList.classList.remove('show');
             showMessage('info', '🗑️ Data dihapus.');
+            addDebug('Form cleared', 'info');
         }
 
         // ========== UI HELPERS ==========
@@ -1377,6 +1640,12 @@
         clearBtn.addEventListener('click', clearAll);
         manualSubmitBtn.addEventListener('click', manualSearch);
         requestPermissionBtn.addEventListener('click', requestCameraPermission);
+        refreshStudentListBtn.addEventListener('click', loadAllStudents);
+        
+        debugToggleBtn.addEventListener('click', function() {
+            debugInfo.classList.toggle('show');
+            this.textContent = debugInfo.classList.contains('show') ? '🔍 Hide Debug' : '🔍 Toggle Debug';
+        });
 
         cameraSelect.addEventListener('change', function() {
             if (this.value) {
@@ -1401,12 +1670,16 @@
 
         // ========== INITIALIZE ==========
         window.addEventListener('load', () => {
-            // Populate materi dropdown first
             populateMateriDropdown();
-            
-            // Initialize scanner
             initializeScanner();
             setTimeout(checkCameraPermission, 1000);
+            
+            // Auto load student list for debugging
+            console.log('💡 Ketik "loadStudents()" di console untuk melihat daftar siswa');
+            window.loadStudents = loadAllStudents;
+            
+            addDebug('Application started', 'success');
+            addDebug(`API Base: ${API_BASE}`, 'info');
         });
 
         window.addEventListener('beforeunload', () => {
@@ -1415,10 +1688,12 @@
             }
         });
 
-        console.log('📷 QR Code Scanner - Mode Semi-Manual');
+        console.log('📷 QR Code Scanner - With Debug');
         console.log(`📍 API Endpoint: ${API_BASE}`);
         console.log('📚 Materi Sosiologi:', DAFTAR_MATERI.map(m => m.value).join(', '));
-        console.log('📝 Scan NISN → Input nilai & pilih materi → Submit');
+        console.log('💡 Jika NISN tidak ditemukan, daftar siswa akan muncul otomatis');
+        console.log('💡 Ketik "loadStudents()" di console untuk melihat daftar siswa');
+        console.log('🔍 Klik "Toggle Debug" untuk melihat log aktivitas');
     </script>
 </body>
 </html>
