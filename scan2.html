@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Scan NISN - Input Nilai Sosiologi</title>
     <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-    <!-- SweetAlert2 for better confirmation dialogs -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         * {
             margin: 0;
@@ -303,120 +301,24 @@
         }
         
         .form-group input, 
-        .form-group select,
-        .form-group textarea {
+        .form-group select {
             width: 100%;
             padding: 10px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 14px;
             transition: border-color 0.3s;
-            font-family: inherit;
         }
         
         .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
+        .form-group select:focus {
             outline: none;
             border-color: #667eea;
         }
         
-        .form-group input:disabled,
-        .form-group select:disabled,
-        .form-group textarea:disabled {
+        .form-group input:disabled {
             background: #f5f5f5;
             cursor: not-allowed;
-        }
-        
-        .form-group textarea {
-            resize: vertical;
-            min-height: 50px;
-        }
-        
-        .form-group .helper-text {
-            font-size: 12px;
-            color: #888;
-            margin-top: 5px;
-        }
-        
-        .materi-input-wrapper {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        
-        .materi-input-wrapper select {
-            flex: 1;
-        }
-        
-        .materi-input-wrapper .toggle-mode-btn {
-            flex: 0 0 auto;
-            padding: 8px 12px;
-            min-width: auto;
-            font-size: 12px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border: none;
-            border-radius: 8px;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .materi-input-wrapper .toggle-mode-btn:hover {
-            transform: scale(1.05);
-        }
-        
-        .materi-input-wrapper .toggle-mode-btn:active {
-            transform: scale(0.95);
-        }
-        
-        .materi-mode-indicator {
-            display: inline-block;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
-            margin-left: 8px;
-        }
-        
-        .materi-mode-indicator.dropdown {
-            background: #d1ecf1;
-            color: #0c5460;
-        }
-        
-        .materi-mode-indicator.manual {
-            background: #d4edda;
-            color: #155724;
-        }
-        
-        .quick-materi-templates {
-            display: flex;
-            gap: 5px;
-            flex-wrap: wrap;
-            margin-top: 8px;
-        }
-        
-        .quick-materi-templates button {
-            flex: 0 0 auto;
-            padding: 5px 12px;
-            font-size: 11px;
-            min-width: auto;
-            background: #e9ecef;
-            color: #333;
-            border: 1px solid #dee2e6;
-            border-radius: 15px;
-            transition: all 0.3s;
-        }
-        
-        .quick-materi-templates button:hover {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-            transform: translateY(-2px);
-        }
-        
-        .quick-materi-templates button:active {
-            transform: scale(0.95);
         }
         
         .column-status {
@@ -639,38 +541,6 @@
             flex: 1;
         }
         
-        .materi-history {
-            margin-top: 10px;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border: 1px solid #e0e0e0;
-        }
-        
-        .materi-history h5 {
-            font-size: 12px;
-            color: #888;
-            margin-bottom: 8px;
-        }
-        
-        .materi-history .history-tag {
-            display: inline-block;
-            padding: 3px 10px;
-            margin: 3px;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            font-size: 11px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .materi-history .history-tag:hover {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-        
         @media (max-width: 600px) {
             .container {
                 padding: 15px;
@@ -705,14 +575,6 @@
             
             .column-status {
                 grid-template-columns: repeat(3, 1fr);
-            }
-            
-            .materi-input-wrapper {
-                flex-direction: column;
-            }
-            
-            .materi-input-wrapper .toggle-mode-btn {
-                width: 100%;
             }
         }
     </style>
@@ -804,52 +666,24 @@
         <div id="inputForm" style="display: none;">
             <div class="form-group">
                 <label for="nilaiInput">📝 Nilai (0-100)</label>
-                <input type="number" id="nilaiInput" placeholder="Masukkan nilai" min="0" max="100" step="1">
+                <input type="number" id="nilaiInput" placeholder="Masukkan nilai" min="0" max="100">
             </div>
             
             <div class="form-group">
-                <label for="materiInput">
-                    📚 Materi
-                    <span class="materi-mode-indicator dropdown" id="materiModeIndicator">Dropdown</span>
-                </label>
-                <div class="materi-input-wrapper">
-                    <select id="materiSelect" style="display: block;">
-                        <option value="">Pilih Materi</option>
-                        <option value="Materi 1">Materi 1</option>
-                        <option value="Materi 2">Materi 2</option>
-                        <option value="Materi 3">Materi 3</option>
-                        <option value="Materi 4">Materi 4</option>
-                        <option value="Materi 5">Materi 5</option>
-                        <option value="Materi 6">Materi 6</option>
-                        <option value="Materi 7">Materi 7</option>
-                        <option value="Materi 8">Materi 8</option>
-                        <option value="Materi 9">Materi 9</option>
-                        <option value="Materi 10">Materi 10</option>
-                    </select>
-                    <textarea id="materiManual" placeholder="Ketik materi secara manual..." style="display: none; min-height: 50px;"></textarea>
-                    <button id="toggleMateriMode" class="toggle-mode-btn" type="button">
-                        ✏️ Manual
-                    </button>
-                </div>
-                <div class="helper-text" id="materiHelperText">Pilih materi dari dropdown atau klik tombol manual untuk mengetik sendiri.</div>
-            </div>
-            
-            <!-- Quick Templates -->
-            <div class="quick-materi-templates" id="quickTemplates">
-                <button type="button" data-materi="Pengantar Sosiologi">📘 Pengantar</button>
-                <button type="button" data-materi="Stratifikasi Sosial">📊 Stratifikasi</button>
-                <button type="button" data-materi="Mobilitas Sosial">🔄 Mobilitas</button>
-                <button type="button" data-materi="Konflik Sosial">⚡ Konflik</button>
-                <button type="button" data-materi="Interaksi Sosial">🤝 Interaksi</button>
-                <button type="button" data-materi="Lembaga Sosial">🏛️ Lembaga</button>
-                <button type="button" data-materi="Perubahan Sosial">🌱 Perubahan</button>
-                <button type="button" data-materi="Integrasi Sosial">🤲 Integrasi</button>
-            </div>
-            
-            <!-- Materi History -->
-            <div class="materi-history" id="materiHistory" style="display: none;">
-                <h5>📜 Riwayat Materi yang Sering Digunakan</h5>
-                <div id="historyTags"></div>
+                <label for="materiSelect">📚 Materi</label>
+                <select id="materiSelect">
+                    <option value="">Pilih Materi</option>
+                    <option value="Materi 1">Materi 1</option>
+                    <option value="Materi 2">Materi 2</option>
+                    <option value="Materi 3">Materi 3</option>
+                    <option value="Materi 4">Materi 4</option>
+                    <option value="Materi 5">Materi 5</option>
+                    <option value="Materi 6">Materi 6</option>
+                    <option value="Materi 7">Materi 7</option>
+                    <option value="Materi 8">Materi 8</option>
+                    <option value="Materi 9">Materi 9</option>
+                    <option value="Materi 10">Materi 10</option>
+                </select>
             </div>
             
             <div class="action-buttons">
@@ -888,8 +722,6 @@
         let torchEnabled = false;
         let retryCount = 0;
         const MAX_RETRY = 3;
-        let isManualMateri = false;
-        let materiHistory = [];
 
         // DOM Elements
         const startScanBtn = document.getElementById('startScanBtn');
@@ -919,151 +751,12 @@
         const inputForm = document.getElementById('inputForm');
         const nilaiInput = document.getElementById('nilaiInput');
         const materiSelect = document.getElementById('materiSelect');
-        const materiManual = document.getElementById('materiManual');
-        const toggleMateriMode = document.getElementById('toggleMateriMode');
-        const materiModeIndicator = document.getElementById('materiModeIndicator');
-        const materiHelperText = document.getElementById('materiHelperText');
-        const quickTemplates = document.getElementById('quickTemplates');
-        const materiHistoryDiv = document.getElementById('materiHistory');
-        const historyTags = document.getElementById('historyTags');
         const submitBtn = document.getElementById('submitBtn');
         const clearBtn = document.getElementById('clearBtn');
         
         // Manual Input
         const manualNis = document.getElementById('manualNis');
         const manualSubmitBtn = document.getElementById('manualSubmitBtn');
-
-        // ========== MATERI FUNCTIONS ==========
-        function toggleMateriMode() {
-            isManualMateri = !isManualMateri;
-            
-            if (isManualMateri) {
-                // Switch to manual mode
-                materiSelect.style.display = 'none';
-                materiManual.style.display = 'block';
-                toggleMateriMode.innerHTML = '📋 Dropdown';
-                toggleMateriMode.style.background = 'linear-gradient(135deg, #4facfe, #00f2fe)';
-                materiModeIndicator.textContent = 'Manual';
-                materiModeIndicator.className = 'materi-mode-indicator manual';
-                materiHelperText.textContent = 'Ketik materi secara manual. Gunakan template cepat di bawah untuk mengisi otomatis.';
-                // Copy value from select to manual if exists
-                if (materiSelect.value) {
-                    materiManual.value = materiSelect.value;
-                }
-                materiManual.focus();
-            } else {
-                // Switch to dropdown mode
-                materiSelect.style.display = 'block';
-                materiManual.style.display = 'none';
-                toggleMateriMode.innerHTML = '✏️ Manual';
-                toggleMateriMode.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
-                materiModeIndicator.textContent = 'Dropdown';
-                materiModeIndicator.className = 'materi-mode-indicator dropdown';
-                materiHelperText.textContent = 'Pilih materi dari dropdown atau klik tombol manual untuk mengetik sendiri.';
-                // Try to match manual text to dropdown option
-                if (materiManual.value) {
-                    const options = materiSelect.options;
-                    let found = false;
-                    for (let i = 0; i < options.length; i++) {
-                        if (options[i].value === materiManual.value) {
-                            materiSelect.value = materiManual.value;
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (!found) {
-                        // If not found, add as new option
-                        const newOption = document.createElement('option');
-                        newOption.value = materiManual.value;
-                        newOption.textContent = materiManual.value;
-                        materiSelect.appendChild(newOption);
-                        materiSelect.value = materiManual.value;
-                    }
-                }
-            }
-        }
-
-        function getMateriValue() {
-            if (isManualMateri) {
-                return materiManual.value.trim();
-            } else {
-                return materiSelect.value;
-            }
-        }
-
-        function setMateriValue(value) {
-            if (isManualMateri) {
-                materiManual.value = value;
-            } else {
-                // Check if exists in dropdown
-                const options = materiSelect.options;
-                let found = false;
-                for (let i = 0; i < options.length; i++) {
-                    if (options[i].value === value) {
-                        materiSelect.value = value;
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found && value) {
-                    // Add as new option
-                    const newOption = document.createElement('option');
-                    newOption.value = value;
-                    newOption.textContent = value;
-                    materiSelect.appendChild(newOption);
-                    materiSelect.value = value;
-                }
-            }
-        }
-
-        function addToHistory(materi) {
-            if (!materi) return;
-            
-            // Update history
-            materiHistory = materiHistory.filter(item => item !== materi);
-            materiHistory.unshift(materi);
-            if (materiHistory.length > 10) {
-                materiHistory.pop();
-            }
-            
-            // Save to localStorage
-            try {
-                localStorage.setItem('materiHistory', JSON.stringify(materiHistory));
-            } catch (e) {}
-            
-            renderHistory();
-        }
-
-        function renderHistory() {
-            if (materiHistory.length === 0) {
-                materiHistoryDiv.style.display = 'none';
-                return;
-            }
-            
-            materiHistoryDiv.style.display = 'block';
-            historyTags.innerHTML = materiHistory.map(item => 
-                `<span class="history-tag" data-materi="${item}">${item}</span>`
-            ).join('');
-            
-            // Add click listeners
-            document.querySelectorAll('.history-tag').forEach(tag => {
-                tag.addEventListener('click', function() {
-                    const materi = this.dataset.materi;
-                    setMateriValue(materi);
-                    showMessage('info', `📚 Materi diisi: ${materi}`);
-                });
-            });
-        }
-
-        function loadMateriHistory() {
-            try {
-                const saved = localStorage.getItem('materiHistory');
-                if (saved) {
-                    materiHistory = JSON.parse(saved);
-                    renderHistory();
-                }
-            } catch (e) {}
-        }
 
         // ========== CAMERA FUNCTIONS ==========
         function initializeScanner() {
@@ -1439,11 +1132,7 @@
             
             // Clear previous values
             nilaiInput.value = '';
-            if (isManualMateri) {
-                materiManual.value = '';
-            } else {
-                materiSelect.value = '';
-            }
+            materiSelect.value = '';
         }
 
         function updateColumnStatus(data) {
@@ -1519,7 +1208,7 @@
             }
 
             const nilai = nilaiInput.value.trim();
-            const materi = getMateriValue();
+            const materi = materiSelect.value;
 
             if (!nilai || isNaN(nilai) || nilai < 0 || nilai > 100) {
                 showMessage('error', '❌ Masukkan nilai yang valid (0-100).');
@@ -1528,12 +1217,8 @@
             }
 
             if (!materi) {
-                showMessage('error', '❌ Masukkan atau pilih materi.');
-                if (isManualMateri) {
-                    materiManual.focus();
-                } else {
-                    materiSelect.focus();
-                }
+                showMessage('error', '❌ Pilih materi.');
+                materiSelect.focus();
                 return;
             }
 
@@ -1558,17 +1243,11 @@
             // Konfirmasi
             const confirmed = await Swal.fire({
                 title: 'Konfirmasi',
-                html: `
-                    <p>Submit nilai <strong>${nilai}</strong> untuk:</p>
-                    <p><strong>${currentStudent.nama}</strong> (${currentStudent.nis})</p>
-                    <p>Materi: <strong>${materi}</strong></p>
-                `,
+                text: `Submit nilai ${nilai} untuk ${currentStudent.nama}?`,
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonText: '✅ Ya, Submit',
-                cancelButtonText: '❌ Batal',
-                confirmButtonColor: '#4facfe',
-                cancelButtonColor: '#f5576c'
+                confirmButtonText: 'Ya, Submit',
+                cancelButtonText: 'Batal'
             });
 
             if (!confirmed.isConfirmed) return;
@@ -1593,19 +1272,12 @@
                 if (result.success) {
                     showMessage('success', `✅ Berhasil! Data disimpan di kolom ke-${result.column}`);
                     
-                    // Add to history
-                    addToHistory(materi);
-                    
                     // Refresh data siswa
                     await cariSiswa(currentStudent.nis);
                     
                     // Clear form
                     nilaiInput.value = '';
-                    if (isManualMateri) {
-                        materiManual.value = '';
-                    } else {
-                        materiSelect.value = '';
-                    }
+                    materiSelect.value = '';
                 } else {
                     showMessage('error', result.error || '❌ Gagal menyimpan data.');
                 }
@@ -1633,11 +1305,7 @@
         function clearAll() {
             clearStudentInfo();
             nilaiInput.value = '';
-            if (isManualMateri) {
-                materiManual.value = '';
-            } else {
-                materiSelect.value = '';
-            }
+            materiSelect.value = '';
             showMessage('info', '🗑️ Data dihapus.');
         }
 
@@ -1679,7 +1347,6 @@
         clearBtn.addEventListener('click', clearAll);
         manualSubmitBtn.addEventListener('click', manualSearch);
         requestPermissionBtn.addEventListener('click', requestCameraPermission);
-        toggleMateriMode.addEventListener('click', toggleMateriMode);
 
         cameraSelect.addEventListener('change', function() {
             if (this.value) {
@@ -1702,24 +1369,9 @@
             }
         });
 
-        // Quick templates
-        document.querySelectorAll('.quick-materi-templates button').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const materi = this.dataset.materi;
-                setMateriValue(materi);
-                showMessage('info', `📚 Materi diisi: ${materi}`);
-                // Scroll to materi field
-                document.querySelector('.form-group label[for="materiInput"]').scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center'
-                });
-            });
-        });
-
         // ========== INITIALIZE ==========
         window.addEventListener('load', () => {
             initializeScanner();
-            loadMateriHistory();
             setTimeout(checkCameraPermission, 1000);
         });
 
@@ -1731,9 +1383,7 @@
 
         console.log('📷 QR Code Scanner - Mode Semi-Manual');
         console.log(`📍 API Endpoint: ${API_BASE}`);
-        console.log('📝 Scan NISN → Input nilai & materi (dropdown atau manual) → Submit');
-        console.log('💡 Klik tombol "Manual" untuk mengetik materi sendiri');
-        console.log('📚 Template cepat dan riwayat materi tersedia');
+        console.log('📝 Scan NISN → Input nilai & materi manual → Submit');
     </script>
 </body>
 </html>
