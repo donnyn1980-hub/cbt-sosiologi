@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Word Search Puzzle: Struktur Sosial</title>
+  <!-- QRCode.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --border-color: #cbd5e1;
+      --selected-bg: #3b82f6;
+      --selected-text: #ffffff;
+      --found-bg: #22c55e;
+      --found-text: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      padding: 12px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 800px;
+      width: 100%;
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 16px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    header h1 {
+      color: var(--primary);
+      font-size: 1.5rem;
+      margin-bottom: 4px;
+    }
+
+    header p {
+      color: #64748b;
+      font-size: 0.85rem;
+    }
+
+    /* Modal / Form Identitas */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+
+    .modal-card {
+      background: var(--card-bg);
+      width: 100%;
+      max-width: 400px;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-card h2 {
+      color: var(--primary);
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .modal-card p {
+      font-size: 0.85rem;
+      color: #64748b;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus {
+      border-color: var(--primary);
+    }
+
+    .btn-start {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-start:hover {
+      background: var(--primary-hover);
+    }
+
+    /* Info Bar Peserta */
+    .player-bar {
+      display: none;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin-bottom: 12px;
+      font-size: 0.85rem;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .player-bar span {
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    /* Game Layout Ergonomis */
+    .game-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+    }
+
+    /* Responsive Grid Ergonomis Mobile */
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 2px;
+      user-select: none;
+      background: #e2e8f0;
+      padding: 6px;
+      border-radius: 12px;
+      touch-action: none;
+      width: 100%;
+      max-width: 450px;
+      aspect-ratio: 1 / 1;
+    }
+
+    .cell {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: min(3.5vw, 1.1rem);
+      background: white;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.1s, color 0.1s;
+    }
+
+    .cell.selected {
+      background-color: var(--selected-bg) !important;
+      color: var(--selected-text) !important;
+    }
+
+    .cell.found {
+      background-color: var(--found-bg) !important;
+      color: var(--found-text) !important;
+    }
+
+    /* Daftar Kata */
+    .word-list-container {
+      width: 100%;
+      max-width: 450px;
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .word-list-container h2 {
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+      color: var(--primary);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 4px;
+    }
+
+    .word-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+    }
+
+    .word-item {
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: #475569;
+      padding: 6px 8px;
+      border-radius: 6px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      text-align: center;
+    }
+
+    .word-item.found {
+      text-decoration: line-through;
+      color: #94a3b8;
+      background: #e2e8f0;
+    }
+
+    /* Result & QR Code Display */
+    .result-card {
+      display: none;
+      margin-top: 16px;
+      background: #f0fdf4;
+      border: 2px solid var(--found-bg);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .result-card h2 {
+      color: #166534;
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+    }
+
+    .result-card p {
+      font-size: 0.95rem;
+      color: #15803d;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    #qrcode {
+      display: flex;
+      justify-content: center;
+      margin: 12px auto;
+      padding: 12px;
+      background: white;
+      border-radius: 8px;
+      width: fit-content;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Modal Form Input Nama & NISN -->
+<div id="startModal" class="modal-overlay">
+  <div class="modal-card">
+    <h2>Selamat Datang!</h2>
+    <p>Silakan isi data diri Anda sebelum memulai permainan Cerdas Cermat Kata.</p>
+    <form id="identityForm" onsubmit="startGame(event)">
+      <div class="form-group">
+        <label for="inputNama">Nama Lengkap</label>
+        <input type="text" id="inputNama" placeholder="Contoh: Ahmad Rizki" required>
+      </div>
+      <div class="form-group">
+        <label for="inputNISN">NISN</label>
+        <input type="number" id="inputNISN" placeholder="Contoh: 0051234567" required>
+      </div>
+      <button type="submit" class="btn-start">Mulai Permainan</button>
+    </form>
+  </div>
+</div>
+
+<div class="container">
+  <header>
+    <h1>Cari Kata: Struktur Sosial</h1>
+    <p>Tarik garis / sentuh huruf untuk menemukan kata!</p>
+  </header>
+
+  <!-- Player Info -->
+  <div id="playerBar" class="player-bar">
+    <div>Nama: <span id="displayName">-</span></div>
+    <div>NISN: <span id="displayNISN">-</span></div>
+  </div>
+
+  <div class="game-layout">
+    <div id="grid"></div>
+
+    <div class="word-list-container">
+      <h2>Daftar Kata (8):</h2>
+      <ul id="wordList" class="word-list"></ul>
+    </div>
+  </div>
+
+  <!-- Hasil & QR Code setelah Selesai -->
+  <div id="resultCard" class="result-card">
+    <h2>🎉 Selamat! Anda Berhasil!</h2>
+    <p id="completionText"></p>
+    <div id="qrcode"></div>
+    <span style="font-size: 0.75rem; color: #64748b;">Scan QR Code di atas untuk melihat NISN dan bukti penyelesaian.</span>
+  </div>
+</div>
+
+<script>
+  let playerNama = "";
+  let playerNISN = "";
+
+  const WORDS = [
+    "STRUKTUR",
+    "STATUS",
+    "PERAN",
+    "DIFERENSIASI",
+    "STRATIFIKASI",
+    "NORMA",
+    "NILAI",
+    "KASTA"
+  ];
+
+  const GRID_SIZE = 12;
+  let grid = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(''));
+  let placedWords = [];
+  let isSelecting = false;
+  let selectedCells = [];
+
+  const DIRECTIONS = [
+    [0, 1],   // Horizontal Right
+    [1, 0],   // Vertical Down
+    [1, 1],   // Diagonal Down-Right
+    [0, -1],  // Horizontal Left
+    [-1, 0]   // Vertical Up
+  ];
+
+  function startGame(event) {
+    event.preventDefault();
+    playerNama = document.getElementById('inputNama').value.trim();
+    playerNISN = document.getElementById('inputNISN').value.trim();
+
+    if (!playerNama || !playerNISN) return;
+
+    document.getElementById('displayName').innerText = playerNama;
+    document.getElementById('displayNISN').innerText = playerNISN;
+    document.getElementById('startModal').style.display = 'none';
+    document.getElementById('playerBar').style.display = 'flex';
+
+    initGame();
+  }
+
+  function initGame() {
+    placeWords();
+    fillRandomLetters();
+    renderGrid();
+    renderWordList();
+  }
+
+  function placeWords() {
+    for (let word of WORDS) {
+      let placed = false;
+      let attempts = 0;
+      while (!placed && attempts < 100) {
+        attempts++;
+        let dir = DIRECTIONS[Math.floor(Math.random() * DIRECTIONS.length)];
+        let startRow = Math.floor(Math.random() * GRID_SIZE);
+        let startCol = Math.floor(Math.random() * GRID_SIZE);
+
+        if (canPlaceWord(word, startRow, startCol, dir)) {
+          let cells = [];
+          for (let i = 0; i < word.length; i++) {
+            let r = startRow + i * dir[0];
+            let c = startCol + i * dir[1];
+            grid[r][c] = word[i];
+            cells.push({ r, c });
+          }
+          placedWords.push({ word, cells, found: false });
+          placed = true;
+        }
+      }
+    }
+  }
+
+  function canPlaceWord(word, row, col, dir) {
+    for (let i = 0; i < word.length; i++) {
+      let r = row + i * dir[0];
+      let c = col + i * dir[1];
+      if (r < 0 || r >= GRID_SIZE || c < 0 || c >= GRID_SIZE) return false;
+      if (grid[r][c] !== '' && grid[r][c] !== word[i]) return false;
+    }
+    return true;
+  }
+
+  function fillRandomLetters() {
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    for (let r = 0; r < GRID_SIZE; r++) {
+      for (let c = 0; c < GRID_SIZE; c++) {
+        if (grid[r][c] === '') {
+          grid[r][c] = alphabet[Math.floor(Math.random() * alphabet.length)];
+        }
+      }
+    }
+  }
+
+  function renderGrid() {
+    const gridEl = document.getElementById('grid');
+    gridEl.innerHTML = '';
+    for (let r = 0; r < GRID_SIZE; r++) {
+      for (let c = 0; c < GRID_SIZE; c++) {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        cell.innerText = grid[r][c];
+        cell.dataset.r = r;
+        cell.dataset.c = c;
+
+        cell.addEventListener('mousedown', () => startSelection(r, c));
+        cell.addEventListener('mouseenter', () => updateSelection(r, c));
+        cell.addEventListener('mouseup', endSelection);
+
+        cell.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+          startSelection(r, c);
+        });
+        
+        gridEl.appendChild(cell);
+      }
+    }
+
+    gridEl.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      let touch = e.touches[0];
+      let elem = document.elementFromPoint(touch.clientX, touch.clientY);
+      if (elem && elem.classList.contains('cell')) {
+        let r = parseInt(elem.dataset.r);
+        let c = parseInt(elem.dataset.c);
+        updateSelection(r, c);
+      }
+    });
+
+    document.addEventListener('touchend', endSelection);
+    document.addEventListener('mouseup', endSelection);
+  }
+
+  function renderWordList() {
+    const listEl = document.getElementById('wordList');
+    listEl.innerHTML = '';
+    WORDS.forEach(word => {
+      const li = document.createElement('li');
+      li.className = 'word-item';
+      li.id = 'word-' + word;
+      li.innerText = word;
+      listEl.appendChild(li);
+    });
+  }
+
+  function startSelection(r, c) {
+    isSelecting = true;
+    selectedCells = [{ r, c }];
+    highlightSelection();
+  }
+
+  function updateSelection(r, c) {
+    if (!isSelecting) return;
+    let start = selectedCells[0];
+    
+    let dr = r - start.r;
+    let dc = c - start.c;
+    
+    if (dr === 0 || dc === 0 || Math.abs(dr) === Math.abs(dc)) {
+      let stepR = dr === 0 ? 0 : dr / Math.abs(dr);
+      let stepC = dc === 0 ? 0 : dc / Math.abs(dc);
+      let steps = Math.max(Math.abs(dr), Math.abs(dc));
+
+      selectedCells = [];
+      for (let i = 0; i <= steps; i++) {
+        selectedCells.push({ r: start.r + i * stepR, c: start.c + i * stepC });
+      }
+      highlightSelection();
+    }
+  }
+
+  function highlightSelection() {
+    document.querySelectorAll('.cell').forEach(cell => {
+      if (!cell.classList.contains('found')) {
+        cell.classList.remove('selected');
+      }
+    });
+
+    selectedCells.forEach(({ r, c }) => {
+      let cell = document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);
+      if (cell && !cell.classList.contains('found')) {
+        cell.classList.add('selected');
+      }
+    });
+  }
+
+  function endSelection() {
+    if (!isSelecting) return;
+    isSelecting = false;
+
+    let selectedWord = selectedCells.map(({ r, c }) => grid[r][c]).join('');
+    let reversedWord = selectedWord.split('').reverse().join('');
+
+    placedWords.forEach(pw => {
+      if (!pw.found && (pw.word === selectedWord || pw.word === reversedWord)) {
+        pw.found = true;
+        pw.cells.forEach(({ r, c }) => {
+          let cell = document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);
+          cell.classList.remove('selected');
+          cell.classList.add('found');
+        });
+        document.getElementById('word-' + pw.word).classList.add('found');
+      }
+    });
+
+    document.querySelectorAll('.cell.selected').forEach(cell => cell.classList.remove('selected'));
+    selectedCells = [];
+
+    checkWin();
+  }
+
+  function checkWin() {
+    if (placedWords.length > 0 && placedWords.every(pw => pw.found)) {
+      showCompletion();
+    }
+  }
+
+  function showCompletion() {
+    const completionText = `${playerNama} telah berhasil menyelesaikan Puzzle`;
+    document.getElementById('completionText').innerText = completionText;
+    
+    // Generate QR Code dari NISN yang diinput
+    document.getElementById('qrcode').innerHTML = '';
+    new QRCode(document.getElementById('qrcode'), {
+      text: playerNISN,
+      width: 128,
+      height: 128,
+      colorDark: "#0f172a",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+
+    document.getElementById('resultCard').style.display = 'block';
+    
+    // Scroll otomatis ke hasil
+    document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
