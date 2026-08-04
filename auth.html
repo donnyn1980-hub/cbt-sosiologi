@@ -874,7 +874,7 @@
             <div id="loginError" class="login-error"></div>
             <div id="loginSuccess" class="login-success"></div>
             <div id="loginInfo" class="login-info">
-                ℹ️ Hanya user dengan akses khusus yang diizinkan.
+                ℹ️ Gunakan NIS dan Password yang terdaftar di database.
             </div>
 
             <form id="loginForm">
@@ -905,7 +905,7 @@
             </form>
 
             <div style="margin-top:15px;text-align:center;font-size:12px;color:#888;">
-                <p>⚠️ Hanya akun dengan akses khusus yang dapat login</p>
+                <p>⚠️ Hanya user dengan akses khusus yang diizinkan</p>
             </div>
         </div>
 
@@ -1065,9 +1065,9 @@
 
     <script>
         // ============================================
-        // KONFIGURASI
+        // KONFIGURASI - UPDATE DENGAN WORKER ANDA
         // ============================================
-        const API_BASE = 'https://nilai-harian.donnyn1980.workers.dev';
+        const API_BASE = 'https://nilai-sosiologi.donnyn1980.workers.dev';
         
         // ============================================
         // STATE
@@ -1153,7 +1153,20 @@
         const manualSubmitBtn = document.getElementById('manualSubmitBtn');
 
         // ============================================
-        // LOGIN FUNCTIONS
+        // DEBUG FUNCTION
+        // ============================================
+        function addDebug(message, type = 'info') {
+            const line = document.createElement('div');
+            line.className = `debug-line ${type}`;
+            const time = new Date().toLocaleTimeString();
+            line.textContent = `[${time}] ${message}`;
+            debugInfo.appendChild(line);
+            debugInfo.scrollTop = debugInfo.scrollHeight;
+            console.log(`[DEBUG] ${message}`);
+        }
+
+        // ============================================
+        // LOGIN FUNCTIONS - MENGGUNAKAN ENDPOINT /api/student
         // ============================================
         function showLoginError(message) {
             loginError.textContent = '❌ ' + message;
@@ -1191,36 +1204,52 @@
             loginSuccess.classList.remove('show');
 
             try {
-                // Panggil API login dengan parameter rowid=1
-                const response = await fetch(`${API_BASE}/api/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ 
-                        nis: nis, 
-                        password: password 
-                    })
-                });
+                addDebug(`🔐 Mencoba login dengan NIS: ${nis}`, 'info');
+                
+                // Coba login dengan endpoint /api/student
+                const response = await fetch(`${API_BASE}/api/student?nis=${encodeURIComponent(nis)}&password=${encodeURIComponent(password)}`);
+                
+                addDebug(`📥 Response status: ${response.status}`, 'info');
+                
+                if (response.status === 401) {
+                    showLoginError('NIS atau Password salah!');
+                    addDebug('❌ Login failed: Invalid credentials', 'error');
+                    return;
+                }
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    addDebug(`❌ Response error: ${errorText}`, 'error');
+                    showLoginError(`Gagal login: ${response.status}`);
+                    return;
+                }
 
                 const result = await response.json();
+                addDebug(`📦 Response data: ${JSON.stringify(result)}`, 'info');
 
                 if (result.success && result.data) {
-                    // Login berhasil
-                    currentUser = result.data;
+                    // Cek apakah ini user dengan rowid = 1
+                    // Karena API tidak mengembalikan rowid, kita cek apakah NIS adalah admin
+                    // Anda bisa menyesuaikan dengan data admin di database
                     
-                    // Cek apakah rowid = 1 (dari response)
-                    if (result.rowid !== 1) {
+                    // Untuk sementara, kita asumsikan user dengan NIS tertentu adalah admin
+                    // Misalnya NIS: 'admin' atau '001'
+                    const adminNisList = ['admin', '001', '2024001']; // Tambahkan NIS admin di sini
+                    
+                    if (!adminNisList.includes(nis.toLowerCase())) {
                         showLoginError('Akun ini tidak memiliki akses administrator.');
-                        currentUser = null;
+                        addDebug(`❌ Access denied for NIS: ${nis}`, 'error');
                         return;
                     }
 
+                    currentUser = result.data;
                     showLoginSuccess(`Login berhasil! Selamat datang, ${result.data.nama}`);
                     
                     // Set admin info
                     adminName.textContent = result.data.nama || 'Admin';
                     adminDetail.textContent = `NIS: ${result.data.nis}`;
+
+                    addDebug(`✅ Login successful: ${result.data.nama}`, 'success');
 
                     // Tampilkan main app
                     setTimeout(() => {
@@ -1231,10 +1260,12 @@
 
                 } else {
                     showLoginError(result.error || 'Login gagal. Periksa NIS dan Password.');
+                    addDebug(`❌ Login failed: ${result.error || 'Unknown error'}`, 'error');
                 }
 
             } catch (error) {
                 console.error('Login error:', error);
+                addDebug(`❌ Login error: ${error.message}`, 'error');
                 showLoginError('Gagal menghubungi server. Periksa koneksi.');
             } finally {
                 loginBtn.disabled = false;
@@ -1262,19 +1293,8 @@
             document.getElementById('studentList').classList.remove('show');
             document.getElementById('inputForm').style.display = 'none';
             
+            addDebug('🔐 Logout berhasil', 'info');
             console.log('🔐 Logout berhasil');
-        }
-
-        // ============================================
-        // DEBUG FUNCTION
-        // ============================================
-        function addDebug(message, type = 'info') {
-            const line = document.createElement('div');
-            line.className = `debug-line ${type}`;
-            line.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
-            debugInfo.appendChild(line);
-            debugInfo.scrollTop = debugInfo.scrollHeight;
-            console.log(`[DEBUG] ${message}`);
         }
 
         // ============================================
@@ -1288,7 +1308,7 @@
                 option.textContent = `${materi.emoji} ${materi.value}`;
                 materiSelect.appendChild(option);
             });
-            addDebug('Materi dropdown populated', 'info');
+            addDebug('📚 Materi dropdown populated', 'info');
         }
 
         // ============================================
@@ -1298,17 +1318,17 @@
             try {
                 studentListContent.innerHTML = '<div class="loading-students">⏳ Memuat data siswa...</div>';
                 studentList.classList.add('show');
-                addDebug('Loading student list...', 'info');
+                addDebug('📋 Loading student list...', 'info');
                 
                 const response = await fetch(`${API_BASE}/api/students`);
                 const result = await response.json();
-                addDebug(`Response status: ${response.status}`, 'info');
+                addDebug(`📥 Response status: ${response.status}`, 'info');
                 
                 if (result.success && result.data && result.data.length > 0) {
-                    addDebug(`Found ${result.data.length} students`, 'success');
+                    addDebug(`✅ Found ${result.data.length} students`, 'success');
                     renderStudentList(result.data);
                 } else {
-                    addDebug('No students found', 'error');
+                    addDebug('❌ No students found', 'error');
                     studentListContent.innerHTML = `
                         <div class="loading-students" style="color: #721c24;">
                             ❌ Tidak ada data siswa ditemukan.<br>
@@ -1318,7 +1338,7 @@
                 }
             } catch (error) {
                 console.error('Error loading students:', error);
-                addDebug(`Error: ${error.message}`, 'error');
+                addDebug(`❌ Error: ${error.message}`, 'error');
                 studentListContent.innerHTML = `
                     <div class="loading-students" style="color: #721c24;">
                         ❌ Gagal memuat data siswa.<br>
@@ -1331,7 +1351,6 @@
         function renderStudentList(students) {
             let html = '';
             students.forEach(student => {
-                const scoreCount = student.scores ? student.scores.length : 0;
                 html += `
                     <div class="student-item" data-nis="${student.nis}">
                         <span class="nis">${student.nis}</span>
@@ -1361,7 +1380,7 @@
                 });
             });
             
-            addDebug(`Rendered ${students.length} students`, 'success');
+            addDebug(`✅ Rendered ${students.length} students`, 'success');
         }
 
         // ============================================
@@ -1508,11 +1527,11 @@
                 updateStatus('active', 'Kamera aktif - Scan QR Code NISN');
                 showMessage('info', '📸 Arahkan ke QR Code NISN siswa.');
                 retryCount = 0;
-                addDebug('Scanner started successfully', 'success');
+                addDebug('✅ Scanner started successfully', 'success');
                 
             } catch (error) {
                 console.error('Error starting scanner:', error);
-                addDebug(`Scanner error: ${error.message}`, 'error');
+                addDebug(`❌ Scanner error: ${error.message}`, 'error');
                 let errorMsg = 'Gagal mengakses kamera';
                 
                 if (error.message.includes('Permission') || error.message.includes('NotAllowed')) {
@@ -1556,11 +1575,11 @@
                         if (torchEnabled) {
                             toggleTorch();
                         }
-                        addDebug('Scanner stopped', 'info');
+                        addDebug('⏹ Scanner stopped', 'info');
                     })
                     .catch(err => {
                         console.error('Error stopping scanner:', err);
-                        addDebug(`Stop error: ${err.message}`, 'error');
+                        addDebug(`❌ Stop error: ${err.message}`, 'error');
                     });
             }
         }
@@ -1666,7 +1685,7 @@
                     }
                 } catch (e) {}
                 
-                addDebug(`QR Code scanned: ${nis}`, 'info');
+                addDebug(`📷 QR Code scanned: ${nis}`, 'info');
                 cariSiswa(nis);
                 
                 const reader = document.getElementById('reader');
@@ -1683,7 +1702,7 @@
                 
             } catch (error) {
                 console.error('Error:', error);
-                addDebug(`Scan error: ${error.message}`, 'error');
+                addDebug(`❌ Scan error: ${error.message}`, 'error');
                 showMessage('error', '❌ Gagal memproses QR Code.');
             }
         }
@@ -1703,13 +1722,13 @@
 
             try {
                 showMessage('info', '⏳ Mencari data siswa...');
-                addDebug(`Searching for student: ${nis}`, 'info');
+                addDebug(`🔍 Searching for student: ${nis}`, 'info');
                 
                 const response = await fetch(`${API_BASE}/api/student?nis=${nis}`);
                 const result = await response.json();
                 
-                addDebug(`Response status: ${response.status}`, 'info');
-                addDebug(`Response data: ${JSON.stringify(result)}`, 'info');
+                addDebug(`📥 Response status: ${response.status}`, 'info');
+                addDebug(`📦 Response data: ${JSON.stringify(result)}`, 'info');
 
                 if (result.success) {
                     currentStudent = result.data;
@@ -1717,16 +1736,16 @@
                     studentList.classList.remove('show');
                     stopScanning();
                     showMessage('success', `✅ Siswa ditemukan: ${currentStudent.nama}`);
-                    addDebug(`Student found: ${currentStudent.nama} (${currentStudent.nis})`, 'success');
+                    addDebug(`✅ Student found: ${currentStudent.nama} (${currentStudent.nis})`, 'success');
                 } else {
                     showMessage('error', '❌ Siswa tidak ditemukan. Menampilkan daftar siswa...');
-                    addDebug(`Student not found: ${nis}`, 'error');
+                    addDebug(`❌ Student not found: ${nis}`, 'error');
                     clearStudentInfo();
                     await loadAllStudents();
                 }
             } catch (error) {
                 console.error('Error:', error);
-                addDebug(`Error: ${error.message}`, 'error');
+                addDebug(`❌ Error: ${error.message}`, 'error');
                 showMessage('error', '❌ Gagal menghubungi server.');
                 await loadAllStudents();
             }
@@ -1750,7 +1769,7 @@
             nilaiInput.value = '';
             materiSelect.value = '';
             
-            addDebug(`Student info displayed: ${data.nama}`, 'info');
+            addDebug(`✅ Student info displayed: ${data.nama}`, 'info');
         }
 
         function updateColumnStatus(data) {
@@ -1822,26 +1841,26 @@
         async function submitNilai() {
             if (!currentStudent) {
                 showMessage('error', '❌ Silakan scan atau pilih NISN terlebih dahulu.');
-                addDebug('Submit attempted without student', 'error');
+                addDebug('❌ Submit attempted without student', 'error');
                 return;
             }
 
             const nilai = nilaiInput.value.trim();
             const materi = materiSelect.value;
 
-            addDebug(`Submit attempt: nilai=${nilai}, materi=${materi}`, 'info');
+            addDebug(`📝 Submit attempt: nilai=${nilai}, materi=${materi}`, 'info');
 
             if (!nilai || isNaN(nilai) || nilai < 0 || nilai > 100) {
                 showMessage('error', '❌ Masukkan nilai yang valid (0-100).');
                 nilaiInput.focus();
-                addDebug(`Invalid nilai: ${nilai}`, 'error');
+                addDebug(`❌ Invalid nilai: ${nilai}`, 'error');
                 return;
             }
 
             if (!materi) {
                 showMessage('error', '❌ Pilih materi.');
                 materiSelect.focus();
-                addDebug('No materi selected', 'error');
+                addDebug('❌ No materi selected', 'error');
                 return;
             }
 
@@ -1861,15 +1880,15 @@
 
             if (!hasEmptyColumn) {
                 showMessage('error', '❌ Semua kolom sudah terisi. Tidak dapat menambah data.');
-                addDebug('No empty columns available', 'error');
+                addDebug('❌ No empty columns available', 'error');
                 return;
             }
 
-            addDebug(`Will use column ${emptyColumnIndex}`, 'info');
+            addDebug(`📊 Will use column ${emptyColumnIndex}`, 'info');
 
             const confirmed = confirm(`Submit nilai ${nilai} untuk ${currentStudent.nama} (${currentStudent.nis})?`);
             if (!confirmed) {
-                addDebug('Submit cancelled by user', 'info');
+                addDebug('❌ Submit cancelled by user', 'info');
                 return;
             }
 
@@ -1883,7 +1902,7 @@
                     materi: materi
                 };
                 
-                addDebug(`Sending payload: ${JSON.stringify(payload)}`, 'info');
+                addDebug(`📤 Sending payload: ${JSON.stringify(payload)}`, 'info');
                 
                 const response = await fetch(`${API_BASE}/api/submit`, {
                     method: 'POST',
@@ -1893,14 +1912,14 @@
                     body: JSON.stringify(payload)
                 });
 
-                addDebug(`Response status: ${response.status}`, 'info');
+                addDebug(`📥 Response status: ${response.status}`, 'info');
                 
                 const result = await response.json();
-                addDebug(`Response data: ${JSON.stringify(result)}`, 'info');
+                addDebug(`📦 Response data: ${JSON.stringify(result)}`, 'info');
 
                 if (result.success) {
                     showMessage('success', `✅ Berhasil! Data disimpan di kolom ke-${result.column}`);
-                    addDebug(`Successfully saved to column ${result.column}`, 'success');
+                    addDebug(`✅ Successfully saved to column ${result.column}`, 'success');
                     
                     await cariSiswa(currentStudent.nis);
                     
@@ -1909,11 +1928,11 @@
                 } else {
                     const errorMsg = result.error || '❌ Gagal menyimpan data.';
                     showMessage('error', errorMsg);
-                    addDebug(`Submit failed: ${errorMsg}`, 'error');
+                    addDebug(`❌ Submit failed: ${errorMsg}`, 'error');
                 }
             } catch (error) {
                 console.error('Error submitting:', error);
-                addDebug(`Submit error: ${error.message}`, 'error');
+                addDebug(`❌ Submit error: ${error.message}`, 'error');
                 showMessage('error', `❌ Terjadi kesalahan: ${error.message}`);
             } finally {
                 submitBtn.disabled = false;
@@ -1943,7 +1962,7 @@
             materiSelect.value = '';
             studentList.classList.remove('show');
             showMessage('info', '🗑️ Data dihapus.');
-            addDebug('Form cleared', 'info');
+            addDebug('🗑️ Form cleared', 'info');
         }
 
         // ============================================
@@ -1987,9 +2006,9 @@
             console.log('💡 Ketik "loadStudents()" di console untuk melihat daftar siswa');
             window.loadStudents = loadAllStudents;
             
-            addDebug('Application started', 'success');
-            addDebug(`API Base: ${API_BASE}`, 'info');
-            addDebug(`Logged in as: ${currentUser ? currentUser.nama : 'Unknown'}`, 'info');
+            addDebug('🚀 Application started', 'success');
+            addDebug(`📍 API Base: ${API_BASE}`, 'info');
+            addDebug(`👤 Logged in as: ${currentUser ? currentUser.nama : 'Unknown'}`, 'info');
         }
 
         // ============================================
@@ -2057,10 +2076,17 @@
         console.log('🔐 QR Code Scanner - With Login');
         console.log(`📍 API Endpoint: ${API_BASE}`);
         console.log('📚 Materi Sosiologi:', DAFTAR_MATERI.map(m => m.value).join(', '));
-        console.log('👤 Login hanya untuk user dengan rowid=1');
+        console.log('👤 Login menggunakan NIS dan Password');
         console.log('💡 Jika NISN tidak ditemukan, daftar siswa akan muncul otomatis');
         console.log('💡 Ketik "loadStudents()" di console untuk melihat daftar siswa');
         console.log('🔍 Klik "Toggle Debug" untuk melihat log aktivitas');
+        
+        // Login info di halaman
+        loginInfo.classList.add('show');
+        loginInfo.innerHTML = `
+            ℹ️ Gunakan NIS dan Password yang terdaftar di database.<br>
+            <small style="color:#666;">Contoh: NIS=admin, Password=admin123</small>
+        `;
     </script>
 </body>
 </html>
