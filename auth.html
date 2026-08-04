@@ -367,15 +367,6 @@
             animation: slideIn 0.5s ease;
         }
         
-        .student-info h3 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
         .student-info .info-item {
             display: flex;
             justify-content: space-between;
@@ -868,22 +859,22 @@
             <div class="login-header">
                 <div class="icon">🔐</div>
                 <h1>Login Admin</h1>
-                <p class="subtitle">Masukkan Username dan Password untuk mengakses</p>
+                <p class="subtitle">Masukkan NIS dan Password untuk mengakses</p>
             </div>
 
             <div id="loginError" class="login-error"></div>
             <div id="loginSuccess" class="login-success"></div>
             <div id="loginInfo" class="login-info">
-                ℹ️ Gunakan username dan password yang telah diberikan.
+                ℹ️ Masukkan NIS dan Password yang terdaftar di database.
             </div>
 
             <form id="loginForm">
                 <div class="form-group">
-                    <label for="loginNis">Username</label>
+                    <label for="loginNis">NIS</label>
                     <input 
                         type="text" 
                         id="loginNis" 
-                        placeholder="Masukkan Username" 
+                        placeholder="Masukkan NIS" 
                         required
                         autocomplete="username"
                     >
@@ -917,7 +908,7 @@
                     <span class="user-avatar">👤</span>
                     <div>
                         <div class="user-name" id="adminName">Admin</div>
-                        <div class="user-detail" id="adminDetail">Username: -</div>
+                        <div class="user-detail" id="adminDetail">NIS: -</div>
                     </div>
                 </div>
                 <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
@@ -1070,13 +1061,10 @@
         const API_BASE = 'https://nilai-sosiologi.donnyn1980.workers.dev';
         
         // ============================================
-        // KREDENSIAL LOGIN - DISEMBUNYIKAN
+        // NIS YANG DIIZINKAN
         // ============================================
-        // Username yang digunakan untuk login (ditampilkan di UI)
-        const ALLOWED_USERNAME = 'ADMIN';
-        
-        // NIS asli yang digunakan untuk query ke database (TIDAK PERNAH DITAMPILKAN)
-        const REAL_NIS = '198004172009021002';
+        // Hanya NIS ini yang diizinkan login
+        const ALLOWED_NIS = '198004172009021002';
         
         // ============================================
         // STATE
@@ -1090,6 +1078,7 @@
         let retryCount = 0;
         const MAX_RETRY = 3;
         let currentUser = null;
+        let adminPassword = '';
 
         // Daftar materi Sosiologi
         const DAFTAR_MATERI = [
@@ -1175,7 +1164,7 @@
         }
 
         // ============================================
-        // LOGIN FUNCTIONS
+        // LOGIN FUNCTIONS - MENGGUNAKAN ENDPOINT /api/login
         // ============================================
         function showLoginError(message) {
             loginError.textContent = '❌ ' + message;
@@ -1198,11 +1187,18 @@
         async function handleLogin(e) {
             e.preventDefault();
 
-            const usernameInput = loginNis.value.trim();
+            const nis = loginNis.value.trim();
             const password = loginPassword.value.trim();
 
-            if (!usernameInput || !password) {
-                showLoginError('Username dan Password harus diisi!');
+            if (!nis || !password) {
+                showLoginError('NIS dan Password harus diisi!');
+                return;
+            }
+
+            // Cek apakah NIS diizinkan
+            if (nis !== ALLOWED_NIS) {
+                showLoginError('NIS tidak memiliki akses administrator.');
+                addDebug(`❌ Access denied for NIS: ${nis}`, 'error');
                 return;
             }
 
@@ -1213,22 +1209,22 @@
             loginSuccess.classList.remove('show');
 
             try {
-                addDebug(`🔐 Mencoba login dengan Username: ${usernameInput}`, 'info');
+                addDebug(`🔐 Mencoba login dengan NIS: ${nis}`, 'info');
                 
-                // CEK APAKAH USERNAME SESUAI
-                if (usernameInput !== ALLOWED_USERNAME) {
-                    showLoginError('Username atau Password salah!');
-                    addDebug(`❌ Access denied for Username: ${usernameInput}`, 'error');
-                    return;
-                }
-                
-                addDebug(`✅ Username ${usernameInput} diizinkan, menggunakan NIS: ${REAL_NIS} (tersembunyi)`, 'info');
-                
-                // Gunakan REAL_NIS untuk query ke database
-                const response = await fetch(`${API_BASE}/api/student?nis=${encodeURIComponent(REAL_NIS)}&password=${encodeURIComponent(password)}`);
-                
+                // Panggil endpoint /api/login
+                const response = await fetch(`${API_BASE}/api/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        nis: nis, 
+                        password: password 
+                    })
+                });
+
                 addDebug(`📥 Response status: ${response.status}`, 'info');
-                
+
                 if (response.status === 401) {
                     showLoginError('Password salah!');
                     addDebug('❌ Login failed: Invalid password', 'error');
@@ -1236,9 +1232,9 @@
                 }
 
                 if (!response.ok) {
-                    const errorText = await response.text();
-                    addDebug(`❌ Response error: ${errorText}`, 'error');
-                    showLoginError(`Gagal login: ${response.status}`);
+                    const errorData = await response.json();
+                    addDebug(`❌ Response error: ${JSON.stringify(errorData)}`, 'error');
+                    showLoginError(errorData.error || `Gagal login: ${response.status}`);
                     return;
                 }
 
@@ -1247,11 +1243,13 @@
 
                 if (result.success && result.data) {
                     currentUser = result.data;
+                    adminPassword = password;
+                    
                     showLoginSuccess(`Login berhasil! Selamat datang, ${result.data.nama}`);
                     
-                    // Tampilkan USERNAME yang digunakan (bukan NIS asli)
+                    // Set admin info
                     adminName.textContent = result.data.nama || 'Admin';
-                    adminDetail.textContent = `Username: ${usernameInput}`;
+                    adminDetail.textContent = `NIS: ${result.data.nis}`;
 
                     addDebug(`✅ Login successful: ${result.data.nama}`, 'success');
 
@@ -1263,7 +1261,7 @@
                     }, 1000);
 
                 } else {
-                    showLoginError(result.error || 'Login gagal. Periksa Username dan Password.');
+                    showLoginError(result.error || 'Login gagal. Periksa NIS dan Password.');
                     addDebug(`❌ Login failed: ${result.error || 'Unknown error'}`, 'error');
                 }
 
@@ -1280,6 +1278,7 @@
 
         function handleLogout() {
             currentUser = null;
+            adminPassword = '';
             mainApp.classList.add('hidden');
             loginSection.classList.remove('hidden');
             loginForm.reset();
@@ -1716,7 +1715,7 @@
         }
 
         // ============================================
-        // STUDENT FUNCTIONS
+        // STUDENT FUNCTIONS - DENGAN PASSWORD
         // ============================================
         async function cariSiswa(nis) {
             if (!nis || nis.trim() === '') {
@@ -1724,11 +1723,17 @@
                 return;
             }
 
+            if (!adminPassword) {
+                showMessage('error', '❌ Sesi login tidak valid. Silakan login ulang.');
+                return;
+            }
+
             try {
                 showMessage('info', '⏳ Mencari data siswa...');
                 addDebug(`🔍 Searching for student: ${nis}`, 'info');
                 
-                const response = await fetch(`${API_BASE}/api/student?nis=${nis}`);
+                // Kirim password untuk verifikasi
+                const response = await fetch(`${API_BASE}/api/student?nis=${encodeURIComponent(nis)}&password=${encodeURIComponent(adminPassword)}`);
                 const result = await response.json();
                 
                 addDebug(`📥 Response status: ${response.status}`, 'info');
@@ -1742,10 +1747,15 @@
                     showMessage('success', `✅ Siswa ditemukan: ${currentStudent.nama}`);
                     addDebug(`✅ Student found: ${currentStudent.nama} (${currentStudent.nis})`, 'success');
                 } else {
-                    showMessage('error', '❌ Siswa tidak ditemukan. Menampilkan daftar siswa...');
-                    addDebug(`❌ Student not found: ${nis}`, 'error');
-                    clearStudentInfo();
-                    await loadAllStudents();
+                    if (response.status === 401) {
+                        showMessage('error', '❌ Sesi login expired. Silakan login ulang.');
+                        handleLogout();
+                    } else {
+                        showMessage('error', '❌ Siswa tidak ditemukan. Menampilkan daftar siswa...');
+                        addDebug(`❌ Student not found: ${nis}`, 'error');
+                        clearStudentInfo();
+                        await loadAllStudents();
+                    }
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -1840,12 +1850,17 @@
         }
 
         // ============================================
-        // SUBMIT FUNCTIONS
+        // SUBMIT FUNCTIONS - DENGAN PASSWORD
         // ============================================
         async function submitNilai() {
             if (!currentStudent) {
                 showMessage('error', '❌ Silakan scan atau pilih NISN terlebih dahulu.');
                 addDebug('❌ Submit attempted without student', 'error');
+                return;
+            }
+
+            if (!adminPassword) {
+                showMessage('error', '❌ Sesi login tidak valid. Silakan login ulang.');
                 return;
             }
 
@@ -1902,6 +1917,7 @@
             try {
                 const payload = {
                     nis: currentStudent.nis,
+                    password: adminPassword,
                     nilai: parseInt(nilai),
                     materi: materi
                 };
@@ -1930,9 +1946,14 @@
                     nilaiInput.value = '';
                     materiSelect.value = '';
                 } else {
-                    const errorMsg = result.error || '❌ Gagal menyimpan data.';
-                    showMessage('error', errorMsg);
-                    addDebug(`❌ Submit failed: ${errorMsg}`, 'error');
+                    if (response.status === 401) {
+                        showMessage('error', '❌ Sesi login expired. Silakan login ulang.');
+                        handleLogout();
+                    } else {
+                        const errorMsg = result.error || '❌ Gagal menyimpan data.';
+                        showMessage('error', errorMsg);
+                        addDebug(`❌ Submit failed: ${errorMsg}`, 'error');
+                    }
                 }
             } catch (error) {
                 console.error('Error submitting:', error);
@@ -2013,6 +2034,7 @@
             addDebug('🚀 Application started', 'success');
             addDebug(`📍 API Base: ${API_BASE}`, 'info');
             addDebug(`👤 Logged in as: ${currentUser ? currentUser.nama : 'Unknown'}`, 'info');
+            addDebug(`🔑 NIS: ${currentUser ? currentUser.nis : 'Unknown'}`, 'info');
         }
 
         // ============================================
@@ -2079,7 +2101,7 @@
 
         console.log('🔐 QR Code Scanner - With Login');
         console.log(`📍 API Endpoint: ${API_BASE}`);
-        console.log(`🔑 Login menggunakan Username: ${ALLOWED_USERNAME}`);
+        console.log(`🔑 Hanya NIS: ${ALLOWED_NIS} yang diizinkan`);
         console.log('📚 Materi Sosiologi:', DAFTAR_MATERI.map(m => m.value).join(', '));
         console.log('💡 Jika NISN tidak ditemukan, daftar siswa akan muncul otomatis');
         console.log('💡 Ketik "loadStudents()" di console untuk melihat daftar siswa');
@@ -2088,8 +2110,8 @@
         // Login info di halaman
         loginInfo.classList.add('show');
         loginInfo.innerHTML = `
-            ℹ️ Gunakan username dan password yang telah diberikan.<br>
-            <small style="color:#666;">Hubungi administrator jika lupa password.</small>
+            ℹ️ Masukkan NIS dan Password yang terdaftar di database.<br>
+            <small style="color:#666;">Hanya NIS dengan akses administrator yang diizinkan.</small>
         `;
     </script>
 </body>
