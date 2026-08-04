@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Scan NISN - Input Nilai Sosiologi</title>
+    <title>Super Admin - Input Nilai Sosiologi</title>
     <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <style>
         * {
@@ -27,7 +27,7 @@
             border-radius: 20px;
             padding: 30px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 500px;
+            max-width: 550px;
             width: 100%;
         }
 
@@ -353,6 +353,16 @@
             color: #888;
         }
         
+        .user-badge .super-admin-badge {
+            background: #ffd700;
+            color: #333;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
         .student-info {
             margin-top: 20px;
             padding: 15px;
@@ -365,6 +375,15 @@
         .student-info.show {
             display: block;
             animation: slideIn 0.5s ease;
+        }
+        
+        .student-info h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .student-info .info-item {
@@ -787,6 +806,32 @@
             color: #17a2b8;
         }
         
+        .search-box {
+            margin-bottom: 15px;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .student-count {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+            text-align: right;
+        }
+        
         @media (max-width: 600px) {
             .container {
                 padding: 15px;
@@ -858,14 +903,14 @@
         <div id="loginSection">
             <div class="login-header">
                 <div class="icon">🔐</div>
-                <h1>Login Admin</h1>
+                <h1>Super Admin</h1>
                 <p class="subtitle">Masukkan NIS dan Password untuk mengakses</p>
             </div>
 
             <div id="loginError" class="login-error"></div>
             <div id="loginSuccess" class="login-success"></div>
             <div id="loginInfo" class="login-info">
-                ℹ️ Masukkan NIS dan Password yang terdaftar di database.
+                ℹ️ Masukkan NIS dan Password Super Admin.
             </div>
 
             <form id="loginForm">
@@ -896,7 +941,7 @@
             </form>
 
             <div style="margin-top:15px;text-align:center;font-size:12px;color:#888;">
-                <p>⚠️ Hanya user dengan akses khusus yang diizinkan</p>
+                <p>⚠️ Hanya Super Admin yang diizinkan</p>
             </div>
         </div>
 
@@ -905,17 +950,18 @@
             <!-- User Badge -->
             <div class="user-badge">
                 <div class="user-info">
-                    <span class="user-avatar">👤</span>
+                    <span class="user-avatar">👑</span>
                     <div>
-                        <div class="user-name" id="adminName">Admin</div>
+                        <div class="user-name" id="adminName">Super Admin</div>
                         <div class="user-detail" id="adminDetail">NIS: -</div>
                     </div>
+                    <span class="super-admin-badge">⭐ SUPER ADMIN</span>
                 </div>
                 <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
             </div>
 
             <h1>📷 Scan NISN</h1>
-            <p class="subtitle">Scan QR Code NISN, input nilai secara manual</p>
+            <p class="subtitle">Scan QR Code NISN siswa, input nilai secara manual</p>
             
             <!-- Permission Box -->
             <div class="permission-box" id="permissionBox">
@@ -972,6 +1018,23 @@
                     🔄 Coba Ulang
                 </button>
             </div>
+
+            <!-- Search Box -->
+            <div class="search-box">
+                <input type="text" id="searchStudent" placeholder="🔍 Cari siswa (NIS atau Nama)..." />
+            </div>
+            
+            <!-- Student List -->
+            <div id="studentList" class="student-list">
+                <div class="student-list-header">
+                    <span>📋 Daftar Siswa</span>
+                    <button class="refresh-btn" id="refreshStudentList">🔄 Refresh</button>
+                </div>
+                <div id="studentListContent">
+                    <div class="loading-students">⏳ Memuat data siswa...</div>
+                </div>
+                <div class="student-count" id="studentCount"></div>
+            </div>
             
             <!-- Student Info -->
             <div id="studentInfo" class="student-info">
@@ -993,17 +1056,6 @@
                     <span class="value" id="columnStatusText">-</span>
                 </div>
                 <div id="columnStatusGrid" class="column-status"></div>
-            </div>
-            
-            <!-- Student List -->
-            <div id="studentList" class="student-list">
-                <div class="student-list-header">
-                    <span>📋 Daftar Siswa</span>
-                    <button class="refresh-btn" id="refreshStudentList">🔄 Refresh</button>
-                </div>
-                <div id="studentListContent">
-                    <div class="loading-students">⏳ Memuat data siswa...</div>
-                </div>
             </div>
             
             <!-- Input Form -->
@@ -1061,9 +1113,9 @@
         const API_BASE = 'https://nilai-sosiologi.donnyn1980.workers.dev';
         
         // ============================================
-        // NIS YANG DIIZINKAN LOGIN
+        // SUPER ADMIN NIS
         // ============================================
-        const ALLOWED_NIS = '198004172009021002';
+        const SUPER_ADMIN_NIS = '198004172009021002';
         
         // ============================================
         // STATE
@@ -1078,6 +1130,7 @@
         const MAX_RETRY = 3;
         let currentUser = null;
         let adminPassword = '';
+        let allStudents = [];
 
         // Daftar materi Sosiologi
         const DAFTAR_MATERI = [
@@ -1137,6 +1190,8 @@
         const studentList = document.getElementById('studentList');
         const studentListContent = document.getElementById('studentListContent');
         const refreshStudentListBtn = document.getElementById('refreshStudentList');
+        const studentCount = document.getElementById('studentCount');
+        const searchStudent = document.getElementById('searchStudent');
         
         const inputForm = document.getElementById('inputForm');
         const nilaiInput = document.getElementById('nilaiInput');
@@ -1194,9 +1249,9 @@
                 return;
             }
 
-            // Cek apakah NIS diizinkan
-            if (nis !== ALLOWED_NIS) {
-                showLoginError('NIS tidak memiliki akses administrator.');
+            // Cek apakah NIS adalah Super Admin
+            if (nis !== SUPER_ADMIN_NIS) {
+                showLoginError('Anda bukan Super Admin!');
                 addDebug(`❌ Access denied for NIS: ${nis}`, 'error');
                 return;
             }
@@ -1208,9 +1263,8 @@
             loginSuccess.classList.remove('show');
 
             try {
-                addDebug(`🔐 Mencoba login dengan NIS: ${nis}`, 'info');
+                addDebug(`🔐 Mencoba login sebagai Super Admin dengan NIS: ${nis}`, 'info');
                 
-                // Panggil endpoint /api/login
                 const response = await fetch(`${API_BASE}/api/login`, {
                     method: 'POST',
                     headers: {
@@ -1242,15 +1296,13 @@
                     currentUser = result.data;
                     adminPassword = password;
                     
-                    showLoginSuccess(`Login berhasil! Selamat datang, ${result.data.nama}`);
+                    showLoginSuccess(`Login berhasil! Selamat datang Super Admin, ${result.data.nama}`);
                     
-                    // Set admin info
-                    adminName.textContent = result.data.nama || 'Admin';
+                    adminName.textContent = result.data.nama || 'Super Admin';
                     adminDetail.textContent = `NIS: ${result.data.nis}`;
 
-                    addDebug(`✅ Login successful: ${result.data.nama}`, 'success');
+                    addDebug(`✅ Login successful as Super Admin: ${result.data.nama}`, 'success');
 
-                    // Tampilkan main app
                     setTimeout(() => {
                         loginSection.classList.add('hidden');
                         mainApp.classList.remove('hidden');
@@ -1276,19 +1328,18 @@
         function handleLogout() {
             currentUser = null;
             adminPassword = '';
+            allStudents = [];
             mainApp.classList.add('hidden');
             loginSection.classList.remove('hidden');
             loginForm.reset();
             loginError.classList.remove('show');
             loginSuccess.classList.remove('show');
             
-            // Cleanup scanner
             if (html5QrCode && isScanning) {
                 html5QrCode.stop().catch(err => console.error(err));
                 isScanning = false;
             }
             
-            // Reset UI
             clearStudentInfo();
             document.getElementById('studentList').classList.remove('show');
             document.getElementById('inputForm').style.display = 'none';
@@ -1325,16 +1376,19 @@
                 addDebug(`📥 Response status: ${response.status}`, 'info');
                 
                 if (result.success && result.data && result.data.length > 0) {
-                    addDebug(`✅ Found ${result.data.length} students`, 'success');
-                    renderStudentList(result.data);
+                    allStudents = result.data;
+                    addDebug(`✅ Found ${allStudents.length} students`, 'success');
+                    renderStudentList(allStudents);
                 } else {
                     addDebug('❌ No students found', 'error');
+                    allStudents = [];
                     studentListContent.innerHTML = `
                         <div class="loading-students" style="color: #721c24;">
                             ❌ Tidak ada data siswa ditemukan.<br>
                             <small style="color: #888;">Pastikan tabel daftar_murid memiliki data.</small>
                         </div>
                     `;
+                    studentCount.textContent = 'Total: 0 siswa';
                 }
             } catch (error) {
                 console.error('Error loading students:', error);
@@ -1349,19 +1403,30 @@
         }
 
         function renderStudentList(students) {
+            if (students.length === 0) {
+                studentListContent.innerHTML = `
+                    <div class="loading-students" style="color: #888;">
+                        📭 Tidak ada siswa ditemukan.
+                    </div>
+                `;
+                studentCount.textContent = 'Total: 0 siswa';
+                return;
+            }
+
             let html = '';
             students.forEach(student => {
                 html += `
                     <div class="student-item" data-nis="${student.nis}">
                         <span class="nis">${student.nis}</span>
-                        <span class="name">${student.nama}</span>
-                        <span class="class">${student.kelas}</span>
+                        <span class="name">${student.nama || 'Tidak ada nama'}</span>
+                        <span class="class">${student.kelas || '-'}</span>
                         <button class="select-btn" data-nis="${student.nis}">Pilih</button>
                     </div>
                 `;
             });
             
             studentListContent.innerHTML = html;
+            studentCount.textContent = `Total: ${students.length} siswa`;
             
             document.querySelectorAll('.student-item .select-btn').forEach(btn => {
                 btn.addEventListener('click', function(e) {
@@ -1381,6 +1446,25 @@
             });
             
             addDebug(`✅ Rendered ${students.length} students`, 'success');
+        }
+
+        // ============================================
+        // SEARCH STUDENT
+        // ============================================
+        function filterStudents(query) {
+            if (!query || query.trim() === '') {
+                renderStudentList(allStudents);
+                return;
+            }
+            
+            const q = query.toLowerCase().trim();
+            const filtered = allStudents.filter(s => 
+                s.nis.toLowerCase().includes(q) || 
+                (s.nama && s.nama.toLowerCase().includes(q))
+            );
+            
+            renderStudentList(filtered);
+            addDebug(`🔍 Search "${q}" found ${filtered.length} results`, 'info');
         }
 
         // ============================================
@@ -1747,7 +1831,7 @@
                         showMessage('error', '❌ Sesi login expired. Silakan login ulang.');
                         handleLogout();
                     } else {
-                        showMessage('error', '❌ Siswa tidak ditemukan. Menampilkan daftar siswa...');
+                        showMessage('error', '❌ Siswa tidak ditemukan.');
                         addDebug(`❌ Student not found: ${nis}`, 'error');
                         clearStudentInfo();
                         await loadAllStudents();
@@ -1762,10 +1846,10 @@
         }
 
         function displayStudentInfo(data) {
-            welcomeText.textContent = `Selamat datang, ${data.nama}`;
+            welcomeText.textContent = `👤 ${data.nama}`;
             studentNis.textContent = data.nis;
             studentName.textContent = data.nama;
-            studentClass.textContent = data.kelas;
+            studentClass.textContent = data.kelas || '-';
             
             updateColumnStatus(data);
             
@@ -2022,32 +2106,29 @@
             populateMateriDropdown();
             initializeScanner();
             setTimeout(checkCameraPermission, 1000);
+            loadAllStudents();
             
-            // Auto load student list for debugging
+            console.log('👑 Super Admin Mode Activated');
             console.log('💡 Ketik "loadStudents()" di console untuk melihat daftar siswa');
             window.loadStudents = loadAllStudents;
             
-            addDebug('🚀 Application started', 'success');
+            addDebug('🚀 Super Admin Application started', 'success');
             addDebug(`📍 API Base: ${API_BASE}`, 'info');
-            addDebug(`👤 Logged in as: ${currentUser ? currentUser.nama : 'Unknown'}`, 'info');
-            addDebug(`🔑 NIS: ${currentUser ? currentUser.nis : 'Unknown'}`, 'info');
+            addDebug(`👑 Super Admin: ${currentUser ? currentUser.nama : 'Unknown'}`, 'info');
         }
 
         // ============================================
         // EVENT LISTENERS
         // ============================================
-        // Login
         loginForm.addEventListener('submit', handleLogin);
         logoutBtn.addEventListener('click', handleLogout);
 
-        // Enter key support for login
         loginPassword.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 loginForm.dispatchEvent(new Event('submit'));
             }
         });
 
-        // Main App
         startScanBtn.addEventListener('click', startScanning);
         stopScanBtn.addEventListener('click', stopScanning);
         retryCameraBtn.addEventListener('click', retryCamera);
@@ -2059,6 +2140,10 @@
         manualSubmitBtn.addEventListener('click', manualSearch);
         requestPermissionBtn.addEventListener('click', requestCameraPermission);
         refreshStudentListBtn.addEventListener('click', loadAllStudents);
+        
+        searchStudent.addEventListener('input', function() {
+            filterStudents(this.value);
+        });
         
         debugToggleBtn.addEventListener('click', function() {
             debugInfo.classList.toggle('show');
@@ -2086,28 +2171,23 @@
             }
         });
 
-        // ============================================
-        // WINDOW EVENTS
-        // ============================================
         window.addEventListener('beforeunload', () => {
             if (html5QrCode && isScanning) {
                 html5QrCode.stop().catch(err => console.error(err));
             }
         });
 
-        console.log('🔐 QR Code Scanner - With Login');
+        console.log('👑 Super Admin QR Code Scanner');
         console.log(`📍 API Endpoint: ${API_BASE}`);
-        console.log(`🔑 Hanya NIS: ${ALLOWED_NIS} yang diizinkan`);
+        console.log(`👑 Super Admin NIS: ${SUPER_ADMIN_NIS}`);
         console.log('📚 Materi Sosiologi:', DAFTAR_MATERI.map(m => m.value).join(', '));
-        console.log('💡 Jika NISN tidak ditemukan, daftar siswa akan muncul otomatis');
-        console.log('💡 Ketik "loadStudents()" di console untuk melihat daftar siswa');
-        console.log('🔍 Klik "Toggle Debug" untuk melihat log aktivitas');
+        console.log('💡 Klik "Toggle Debug" untuk melihat log aktivitas');
+        console.log('🔍 Gunakan fitur search untuk mencari siswa');
         
-        // Login info di halaman
         loginInfo.classList.add('show');
         loginInfo.innerHTML = `
-            ℹ️ Masukkan NIS dan Password yang terdaftar di database.<br>
-            <small style="color:#666;">Hanya NIS dengan akses administrator yang diizinkan.</small>
+            ℹ️ Masukkan NIS dan Password Super Admin.<br>
+            <small style="color:#666;">Hanya Super Admin yang diizinkan mengakses.</small>
         `;
     </script>
 </body>
