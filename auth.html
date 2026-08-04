@@ -874,7 +874,7 @@
             <div id="loginError" class="login-error"></div>
             <div id="loginSuccess" class="login-success"></div>
             <div id="loginInfo" class="login-info">
-                ℹ️ Hanya <strong>ADMIN</strong> yang diizinkan.
+                ℹ️ Masukkan NIS dan Password yang terdaftar.
             </div>
 
             <form id="loginForm">
@@ -905,7 +905,7 @@
             </form>
 
             <div style="margin-top:15px;text-align:center;font-size:12px;color:#888;">
-                <p>⚠️ Hanya <strong>ADMIN</strong> yang diizinkan</p>
+                <p>⚠️ Hanya user dengan akses khusus yang diizinkan</p>
             </div>
         </div>
 
@@ -1070,9 +1070,14 @@
         const API_BASE = 'https://nilai-sosiologi.donnyn1980.workers.dev';
         
         // ============================================
-        // NIS YANG DIIZINKAN - HANYA SATU
+        // NIS YANG DIIZINKAN - DISEMBUNYIKAN
         // ============================================
-        const ALLOWED_NIS = '198004172009021002';
+        // NIS asli: 198004172009021002 (TIDAK DITAMPILKAN)
+        // Yang digunakan untuk login: ADMIN
+        const ALLOWED_NIS = 'ADMIN';
+        
+        // NIS asli yang akan digunakan untuk query ke database
+        const REAL_NIS = '198004172009021002';
         
         // ============================================
         // STATE
@@ -1194,10 +1199,10 @@
         async function handleLogin(e) {
             e.preventDefault();
 
-            const nis = loginNis.value.trim();
+            const nisInput = loginNis.value.trim();
             const password = loginPassword.value.trim();
 
-            if (!nis || !password) {
+            if (!nisInput || !password) {
                 showLoginError('NIS dan Password harus diisi!');
                 return;
             }
@@ -1209,19 +1214,19 @@
             loginSuccess.classList.remove('show');
 
             try {
-                addDebug(`🔐 Mencoba login dengan NIS: ${nis}`, 'info');
+                addDebug(`🔐 Mencoba login dengan NIS: ${nisInput}`, 'info');
                 
                 // CEK APAKAH NIS SESUAI DENGAN YANG DIIZINKAN
-                if (nis !== ALLOWED_NIS) {
+                if (nisInput !== ALLOWED_NIS) {
                     showLoginError('NIS tidak memiliki akses administrator.');
-                    addDebug(`❌ Access denied for NIS: ${nis} (hanya ${ALLOWED_NIS} yang diizinkan)`, 'error');
+                    addDebug(`❌ Access denied for NIS: ${nisInput}`, 'error');
                     return;
                 }
                 
-                addDebug(`✅ NIS ${nis} diizinkan, mencoba verifikasi password...`, 'info');
+                addDebug(`✅ NIS ${nisInput} diizinkan, menggunakan NIS real: ${REAL_NIS}`, 'info');
                 
-                // Coba login dengan endpoint /api/student
-                const response = await fetch(`${API_BASE}/api/student?nis=${encodeURIComponent(nis)}&password=${encodeURIComponent(password)}`);
+                // Gunakan REAL_NIS untuk query ke database
+                const response = await fetch(`${API_BASE}/api/student?nis=${encodeURIComponent(REAL_NIS)}&password=${encodeURIComponent(password)}`);
                 
                 addDebug(`📥 Response status: ${response.status}`, 'info');
                 
@@ -1245,9 +1250,9 @@
                     currentUser = result.data;
                     showLoginSuccess(`Login berhasil! Selamat datang, ${result.data.nama}`);
                     
-                    // Set admin info
+                    // Set admin info - TAMPILKAN NIS YANG DIMASUKKAN (ADMIN)
                     adminName.textContent = result.data.nama || 'Admin';
-                    adminDetail.textContent = `NIS: ${result.data.nis}`;
+                    adminDetail.textContent = `NIS: ${nisInput}`;
 
                     addDebug(`✅ Login successful: ${result.data.nama}`, 'success');
 
@@ -2009,7 +2014,6 @@
             addDebug('🚀 Application started', 'success');
             addDebug(`📍 API Base: ${API_BASE}`, 'info');
             addDebug(`👤 Logged in as: ${currentUser ? currentUser.nama : 'Unknown'}`, 'info');
-            addDebug(`🔑 Allowed NIS: ${ALLOWED_NIS}`, 'info');
         }
 
         // ============================================
@@ -2076,7 +2080,7 @@
 
         console.log('🔐 QR Code Scanner - With Login');
         console.log(`📍 API Endpoint: ${API_BASE}`);
-        console.log(`🔑 Hanya NIS: ${ALLOWED_NIS} yang diizinkan`);
+        console.log(`🔑 Login menggunakan NIS: ${ALLOWED_NIS}`);
         console.log('📚 Materi Sosiologi:', DAFTAR_MATERI.map(m => m.value).join(', '));
         console.log('💡 Jika NISN tidak ditemukan, daftar siswa akan muncul otomatis');
         console.log('💡 Ketik "loadStudents()" di console untuk melihat daftar siswa');
@@ -2085,8 +2089,8 @@
         // Login info di halaman
         loginInfo.classList.add('show');
         loginInfo.innerHTML = `
-            ℹ️ Hanya user dengan NIS <strong>${ALLOWED_NIS}</strong> yang diizinkan.<br>
-            <small style="color:#666;">Masukkan NIS dan Password yang sesuai di database.</small>
+            ℹ️ Masukkan NIS dan Password yang terdaftar.<br>
+            <small style="color:#666;">Hubungi administrator jika lupa password.</small>
         `;
     </script>
 </body>
