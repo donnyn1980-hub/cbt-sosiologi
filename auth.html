@@ -1056,14 +1056,13 @@
 
     <script>
         // ============================================
-        // KONFIGURASI
+        // KONFIGURASI - API BACKEND
         // ============================================
         const API_BASE = 'https://nilai-sosiologi.donnyn1980.workers.dev';
         
         // ============================================
-        // NIS YANG DIIZINKAN
+        // NIS YANG DIIZINKAN LOGIN
         // ============================================
-        // Hanya NIS ini yang diizinkan login
         const ALLOWED_NIS = '198004172009021002';
         
         // ============================================
@@ -1164,7 +1163,7 @@
         }
 
         // ============================================
-        // LOGIN FUNCTIONS - MENGGUNAKAN ENDPOINT /api/login
+        // LOGIN FUNCTIONS
         // ============================================
         function showLoginError(message) {
             loginError.textContent = '❌ ' + message;
@@ -1225,6 +1224,9 @@
 
                 addDebug(`📥 Response status: ${response.status}`, 'info');
 
+                const result = await response.json();
+                addDebug(`📦 Response data: ${JSON.stringify(result)}`, 'info');
+
                 if (response.status === 401) {
                     showLoginError('Password salah!');
                     addDebug('❌ Login failed: Invalid password', 'error');
@@ -1232,14 +1234,9 @@
                 }
 
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    addDebug(`❌ Response error: ${JSON.stringify(errorData)}`, 'error');
-                    showLoginError(errorData.error || `Gagal login: ${response.status}`);
+                    showLoginError(result.error || `Gagal login: ${response.status}`);
                     return;
                 }
-
-                const result = await response.json();
-                addDebug(`📦 Response data: ${JSON.stringify(result)}`, 'info');
 
                 if (result.success && result.data) {
                     currentUser = result.data;
@@ -1715,7 +1712,7 @@
         }
 
         // ============================================
-        // STUDENT FUNCTIONS - DENGAN PASSWORD
+        // STUDENT FUNCTIONS
         // ============================================
         async function cariSiswa(nis) {
             if (!nis || nis.trim() === '') {
@@ -1732,7 +1729,6 @@
                 showMessage('info', '⏳ Mencari data siswa...');
                 addDebug(`🔍 Searching for student: ${nis}`, 'info');
                 
-                // Kirim password untuk verifikasi
                 const response = await fetch(`${API_BASE}/api/student?nis=${encodeURIComponent(nis)}&password=${encodeURIComponent(adminPassword)}`);
                 const result = await response.json();
                 
@@ -1850,7 +1846,7 @@
         }
 
         // ============================================
-        // SUBMIT FUNCTIONS - DENGAN PASSWORD
+        // SUBMIT FUNCTIONS
         // ============================================
         async function submitNilai() {
             if (!currentStudent) {
