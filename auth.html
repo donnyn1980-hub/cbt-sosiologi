@@ -320,6 +320,38 @@
             padding: 8px 16px;
             font-size: 12px;
         }
+
+        .user-badge {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f0f7ff;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #667eea;
+        }
+        
+        .user-badge .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-badge .user-avatar {
+            font-size: 24px;
+        }
+        
+        .user-badge .user-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .user-badge .user-detail {
+            font-size: 12px;
+            color: #888;
+        }
         
         .student-info {
             margin-top: 20px;
@@ -764,38 +796,6 @@
             color: #17a2b8;
         }
         
-        .user-badge {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #f0f7ff;
-            padding: 10px 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #667eea;
-        }
-        
-        .user-badge .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .user-badge .user-avatar {
-            font-size: 24px;
-        }
-        
-        .user-badge .user-name {
-            font-weight: 600;
-            color: #333;
-            font-size: 14px;
-        }
-        
-        .user-badge .user-detail {
-            font-size: 12px;
-            color: #888;
-        }
-        
         @media (max-width: 600px) {
             .container {
                 padding: 15px;
@@ -868,22 +868,22 @@
             <div class="login-header">
                 <div class="icon">🔐</div>
                 <h1>Login Admin</h1>
-                <p class="subtitle">Masukkan NIS dan Password untuk mengakses</p>
+                <p class="subtitle">Masukkan Username dan Password untuk mengakses</p>
             </div>
 
             <div id="loginError" class="login-error"></div>
             <div id="loginSuccess" class="login-success"></div>
             <div id="loginInfo" class="login-info">
-                ℹ️ Masukkan NIS dan Password yang terdaftar.
+                ℹ️ Gunakan username dan password yang telah diberikan.
             </div>
 
             <form id="loginForm">
                 <div class="form-group">
-                    <label for="loginNis">NIS (Username)</label>
+                    <label for="loginNis">Username</label>
                     <input 
                         type="text" 
                         id="loginNis" 
-                        placeholder="Masukkan NIS" 
+                        placeholder="Masukkan Username" 
                         required
                         autocomplete="username"
                     >
@@ -917,7 +917,7 @@
                     <span class="user-avatar">👤</span>
                     <div>
                         <div class="user-name" id="adminName">Admin</div>
-                        <div class="user-detail" id="adminDetail">NIS: -</div>
+                        <div class="user-detail" id="adminDetail">Username: -</div>
                     </div>
                 </div>
                 <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
@@ -1070,13 +1070,12 @@
         const API_BASE = 'https://nilai-sosiologi.donnyn1980.workers.dev';
         
         // ============================================
-        // NIS YANG DIIZINKAN - DISEMBUNYIKAN
+        // KREDENSIAL LOGIN - DISEMBUNYIKAN
         // ============================================
-        // NIS asli: 198004172009021002 (TIDAK DITAMPILKAN)
-        // Yang digunakan untuk login: ADMIN
-        const ALLOWED_NIS = 'ADMIN';
+        // Username yang digunakan untuk login (ditampilkan di UI)
+        const ALLOWED_USERNAME = 'ADMIN';
         
-        // NIS asli yang akan digunakan untuk query ke database
+        // NIS asli yang digunakan untuk query ke database (TIDAK PERNAH DITAMPILKAN)
         const REAL_NIS = '198004172009021002';
         
         // ============================================
@@ -1199,11 +1198,11 @@
         async function handleLogin(e) {
             e.preventDefault();
 
-            const nisInput = loginNis.value.trim();
+            const usernameInput = loginNis.value.trim();
             const password = loginPassword.value.trim();
 
-            if (!nisInput || !password) {
-                showLoginError('NIS dan Password harus diisi!');
+            if (!usernameInput || !password) {
+                showLoginError('Username dan Password harus diisi!');
                 return;
             }
 
@@ -1214,16 +1213,16 @@
             loginSuccess.classList.remove('show');
 
             try {
-                addDebug(`🔐 Mencoba login dengan NIS: ${nisInput}`, 'info');
+                addDebug(`🔐 Mencoba login dengan Username: ${usernameInput}`, 'info');
                 
-                // CEK APAKAH NIS SESUAI DENGAN YANG DIIZINKAN
-                if (nisInput !== ALLOWED_NIS) {
-                    showLoginError('NIS tidak memiliki akses administrator.');
-                    addDebug(`❌ Access denied for NIS: ${nisInput}`, 'error');
+                // CEK APAKAH USERNAME SESUAI
+                if (usernameInput !== ALLOWED_USERNAME) {
+                    showLoginError('Username atau Password salah!');
+                    addDebug(`❌ Access denied for Username: ${usernameInput}`, 'error');
                     return;
                 }
                 
-                addDebug(`✅ NIS ${nisInput} diizinkan, menggunakan NIS real: ${REAL_NIS}`, 'info');
+                addDebug(`✅ Username ${usernameInput} diizinkan, menggunakan NIS: ${REAL_NIS} (tersembunyi)`, 'info');
                 
                 // Gunakan REAL_NIS untuk query ke database
                 const response = await fetch(`${API_BASE}/api/student?nis=${encodeURIComponent(REAL_NIS)}&password=${encodeURIComponent(password)}`);
@@ -1250,9 +1249,9 @@
                     currentUser = result.data;
                     showLoginSuccess(`Login berhasil! Selamat datang, ${result.data.nama}`);
                     
-                    // Set admin info - TAMPILKAN NIS YANG DIMASUKKAN (ADMIN)
+                    // Tampilkan USERNAME yang digunakan (bukan NIS asli)
                     adminName.textContent = result.data.nama || 'Admin';
-                    adminDetail.textContent = `NIS: ${nisInput}`;
+                    adminDetail.textContent = `Username: ${usernameInput}`;
 
                     addDebug(`✅ Login successful: ${result.data.nama}`, 'success');
 
@@ -1264,7 +1263,7 @@
                     }, 1000);
 
                 } else {
-                    showLoginError(result.error || 'Login gagal. Periksa NIS dan Password.');
+                    showLoginError(result.error || 'Login gagal. Periksa Username dan Password.');
                     addDebug(`❌ Login failed: ${result.error || 'Unknown error'}`, 'error');
                 }
 
@@ -2080,7 +2079,7 @@
 
         console.log('🔐 QR Code Scanner - With Login');
         console.log(`📍 API Endpoint: ${API_BASE}`);
-        console.log(`🔑 Login menggunakan NIS: ${ALLOWED_NIS}`);
+        console.log(`🔑 Login menggunakan Username: ${ALLOWED_USERNAME}`);
         console.log('📚 Materi Sosiologi:', DAFTAR_MATERI.map(m => m.value).join(', '));
         console.log('💡 Jika NISN tidak ditemukan, daftar siswa akan muncul otomatis');
         console.log('💡 Ketik "loadStudents()" di console untuk melihat daftar siswa');
@@ -2089,7 +2088,7 @@
         // Login info di halaman
         loginInfo.classList.add('show');
         loginInfo.innerHTML = `
-            ℹ️ Masukkan NIS dan Password yang terdaftar.<br>
+            ℹ️ Gunakan username dan password yang telah diberikan.<br>
             <small style="color:#666;">Hubungi administrator jika lupa password.</small>
         `;
     </script>
