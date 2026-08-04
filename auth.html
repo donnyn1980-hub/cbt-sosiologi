@@ -1,0 +1,2066 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Scan NISN - Input Nilai Sosiologi</title>
+    <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        /* ========== LOGIN STYLES ========== */
+        #loginSection {
+            display: block;
+        }
+        #loginSection.hidden {
+            display: none;
+        }
+
+        #mainApp.hidden {
+            display: none;
+        }
+        #mainApp {
+            display: block;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .login-header .icon {
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+        .login-header h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .login-header .subtitle {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .login-error {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            display: none;
+        }
+        .login-error.show {
+            display: block;
+            animation: shake 0.5s;
+        }
+
+        .login-success {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            display: none;
+        }
+        .login-success.show {
+            display: block;
+            animation: slideIn 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .login-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            display: none;
+        }
+        .login-info.show {
+            display: block;
+        }
+
+        /* ========== EXISTING STYLES ========== */
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 5px;
+            font-size: 24px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+        
+        .camera-selector {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .camera-selector label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        
+        .camera-selector select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+        }
+        
+        .camera-selector select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .camera-quick-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .camera-quick-buttons button {
+            flex: 1;
+            padding: 8px 12px;
+            font-size: 12px;
+            min-width: auto;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+        }
+        
+        .camera-quick-buttons button:active {
+            transform: scale(0.95);
+        }
+        
+        .btn-back {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        }
+        
+        .btn-front {
+            background: linear-gradient(135deg, #f6d365, #fda085);
+        }
+        
+        .btn-torch {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+        }
+        
+        .btn-torch.active {
+            background: linear-gradient(135deg, #FF6B6B, #ee5a24);
+        }
+        
+        #reader {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            border-radius: 15px;
+            overflow: hidden;
+            background: #000;
+            position: relative;
+            min-height: 300px;
+        }
+        
+        #reader video {
+            width: 100%;
+            height: auto;
+            border-radius: 15px;
+            display: block;
+        }
+        
+        #reader .scan-region {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.4);
+            pointer-events: none;
+        }
+        
+        #reader .scan-line {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 180px;
+            height: 2px;
+            background: #00ff00;
+            animation: scan 2s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes scan {
+            0%, 100% {
+                transform: translate(-50%, -50%) translateY(-80px);
+            }
+            50% {
+                transform: translate(-50%, -50%) translateY(80px);
+            }
+        }
+        
+        #reader .placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            pointer-events: none;
+            width: 90%;
+        }
+        
+        #reader .placeholder .icon {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        #reader .placeholder .text {
+            font-size: 16px;
+        }
+        
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            min-width: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        button.danger {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        button.success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        button.logout-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            flex: 0 1 auto;
+            min-width: auto;
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+        
+        .student-info {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #f0f7ff;
+            border: 2px solid #667eea;
+            display: none;
+        }
+        
+        .student-info.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+        
+        .student-info h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .student-info .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
+        }
+        
+        .student-info .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .student-info .label {
+            color: #888;
+            font-weight: 500;
+        }
+        
+        .student-info .value {
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .student-info .welcome-text {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 700;
+            color: #667eea;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border-radius: 8px;
+        }
+        
+        .form-group {
+            margin-top: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        
+        .form-group input, 
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .form-group input:disabled {
+            background: #f5f5f5;
+            cursor: not-allowed;
+        }
+        
+        .column-status {
+            margin-top: 10px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+        }
+        
+        .column-status .col-item {
+            text-align: center;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .col-filled {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .col-empty {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .col-current {
+            background: #d1ecf1;
+            color: #0c5460;
+            animation: pulse-bg 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-bg {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        
+        .message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .message.success {
+            display: block;
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .message.error {
+            display: block;
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .message.info {
+            display: block;
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .message.warning {
+            display: block;
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .status-indicator .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+        
+        .status-indicator .dot.active {
+            background: #4CAF50;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        .status-indicator .dot.inactive {
+            background: #f44336;
+        }
+        
+        .status-indicator .dot.loading {
+            background: #FFC107;
+            animation: pulse 1s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(0.8);
+            }
+        }
+        
+        .manual-input {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px dashed #e0e0e0;
+        }
+        
+        .manual-input summary {
+            cursor: pointer;
+            color: #667eea;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .manual-input .form-group {
+            margin-top: 15px;
+        }
+        
+        .manual-input input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .manual-input input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .permission-box {
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            display: none;
+        }
+        
+        .permission-box.show {
+            display: block;
+        }
+        
+        .permission-box h4 {
+            color: #856404;
+            margin-bottom: 8px;
+        }
+        
+        .permission-box p {
+            font-size: 13px;
+            color: #856404;
+            line-height: 1.6;
+        }
+        
+        .permission-box button {
+            margin-top: 10px;
+            padding: 8px 20px;
+            font-size: 13px;
+            min-width: auto;
+            background: #856404;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .action-buttons button {
+            flex: 1;
+        }
+        
+        .student-list {
+            margin-top: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .student-list.show {
+            display: block;
+        }
+        
+        .student-list .student-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .student-list .student-item:hover {
+            background: #f0f7ff;
+        }
+        
+        .student-list .student-item:last-child {
+            border-bottom: none;
+        }
+        
+        .student-list .student-item .nis {
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        .student-list .student-item .name {
+            flex: 1;
+            margin-left: 10px;
+            color: #333;
+        }
+        
+        .student-list .student-item .class {
+            color: #888;
+            font-size: 12px;
+            background: #f0f0f0;
+            padding: 2px 10px;
+            border-radius: 12px;
+        }
+        
+        .student-list .student-item .select-btn {
+            padding: 4px 12px;
+            font-size: 11px;
+            min-width: auto;
+            background: #4facfe;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .student-list .student-item .select-btn:hover {
+            background: #667eea;
+        }
+        
+        .student-list-header {
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e0e0e0;
+            font-weight: 600;
+            color: #555;
+            display: flex;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            background: #f8f9fa;
+            z-index: 1;
+        }
+        
+        .student-list .loading-students {
+            padding: 20px;
+            text-align: center;
+            color: #888;
+        }
+        
+        .refresh-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .refresh-btn:hover {
+            background: #218838;
+        }
+        
+        .debug-info {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 12px;
+            font-family: monospace;
+            display: none;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+        }
+        
+        .debug-info.show {
+            display: block;
+        }
+        
+        .debug-info .debug-line {
+            padding: 3px 0;
+            border-bottom: 1px solid #eee;
+            color: #333;
+        }
+        
+        .debug-info .debug-line.error {
+            color: #dc3545;
+        }
+        
+        .debug-info .debug-line.success {
+            color: #28a745;
+        }
+        
+        .debug-info .debug-line.info {
+            color: #17a2b8;
+        }
+        
+        .user-badge {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f0f7ff;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #667eea;
+        }
+        
+        .user-badge .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-badge .user-avatar {
+            font-size: 24px;
+        }
+        
+        .user-badge .user-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .user-badge .user-detail {
+            font-size: 12px;
+            color: #888;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            #reader .scan-region {
+                width: 150px;
+                height: 150px;
+            }
+            
+            #reader .scan-line {
+                width: 130px;
+            }
+            
+            button {
+                font-size: 12px;
+                padding: 10px 15px;
+                min-width: 80px;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .camera-quick-buttons {
+                flex-direction: row;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .column-status {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .student-list .student-item {
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+            
+            .student-list .student-item .name {
+                margin-left: 0;
+                width: 100%;
+                order: 3;
+            }
+            
+            .student-list .student-item .select-btn {
+                order: 4;
+                width: 100%;
+                margin-top: 5px;
+            }
+
+            .user-badge {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .user-badge .user-info {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ========== LOGIN SECTION ========== -->
+        <div id="loginSection">
+            <div class="login-header">
+                <div class="icon">🔐</div>
+                <h1>Login Admin</h1>
+                <p class="subtitle">Masukkan NIS dan Password untuk mengakses</p>
+            </div>
+
+            <div id="loginError" class="login-error"></div>
+            <div id="loginSuccess" class="login-success"></div>
+            <div id="loginInfo" class="login-info">
+                ℹ️ Hanya user dengan akses khusus yang diizinkan.
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginNis">NIS (Username)</label>
+                    <input 
+                        type="text" 
+                        id="loginNis" 
+                        placeholder="Masukkan NIS" 
+                        required
+                        autocomplete="username"
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input 
+                        type="password" 
+                        id="loginPassword" 
+                        placeholder="Masukkan Password" 
+                        required
+                        autocomplete="current-password"
+                    >
+                </div>
+                <button type="submit" class="btn" id="loginBtn" style="width:100%;">
+                    <span id="loginBtnText">Login</span>
+                    <span id="loginBtnLoading" style="display: none;">Loading...</span>
+                </button>
+            </form>
+
+            <div style="margin-top:15px;text-align:center;font-size:12px;color:#888;">
+                <p>⚠️ Hanya akun dengan akses khusus yang dapat login</p>
+            </div>
+        </div>
+
+        <!-- ========== MAIN APP SECTION ========== -->
+        <div id="mainApp" class="hidden">
+            <!-- User Badge -->
+            <div class="user-badge">
+                <div class="user-info">
+                    <span class="user-avatar">👤</span>
+                    <div>
+                        <div class="user-name" id="adminName">Admin</div>
+                        <div class="user-detail" id="adminDetail">NIS: -</div>
+                    </div>
+                </div>
+                <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
+            </div>
+
+            <h1>📷 Scan NISN</h1>
+            <p class="subtitle">Scan QR Code NISN, input nilai secara manual</p>
+            
+            <!-- Permission Box -->
+            <div class="permission-box" id="permissionBox">
+                <h4>🔒 Izin Akses Kamera</h4>
+                <p>Aplikasi membutuhkan akses kamera untuk scan QR Code. Silakan izinkan akses kamera di browser Anda.</p>
+                <button id="requestPermissionBtn" style="width:100%;">📷 Minta Izin Kamera</button>
+            </div>
+            
+            <!-- Camera Selection -->
+            <div class="camera-selector">
+                <label for="cameraSelect">📸 Pilih Kamera:</label>
+                <select id="cameraSelect">
+                    <option value="">-- Pilih Kamera --</option>
+                </select>
+                
+                <div class="camera-quick-buttons">
+                    <button id="backCameraBtn" class="btn-back">
+                        📱 Kamera Belakang
+                    </button>
+                    <button id="frontCameraBtn" class="btn-front">
+                        🤳 Kamera Depan
+                    </button>
+                    <button id="torchBtn" class="btn-torch">
+                        🔦
+                    </button>
+                </div>
+            </div>
+            
+            <!-- QR Reader -->
+            <div id="reader">
+                <div class="scan-region"></div>
+                <div class="scan-line"></div>
+                <div class="placeholder" id="placeholder">
+                    <span class="icon">📷</span>
+                    <span class="text">Tekan tombol "Start Scan"<br>untuk mengaktifkan kamera</span>
+                </div>
+            </div>
+            
+            <!-- Status Indicator -->
+            <div class="status-indicator">
+                <span class="dot inactive" id="statusDot"></span>
+                <span id="statusText">Kamera tidak aktif</span>
+            </div>
+            
+            <!-- Controls -->
+            <div class="controls">
+                <button id="startScanBtn" class="success">
+                    <span class="icon-btn">▶</span> Start Scan
+                </button>
+                <button id="stopScanBtn" class="danger" disabled>
+                    <span class="icon-btn">⏹</span> Stop Scan
+                </button>
+                <button id="retryCameraBtn" style="background: linear-gradient(135deg, #f6d365, #fda085);">
+                    🔄 Coba Ulang
+                </button>
+            </div>
+            
+            <!-- Student Info -->
+            <div id="studentInfo" class="student-info">
+                <div class="welcome-text" id="welcomeText">Selamat datang, [Nama]</div>
+                <div class="info-item">
+                    <span class="label">NISN</span>
+                    <span class="value" id="studentNis">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Nama</span>
+                    <span class="value" id="studentName">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Kelas</span>
+                    <span class="value" id="studentClass">-</span>
+                </div>
+                <div class="info-item" style="border-bottom: none;">
+                    <span class="label">Status Kolom</span>
+                    <span class="value" id="columnStatusText">-</span>
+                </div>
+                <div id="columnStatusGrid" class="column-status"></div>
+            </div>
+            
+            <!-- Student List -->
+            <div id="studentList" class="student-list">
+                <div class="student-list-header">
+                    <span>📋 Daftar Siswa</span>
+                    <button class="refresh-btn" id="refreshStudentList">🔄 Refresh</button>
+                </div>
+                <div id="studentListContent">
+                    <div class="loading-students">⏳ Memuat data siswa...</div>
+                </div>
+            </div>
+            
+            <!-- Input Form -->
+            <div id="inputForm" style="display: none;">
+                <div class="form-group">
+                    <label for="nilaiInput">📝 Nilai (0-100)</label>
+                    <input type="number" id="nilaiInput" placeholder="Masukkan nilai" min="0" max="100" step="1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="materiSelect">📚 Materi</label>
+                    <select id="materiSelect">
+                        <option value="">Pilih Materi</option>
+                    </select>
+                </div>
+                
+                <div class="action-buttons">
+                    <button id="submitBtn" class="success" style="flex:2;">
+                        ✅ Submit Nilai
+                    </button>
+                    <button id="clearBtn" class="danger" style="flex:1;">
+                        🗑️ Hapus
+                    </button>
+                </div>
+                
+                <button id="debugToggleBtn" style="margin-top: 10px; background: #6c757d; font-size: 12px; padding: 6px 12px; min-width: auto;">
+                    🔍 Toggle Debug
+                </button>
+                
+                <div id="debugInfo" class="debug-info">
+                    <div class="debug-line info">📊 Debug Info</div>
+                </div>
+            </div>
+            
+            <div id="message" class="message"></div>
+            
+            <!-- Manual Input -->
+            <div class="manual-input">
+                <details>
+                    <summary>📝 Input Manual NISN</summary>
+                    <div class="form-group">
+                        <label style="font-size:14px;color:#555;font-weight:600;">Masukkan NISN</label>
+                        <input type="text" id="manualNis" placeholder="Masukkan NISN secara manual">
+                        <button id="manualSubmitBtn" style="width:100%;margin-top:10px;">🔍 Cari Siswa</button>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // KONFIGURASI
+        // ============================================
+        const API_BASE = 'https://besosiologi2627.donnyn1980.workers.dev';
+        
+        // ============================================
+        // STATE
+        // ============================================
+        let html5QrCode = null;
+        let currentStudent = null;
+        let isScanning = false;
+        let currentCameraId = null;
+        let availableCameras = [];
+        let torchEnabled = false;
+        let retryCount = 0;
+        const MAX_RETRY = 3;
+        let currentUser = null;
+
+        // Daftar materi Sosiologi
+        const DAFTAR_MATERI = [
+            { value: 'Kelompok Sosial', emoji: '👥' },
+            { value: 'Struktur Sosial', emoji: '🏛️' },
+            { value: 'Gejala dan Masalah Sosial', emoji: '⚠️' },
+            { value: 'Konflik Sosial', emoji: '⚔️' },
+            { value: 'Pengendalian Sosial', emoji: '🛡️' },
+            { value: 'Perubahan Sosial', emoji: '🔄' },
+            { value: 'Globalisasi Sosial', emoji: '🌍' },
+            { value: 'Pemberdayaan Komunitas', emoji: '💪' }
+        ];
+
+        // ============================================
+        // DOM ELEMENTS - LOGIN
+        // ============================================
+        const loginSection = document.getElementById('loginSection');
+        const mainApp = document.getElementById('mainApp');
+        const loginForm = document.getElementById('loginForm');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginBtnText = document.getElementById('loginBtnText');
+        const loginBtnLoading = document.getElementById('loginBtnLoading');
+        const loginError = document.getElementById('loginError');
+        const loginSuccess = document.getElementById('loginSuccess');
+        const loginInfo = document.getElementById('loginInfo');
+        const loginNis = document.getElementById('loginNis');
+        const loginPassword = document.getElementById('loginPassword');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const adminName = document.getElementById('adminName');
+        const adminDetail = document.getElementById('adminDetail');
+
+        // ============================================
+        // DOM ELEMENTS - MAIN APP
+        // ============================================
+        const startScanBtn = document.getElementById('startScanBtn');
+        const stopScanBtn = document.getElementById('stopScanBtn');
+        const retryCameraBtn = document.getElementById('retryCameraBtn');
+        const cameraSelect = document.getElementById('cameraSelect');
+        const backCameraBtn = document.getElementById('backCameraBtn');
+        const frontCameraBtn = document.getElementById('frontCameraBtn');
+        const torchBtn = document.getElementById('torchBtn');
+        const messageDiv = document.getElementById('message');
+        const placeholder = document.getElementById('placeholder');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        const permissionBox = document.getElementById('permissionBox');
+        const requestPermissionBtn = document.getElementById('requestPermissionBtn');
+        
+        const studentInfo = document.getElementById('studentInfo');
+        const welcomeText = document.getElementById('welcomeText');
+        const studentNis = document.getElementById('studentNis');
+        const studentName = document.getElementById('studentName');
+        const studentClass = document.getElementById('studentClass');
+        const columnStatusText = document.getElementById('columnStatusText');
+        const columnStatusGrid = document.getElementById('columnStatusGrid');
+        
+        const studentList = document.getElementById('studentList');
+        const studentListContent = document.getElementById('studentListContent');
+        const refreshStudentListBtn = document.getElementById('refreshStudentList');
+        
+        const inputForm = document.getElementById('inputForm');
+        const nilaiInput = document.getElementById('nilaiInput');
+        const materiSelect = document.getElementById('materiSelect');
+        const submitBtn = document.getElementById('submitBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const debugToggleBtn = document.getElementById('debugToggleBtn');
+        const debugInfo = document.getElementById('debugInfo');
+        
+        const manualNis = document.getElementById('manualNis');
+        const manualSubmitBtn = document.getElementById('manualSubmitBtn');
+
+        // ============================================
+        // LOGIN FUNCTIONS
+        // ============================================
+        function showLoginError(message) {
+            loginError.textContent = '❌ ' + message;
+            loginError.classList.add('show');
+            loginSuccess.classList.remove('show');
+            setTimeout(() => {
+                loginError.classList.remove('show');
+            }, 5000);
+        }
+
+        function showLoginSuccess(message) {
+            loginSuccess.textContent = '✅ ' + message;
+            loginSuccess.classList.add('show');
+            loginError.classList.remove('show');
+            setTimeout(() => {
+                loginSuccess.classList.remove('show');
+            }, 3000);
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+
+            const nis = loginNis.value.trim();
+            const password = loginPassword.value.trim();
+
+            if (!nis || !password) {
+                showLoginError('NIS dan Password harus diisi!');
+                return;
+            }
+
+            loginBtn.disabled = true;
+            loginBtnText.style.display = 'none';
+            loginBtnLoading.style.display = 'inline';
+            loginError.classList.remove('show');
+            loginSuccess.classList.remove('show');
+
+            try {
+                // Panggil API login dengan parameter rowid=1
+                const response = await fetch(`${API_BASE}/api/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        nis: nis, 
+                        password: password 
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    // Login berhasil
+                    currentUser = result.data;
+                    
+                    // Cek apakah rowid = 1 (dari response)
+                    if (result.rowid !== 1) {
+                        showLoginError('Akun ini tidak memiliki akses administrator.');
+                        currentUser = null;
+                        return;
+                    }
+
+                    showLoginSuccess(`Login berhasil! Selamat datang, ${result.data.nama}`);
+                    
+                    // Set admin info
+                    adminName.textContent = result.data.nama || 'Admin';
+                    adminDetail.textContent = `NIS: ${result.data.nis}`;
+
+                    // Tampilkan main app
+                    setTimeout(() => {
+                        loginSection.classList.add('hidden');
+                        mainApp.classList.remove('hidden');
+                        initializeApp();
+                    }, 1000);
+
+                } else {
+                    showLoginError(result.error || 'Login gagal. Periksa NIS dan Password.');
+                }
+
+            } catch (error) {
+                console.error('Login error:', error);
+                showLoginError('Gagal menghubungi server. Periksa koneksi.');
+            } finally {
+                loginBtn.disabled = false;
+                loginBtnText.style.display = 'inline';
+                loginBtnLoading.style.display = 'none';
+            }
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            mainApp.classList.add('hidden');
+            loginSection.classList.remove('hidden');
+            loginForm.reset();
+            loginError.classList.remove('show');
+            loginSuccess.classList.remove('show');
+            
+            // Cleanup scanner
+            if (html5QrCode && isScanning) {
+                html5QrCode.stop().catch(err => console.error(err));
+                isScanning = false;
+            }
+            
+            // Reset UI
+            clearStudentInfo();
+            document.getElementById('studentList').classList.remove('show');
+            document.getElementById('inputForm').style.display = 'none';
+            
+            console.log('🔐 Logout berhasil');
+        }
+
+        // ============================================
+        // DEBUG FUNCTION
+        // ============================================
+        function addDebug(message, type = 'info') {
+            const line = document.createElement('div');
+            line.className = `debug-line ${type}`;
+            line.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            debugInfo.appendChild(line);
+            debugInfo.scrollTop = debugInfo.scrollHeight;
+            console.log(`[DEBUG] ${message}`);
+        }
+
+        // ============================================
+        // MATERI FUNCTIONS
+        // ============================================
+        function populateMateriDropdown() {
+            materiSelect.innerHTML = '<option value="">Pilih Materi</option>';
+            DAFTAR_MATERI.forEach(materi => {
+                const option = document.createElement('option');
+                option.value = materi.value;
+                option.textContent = `${materi.emoji} ${materi.value}`;
+                materiSelect.appendChild(option);
+            });
+            addDebug('Materi dropdown populated', 'info');
+        }
+
+        // ============================================
+        // STUDENT LIST FUNCTIONS
+        // ============================================
+        async function loadAllStudents() {
+            try {
+                studentListContent.innerHTML = '<div class="loading-students">⏳ Memuat data siswa...</div>';
+                studentList.classList.add('show');
+                addDebug('Loading student list...', 'info');
+                
+                const response = await fetch(`${API_BASE}/api/students`);
+                const result = await response.json();
+                addDebug(`Response status: ${response.status}`, 'info');
+                
+                if (result.success && result.data && result.data.length > 0) {
+                    addDebug(`Found ${result.data.length} students`, 'success');
+                    renderStudentList(result.data);
+                } else {
+                    addDebug('No students found', 'error');
+                    studentListContent.innerHTML = `
+                        <div class="loading-students" style="color: #721c24;">
+                            ❌ Tidak ada data siswa ditemukan.<br>
+                            <small style="color: #888;">Pastikan tabel daftar_murid memiliki data.</small>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading students:', error);
+                addDebug(`Error: ${error.message}`, 'error');
+                studentListContent.innerHTML = `
+                    <div class="loading-students" style="color: #721c24;">
+                        ❌ Gagal memuat data siswa.<br>
+                        <small style="color: #888;">${error.message}</small>
+                    </div>
+                `;
+            }
+        }
+
+        function renderStudentList(students) {
+            let html = '';
+            students.forEach(student => {
+                const scoreCount = student.scores ? student.scores.length : 0;
+                html += `
+                    <div class="student-item" data-nis="${student.nis}">
+                        <span class="nis">${student.nis}</span>
+                        <span class="name">${student.nama}</span>
+                        <span class="class">${student.kelas}</span>
+                        <button class="select-btn" data-nis="${student.nis}">Pilih</button>
+                    </div>
+                `;
+            });
+            
+            studentListContent.innerHTML = html;
+            
+            document.querySelectorAll('.student-item .select-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const nis = this.dataset.nis;
+                    cariSiswa(nis);
+                    studentList.classList.remove('show');
+                });
+            });
+            
+            document.querySelectorAll('.student-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const nis = this.dataset.nis;
+                    cariSiswa(nis);
+                    studentList.classList.remove('show');
+                });
+            });
+            
+            addDebug(`Rendered ${students.length} students`, 'success');
+        }
+
+        // ============================================
+        // CAMERA FUNCTIONS
+        // ============================================
+        function initializeScanner() {
+            if (html5QrCode) {
+                try {
+                    html5QrCode.clear();
+                } catch (e) {}
+                html5QrCode = null;
+            }
+            html5QrCode = new Html5Qrcode("reader");
+            loadCameras();
+        }
+
+        async function checkCameraPermission() {
+            try {
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    showMessage('error', '❌ Browser Anda tidak mendukung akses kamera.');
+                    return false;
+                }
+
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                stream.getTracks().forEach(track => track.stop());
+                permissionBox.classList.remove('show');
+                return true;
+            } catch (error) {
+                console.error('Permission check error:', error);
+                if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+                    permissionBox.classList.add('show');
+                    showMessage('warning', '⚠️ Izin kamera diperlukan untuk scan QR Code.');
+                } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
+                    showMessage('error', '❌ Tidak ada kamera yang terdeteksi.');
+                } else {
+                    showMessage('error', '❌ Gagal mengakses kamera: ' + error.message);
+                }
+                return false;
+            }
+        }
+
+        async function requestCameraPermission() {
+            try {
+                showMessage('info', '📷 Meminta izin akses kamera...');
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: 'environment' } 
+                });
+                stream.getTracks().forEach(track => track.stop());
+                permissionBox.classList.remove('show');
+                showMessage('success', '✅ Izin kamera diberikan!');
+                await loadCameras();
+            } catch (error) {
+                console.error('Permission request error:', error);
+                showMessage('error', '❌ Izin kamera ditolak.');
+            }
+        }
+
+        async function loadCameras() {
+            try {
+                const hasPermission = await checkCameraPermission();
+                if (!hasPermission) return;
+
+                const devices = await Html5Qrcode.getCameras();
+                if (devices && devices.length > 0) {
+                    availableCameras = devices;
+                    cameraSelect.innerHTML = '<option value="">-- Pilih Kamera --</option>';
+                    
+                    let backCamera = null;
+                    let frontCamera = null;
+                    
+                    devices.forEach((device, index) => {
+                        const option = document.createElement('option');
+                        option.value = device.id;
+                        
+                        const label = device.label ? device.label.toLowerCase() : '';
+                        let displayName = device.label || `Kamera ${index + 1}`;
+                        
+                        if (label.includes('back') || label.includes('belakang') || label.includes('rear') || label.includes('environment')) {
+                            displayName = '📱 Kamera Belakang';
+                            backCamera = device;
+                        } else if (label.includes('front') || label.includes('depan') || label.includes('face') || label.includes('user')) {
+                            displayName = '🤳 Kamera Depan';
+                            frontCamera = device;
+                        }
+                        
+                        option.textContent = displayName;
+                        cameraSelect.appendChild(option);
+                    });
+                    
+                    if (backCamera) {
+                        cameraSelect.value = backCamera.id;
+                        currentCameraId = backCamera.id;
+                    } else if (devices.length > 0) {
+                        cameraSelect.value = devices[0].id;
+                        currentCameraId = devices[0].id;
+                    }
+                    
+                    showMessage('info', `📸 Ditemukan ${devices.length} kamera.`);
+                    return true;
+                } else {
+                    showMessage('error', '❌ Tidak ada kamera yang terdeteksi.');
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error loading cameras:', error);
+                showMessage('error', '❌ Gagal mendeteksi kamera.');
+                return false;
+            }
+        }
+
+        async function startScanning() {
+            if (isScanning) return;
+            
+            const cameraId = cameraSelect.value;
+            if (!cameraId) {
+                showMessage('warning', '⚠️ Silakan pilih kamera terlebih dahulu.');
+                return;
+            }
+
+            try {
+                startScanBtn.disabled = true;
+                startScanBtn.innerHTML = '<span class="loading"></span> Memulai...';
+                updateStatus('loading', 'Mengaktifkan kamera...');
+                
+                placeholder.style.display = 'none';
+                
+                await html5QrCode.start(
+                    cameraId,
+                    {
+                        fps: 15,
+                        qrbox: { width: 250, height: 250 },
+                        aspectRatio: 1.0
+                    },
+                    onScanSuccess,
+                    onScanError
+                );
+                
+                isScanning = true;
+                currentCameraId = cameraId;
+                startScanBtn.textContent = '🔄 Scanning...';
+                stopScanBtn.disabled = false;
+                retryCameraBtn.disabled = true;
+                cameraSelect.disabled = true;
+                updateStatus('active', 'Kamera aktif - Scan QR Code NISN');
+                showMessage('info', '📸 Arahkan ke QR Code NISN siswa.');
+                retryCount = 0;
+                addDebug('Scanner started successfully', 'success');
+                
+            } catch (error) {
+                console.error('Error starting scanner:', error);
+                addDebug(`Scanner error: ${error.message}`, 'error');
+                let errorMsg = 'Gagal mengakses kamera';
+                
+                if (error.message.includes('Permission') || error.message.includes('NotAllowed')) {
+                    errorMsg = 'Akses kamera ditolak. Izinkan akses kamera.';
+                    permissionBox.classList.add('show');
+                } else if (error.message.includes('NotFound')) {
+                    errorMsg = 'Kamera tidak ditemukan.';
+                } else if (error.message.includes('NotReadable')) {
+                    errorMsg = 'Kamera sedang digunakan aplikasi lain.';
+                }
+                
+                showMessage('error', '❌ ' + errorMsg);
+                startScanBtn.disabled = false;
+                startScanBtn.textContent = '▶ Start Scan';
+                updateStatus('inactive', 'Kamera tidak aktif');
+                placeholder.style.display = 'block';
+                
+                if (retryCount < MAX_RETRY) {
+                    retryCount++;
+                    setTimeout(() => {
+                        showMessage('info', `🔄 Mencoba ulang (${retryCount}/${MAX_RETRY})...`);
+                        startScanning();
+                    }, 2000);
+                }
+            }
+        }
+
+        function stopScanning() {
+            if (html5QrCode && isScanning) {
+                html5QrCode.stop()
+                    .then(() => {
+                        isScanning = false;
+                        startScanBtn.disabled = false;
+                        startScanBtn.textContent = '▶ Start Scan';
+                        stopScanBtn.disabled = true;
+                        retryCameraBtn.disabled = false;
+                        cameraSelect.disabled = false;
+                        updateStatus('inactive', 'Kamera dimatikan');
+                        showMessage('info', '⏹ Scan dihentikan.');
+                        placeholder.style.display = 'block';
+                        if (torchEnabled) {
+                            toggleTorch();
+                        }
+                        addDebug('Scanner stopped', 'info');
+                    })
+                    .catch(err => {
+                        console.error('Error stopping scanner:', err);
+                        addDebug(`Stop error: ${err.message}`, 'error');
+                    });
+            }
+        }
+
+        function retryCamera() {
+            showMessage('info', '🔄 Mencoba ulang akses kamera...');
+            stopScanning();
+            loadCameras();
+            setTimeout(() => startScanning(), 1000);
+        }
+
+        function selectBackCamera() {
+            const backCamera = availableCameras.find(c => {
+                const label = c.label ? c.label.toLowerCase() : '';
+                return label.includes('back') || label.includes('belakang') || label.includes('rear') || label.includes('environment');
+            });
+            
+            if (backCamera) {
+                cameraSelect.value = backCamera.id;
+                currentCameraId = backCamera.id;
+                if (!isScanning) {
+                    showMessage('info', '📱 Beralih ke kamera belakang');
+                } else {
+                    switchToCamera(backCamera.id);
+                }
+            } else {
+                showMessage('warning', '⚠️ Kamera belakang tidak ditemukan.');
+            }
+        }
+
+        function selectFrontCamera() {
+            const frontCamera = availableCameras.find(c => {
+                const label = c.label ? c.label.toLowerCase() : '';
+                return label.includes('front') || label.includes('depan') || label.includes('face') || label.includes('user');
+            });
+            
+            if (frontCamera) {
+                cameraSelect.value = frontCamera.id;
+                currentCameraId = frontCamera.id;
+                if (!isScanning) {
+                    showMessage('info', '🤳 Beralih ke kamera depan');
+                } else {
+                    switchToCamera(frontCamera.id);
+                }
+            } else {
+                showMessage('warning', '⚠️ Kamera depan tidak ditemukan.');
+            }
+        }
+
+        async function switchToCamera(cameraId) {
+            if (!isScanning) {
+                cameraSelect.value = cameraId;
+                currentCameraId = cameraId;
+                return;
+            }
+            
+            try {
+                await html5QrCode.stop();
+                isScanning = false;
+                cameraSelect.value = cameraId;
+                currentCameraId = cameraId;
+                await startScanning();
+            } catch (error) {
+                console.error('Error switching camera:', error);
+                showMessage('error', '❌ Gagal mengganti kamera.');
+            }
+        }
+
+        function toggleTorch() {
+            if (!isScanning) {
+                showMessage('warning', '⚠️ Aktifkan kamera terlebih dahulu.');
+                return;
+            }
+            
+            torchEnabled = !torchEnabled;
+            try {
+                html5QrCode.applyVideoConstraints({
+                    advanced: [{ torch: torchEnabled }]
+                });
+                
+                torchBtn.classList.toggle('active');
+                torchBtn.textContent = torchEnabled ? '🔦 ON' : '🔦';
+                showMessage('info', torchEnabled ? '💡 Senter menyala' : '💡 Senter mati');
+            } catch (error) {
+                console.error('Torch error:', error);
+                showMessage('error', '❌ Senter tidak didukung.');
+                torchEnabled = false;
+                torchBtn.classList.remove('active');
+                torchBtn.textContent = '🔦';
+            }
+        }
+
+        // ============================================
+        // SCAN SUCCESS
+        // ============================================
+        function onScanSuccess(decodedText, decodedResult) {
+            try {
+                let nis = decodedText;
+                try {
+                    const data = JSON.parse(decodedText);
+                    if (data.nis) {
+                        nis = data.nis;
+                    }
+                } catch (e) {}
+                
+                addDebug(`QR Code scanned: ${nis}`, 'info');
+                cariSiswa(nis);
+                
+                const reader = document.getElementById('reader');
+                if (reader) {
+                    reader.style.boxShadow = '0 0 20px #00ff00';
+                    setTimeout(() => {
+                        reader.style.boxShadow = '0 0 20px rgba(16, 185, 129, 0.3)';
+                    }, 300);
+                }
+                
+                if (navigator.vibrate) {
+                    navigator.vibrate(200);
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                addDebug(`Scan error: ${error.message}`, 'error');
+                showMessage('error', '❌ Gagal memproses QR Code.');
+            }
+        }
+
+        function onScanError(error) {
+            // Ignore
+        }
+
+        // ============================================
+        // STUDENT FUNCTIONS
+        // ============================================
+        async function cariSiswa(nis) {
+            if (!nis || nis.trim() === '') {
+                showMessage('warning', '⚠️ NISN tidak valid.');
+                return;
+            }
+
+            try {
+                showMessage('info', '⏳ Mencari data siswa...');
+                addDebug(`Searching for student: ${nis}`, 'info');
+                
+                const response = await fetch(`${API_BASE}/api/student?nis=${nis}`);
+                const result = await response.json();
+                
+                addDebug(`Response status: ${response.status}`, 'info');
+                addDebug(`Response data: ${JSON.stringify(result)}`, 'info');
+
+                if (result.success) {
+                    currentStudent = result.data;
+                    displayStudentInfo(currentStudent);
+                    studentList.classList.remove('show');
+                    stopScanning();
+                    showMessage('success', `✅ Siswa ditemukan: ${currentStudent.nama}`);
+                    addDebug(`Student found: ${currentStudent.nama} (${currentStudent.nis})`, 'success');
+                } else {
+                    showMessage('error', '❌ Siswa tidak ditemukan. Menampilkan daftar siswa...');
+                    addDebug(`Student not found: ${nis}`, 'error');
+                    clearStudentInfo();
+                    await loadAllStudents();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                addDebug(`Error: ${error.message}`, 'error');
+                showMessage('error', '❌ Gagal menghubungi server.');
+                await loadAllStudents();
+            }
+        }
+
+        function displayStudentInfo(data) {
+            welcomeText.textContent = `Selamat datang, ${data.nama}`;
+            studentNis.textContent = data.nis;
+            studentName.textContent = data.nama;
+            studentClass.textContent = data.kelas;
+            
+            updateColumnStatus(data);
+            
+            studentInfo.classList.add('show');
+            inputForm.style.display = 'block';
+            
+            nilaiInput.disabled = false;
+            materiSelect.disabled = false;
+            submitBtn.disabled = false;
+            
+            nilaiInput.value = '';
+            materiSelect.value = '';
+            
+            addDebug(`Student info displayed: ${data.nama}`, 'info');
+        }
+
+        function updateColumnStatus(data) {
+            let emptyColumns = [];
+            let filledColumns = [];
+            
+            for (let i = 1; i <= 9; i++) {
+                const nilaiKey = i.toString();
+                const materiKey = `m${i}`;
+                
+                const nilaiEmpty = data[nilaiKey] === null || data[nilaiKey] === '';
+                const materiEmpty = data[materiKey] === null || data[materiKey] === '';
+                
+                if (nilaiEmpty && materiEmpty) {
+                    emptyColumns.push(i);
+                } else if (!nilaiEmpty && !materiEmpty) {
+                    filledColumns.push(i);
+                }
+            }
+            
+            if (emptyColumns.length === 0) {
+                columnStatusText.textContent = '⚠️ Semua kolom terisi!';
+                columnStatusText.style.color = '#721c24';
+            } else {
+                columnStatusText.textContent = `✅ ${emptyColumns.length} kolom tersedia (${emptyColumns.join(', ')})`;
+                columnStatusText.style.color = '#155724';
+            }
+            
+            let html = '';
+            for (let i = 1; i <= 9; i++) {
+                const isFilled = filledColumns.includes(i);
+                const isEmpty = emptyColumns.includes(i);
+                let statusClass = 'col-empty';
+                let label = 'Kosong';
+                
+                if (isFilled) {
+                    statusClass = 'col-filled';
+                    label = '✓ Terisi';
+                } else if (isEmpty) {
+                    statusClass = 'col-empty';
+                    label = '◻ Kosong';
+                }
+                
+                html += `
+                    <div class="col-item ${statusClass}">
+                        ${i}<br><small>${label}</small>
+                    </div>
+                `;
+            }
+            
+            columnStatusGrid.innerHTML = html;
+        }
+
+        function clearStudentInfo() {
+            studentInfo.classList.remove('show');
+            inputForm.style.display = 'none';
+            currentStudent = null;
+            welcomeText.textContent = 'Selamat datang, [Nama]';
+            studentNis.textContent = '-';
+            studentName.textContent = '-';
+            studentClass.textContent = '-';
+            columnStatusText.textContent = '-';
+            columnStatusGrid.innerHTML = '';
+        }
+
+        // ============================================
+        // SUBMIT FUNCTIONS
+        // ============================================
+        async function submitNilai() {
+            if (!currentStudent) {
+                showMessage('error', '❌ Silakan scan atau pilih NISN terlebih dahulu.');
+                addDebug('Submit attempted without student', 'error');
+                return;
+            }
+
+            const nilai = nilaiInput.value.trim();
+            const materi = materiSelect.value;
+
+            addDebug(`Submit attempt: nilai=${nilai}, materi=${materi}`, 'info');
+
+            if (!nilai || isNaN(nilai) || nilai < 0 || nilai > 100) {
+                showMessage('error', '❌ Masukkan nilai yang valid (0-100).');
+                nilaiInput.focus();
+                addDebug(`Invalid nilai: ${nilai}`, 'error');
+                return;
+            }
+
+            if (!materi) {
+                showMessage('error', '❌ Pilih materi.');
+                materiSelect.focus();
+                addDebug('No materi selected', 'error');
+                return;
+            }
+
+            let hasEmptyColumn = false;
+            let emptyColumnIndex = 0;
+            for (let i = 1; i <= 9; i++) {
+                const nilaiKey = i.toString();
+                const materiKey = `m${i}`;
+                const nilaiEmpty = currentStudent[nilaiKey] === null || currentStudent[nilaiKey] === '';
+                const materiEmpty = currentStudent[materiKey] === null || currentStudent[materiKey] === '';
+                if (nilaiEmpty && materiEmpty) {
+                    hasEmptyColumn = true;
+                    emptyColumnIndex = i;
+                    break;
+                }
+            }
+
+            if (!hasEmptyColumn) {
+                showMessage('error', '❌ Semua kolom sudah terisi. Tidak dapat menambah data.');
+                addDebug('No empty columns available', 'error');
+                return;
+            }
+
+            addDebug(`Will use column ${emptyColumnIndex}`, 'info');
+
+            const confirmed = confirm(`Submit nilai ${nilai} untuk ${currentStudent.nama} (${currentStudent.nis})?`);
+            if (!confirmed) {
+                addDebug('Submit cancelled by user', 'info');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading"></span> Memproses...';
+
+            try {
+                const payload = {
+                    nis: currentStudent.nis,
+                    nilai: parseInt(nilai),
+                    materi: materi
+                };
+                
+                addDebug(`Sending payload: ${JSON.stringify(payload)}`, 'info');
+                
+                const response = await fetch(`${API_BASE}/api/submit`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                addDebug(`Response status: ${response.status}`, 'info');
+                
+                const result = await response.json();
+                addDebug(`Response data: ${JSON.stringify(result)}`, 'info');
+
+                if (result.success) {
+                    showMessage('success', `✅ Berhasil! Data disimpan di kolom ke-${result.column}`);
+                    addDebug(`Successfully saved to column ${result.column}`, 'success');
+                    
+                    await cariSiswa(currentStudent.nis);
+                    
+                    nilaiInput.value = '';
+                    materiSelect.value = '';
+                } else {
+                    const errorMsg = result.error || '❌ Gagal menyimpan data.';
+                    showMessage('error', errorMsg);
+                    addDebug(`Submit failed: ${errorMsg}`, 'error');
+                }
+            } catch (error) {
+                console.error('Error submitting:', error);
+                addDebug(`Submit error: ${error.message}`, 'error');
+                showMessage('error', `❌ Terjadi kesalahan: ${error.message}`);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '✅ Submit Nilai';
+            }
+        }
+
+        // ============================================
+        // MANUAL INPUT
+        // ============================================
+        function manualSearch() {
+            const nis = manualNis.value.trim();
+            if (nis) {
+                cariSiswa(nis);
+                manualNis.value = '';
+            } else {
+                showMessage('warning', '⚠️ Masukkan NISN.');
+            }
+        }
+
+        // ============================================
+        // CLEAR FUNCTIONS
+        // ============================================
+        function clearAll() {
+            clearStudentInfo();
+            nilaiInput.value = '';
+            materiSelect.value = '';
+            studentList.classList.remove('show');
+            showMessage('info', '🗑️ Data dihapus.');
+            addDebug('Form cleared', 'info');
+        }
+
+        // ============================================
+        // UI HELPERS
+        // ============================================
+        function updateStatus(status, text) {
+            statusDot.className = 'dot';
+            if (status === 'active') {
+                statusDot.classList.add('active');
+            } else if (status === 'loading') {
+                statusDot.classList.add('loading');
+            } else {
+                statusDot.classList.add('inactive');
+            }
+            statusText.textContent = text;
+        }
+
+        function showMessage(type, text) {
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = text;
+            messageDiv.style.display = 'block';
+            
+            if (type === 'success') {
+                setTimeout(() => {
+                    if (messageDiv.className.includes('success')) {
+                        messageDiv.style.display = 'none';
+                    }
+                }, 4000);
+            }
+        }
+
+        // ============================================
+        // INITIALIZE APP
+        // ============================================
+        function initializeApp() {
+            populateMateriDropdown();
+            initializeScanner();
+            setTimeout(checkCameraPermission, 1000);
+            
+            // Auto load student list for debugging
+            console.log('💡 Ketik "loadStudents()" di console untuk melihat daftar siswa');
+            window.loadStudents = loadAllStudents;
+            
+            addDebug('Application started', 'success');
+            addDebug(`API Base: ${API_BASE}`, 'info');
+            addDebug(`Logged in as: ${currentUser ? currentUser.nama : 'Unknown'}`, 'info');
+        }
+
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+        // Login
+        loginForm.addEventListener('submit', handleLogin);
+        logoutBtn.addEventListener('click', handleLogout);
+
+        // Enter key support for login
+        loginPassword.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                loginForm.dispatchEvent(new Event('submit'));
+            }
+        });
+
+        // Main App
+        startScanBtn.addEventListener('click', startScanning);
+        stopScanBtn.addEventListener('click', stopScanning);
+        retryCameraBtn.addEventListener('click', retryCamera);
+        backCameraBtn.addEventListener('click', selectBackCamera);
+        frontCameraBtn.addEventListener('click', selectFrontCamera);
+        torchBtn.addEventListener('click', toggleTorch);
+        submitBtn.addEventListener('click', submitNilai);
+        clearBtn.addEventListener('click', clearAll);
+        manualSubmitBtn.addEventListener('click', manualSearch);
+        requestPermissionBtn.addEventListener('click', requestCameraPermission);
+        refreshStudentListBtn.addEventListener('click', loadAllStudents);
+        
+        debugToggleBtn.addEventListener('click', function() {
+            debugInfo.classList.toggle('show');
+            this.textContent = debugInfo.classList.contains('show') ? '🔍 Hide Debug' : '🔍 Toggle Debug';
+        });
+
+        cameraSelect.addEventListener('change', function() {
+            if (this.value) {
+                currentCameraId = this.value;
+                if (isScanning) {
+                    switchToCamera(this.value);
+                }
+            }
+        });
+
+        manualNis.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                manualSearch();
+            }
+        });
+
+        nilaiInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                submitNilai();
+            }
+        });
+
+        // ============================================
+        // WINDOW EVENTS
+        // ============================================
+        window.addEventListener('beforeunload', () => {
+            if (html5QrCode && isScanning) {
+                html5QrCode.stop().catch(err => console.error(err));
+            }
+        });
+
+        console.log('🔐 QR Code Scanner - With Login');
+        console.log(`📍 API Endpoint: ${API_BASE}`);
+        console.log('📚 Materi Sosiologi:', DAFTAR_MATERI.map(m => m.value).join(', '));
+        console.log('👤 Login hanya untuk user dengan rowid=1');
+        console.log('💡 Jika NISN tidak ditemukan, daftar siswa akan muncul otomatis');
+        console.log('💡 Ketik "loadStudents()" di console untuk melihat daftar siswa');
+        console.log('🔍 Klik "Toggle Debug" untuk melihat log aktivitas');
+    </script>
+</body>
+</html>
