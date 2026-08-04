@@ -874,7 +874,7 @@
             <div id="loginError" class="login-error"></div>
             <div id="loginSuccess" class="login-success"></div>
             <div id="loginInfo" class="login-info">
-                ℹ️ Gunakan NIS dan Password yang terdaftar di database.
+                ℹ️ Hanya user dengan NIS <strong>198004172009021002</strong> yang diizinkan.
             </div>
 
             <form id="loginForm">
@@ -905,7 +905,7 @@
             </form>
 
             <div style="margin-top:15px;text-align:center;font-size:12px;color:#888;">
-                <p>⚠️ Hanya user dengan akses khusus yang diizinkan</p>
+                <p>⚠️ Hanya user dengan NIS <strong>198004172009021002</strong> yang diizinkan</p>
             </div>
         </div>
 
@@ -1065,9 +1065,14 @@
 
     <script>
         // ============================================
-        // KONFIGURASI - UPDATE DENGAN WORKER ANDA
+        // KONFIGURASI
         // ============================================
         const API_BASE = 'https://nilai-sosiologi.donnyn1980.workers.dev';
+        
+        // ============================================
+        // NIS YANG DIIZINKAN - HANYA SATU
+        // ============================================
+        const ALLOWED_NIS = '198004172009021002';
         
         // ============================================
         // STATE
@@ -1166,7 +1171,7 @@
         }
 
         // ============================================
-        // LOGIN FUNCTIONS - MENGGUNAKAN ENDPOINT /api/student
+        // LOGIN FUNCTIONS
         // ============================================
         function showLoginError(message) {
             loginError.textContent = '❌ ' + message;
@@ -1206,14 +1211,23 @@
             try {
                 addDebug(`🔐 Mencoba login dengan NIS: ${nis}`, 'info');
                 
+                // CEK APAKAH NIS SESUAI DENGAN YANG DIIZINKAN
+                if (nis !== ALLOWED_NIS) {
+                    showLoginError('NIS tidak memiliki akses administrator.');
+                    addDebug(`❌ Access denied for NIS: ${nis} (hanya ${ALLOWED_NIS} yang diizinkan)`, 'error');
+                    return;
+                }
+                
+                addDebug(`✅ NIS ${nis} diizinkan, mencoba verifikasi password...`, 'info');
+                
                 // Coba login dengan endpoint /api/student
                 const response = await fetch(`${API_BASE}/api/student?nis=${encodeURIComponent(nis)}&password=${encodeURIComponent(password)}`);
                 
                 addDebug(`📥 Response status: ${response.status}`, 'info');
                 
                 if (response.status === 401) {
-                    showLoginError('NIS atau Password salah!');
-                    addDebug('❌ Login failed: Invalid credentials', 'error');
+                    showLoginError('Password salah!');
+                    addDebug('❌ Login failed: Invalid password', 'error');
                     return;
                 }
 
@@ -1228,20 +1242,6 @@
                 addDebug(`📦 Response data: ${JSON.stringify(result)}`, 'info');
 
                 if (result.success && result.data) {
-                    // Cek apakah ini user dengan rowid = 1
-                    // Karena API tidak mengembalikan rowid, kita cek apakah NIS adalah admin
-                    // Anda bisa menyesuaikan dengan data admin di database
-                    
-                    // Untuk sementara, kita asumsikan user dengan NIS tertentu adalah admin
-                    // Misalnya NIS: 'admin' atau '001'
-                    const adminNisList = ['admin', '001', '2024001']; // Tambahkan NIS admin di sini
-                    
-                    if (!adminNisList.includes(nis.toLowerCase())) {
-                        showLoginError('Akun ini tidak memiliki akses administrator.');
-                        addDebug(`❌ Access denied for NIS: ${nis}`, 'error');
-                        return;
-                    }
-
                     currentUser = result.data;
                     showLoginSuccess(`Login berhasil! Selamat datang, ${result.data.nama}`);
                     
@@ -2009,6 +2009,7 @@
             addDebug('🚀 Application started', 'success');
             addDebug(`📍 API Base: ${API_BASE}`, 'info');
             addDebug(`👤 Logged in as: ${currentUser ? currentUser.nama : 'Unknown'}`, 'info');
+            addDebug(`🔑 Allowed NIS: ${ALLOWED_NIS}`, 'info');
         }
 
         // ============================================
@@ -2075,8 +2076,8 @@
 
         console.log('🔐 QR Code Scanner - With Login');
         console.log(`📍 API Endpoint: ${API_BASE}`);
+        console.log(`🔑 Hanya NIS: ${ALLOWED_NIS} yang diizinkan`);
         console.log('📚 Materi Sosiologi:', DAFTAR_MATERI.map(m => m.value).join(', '));
-        console.log('👤 Login menggunakan NIS dan Password');
         console.log('💡 Jika NISN tidak ditemukan, daftar siswa akan muncul otomatis');
         console.log('💡 Ketik "loadStudents()" di console untuk melihat daftar siswa');
         console.log('🔍 Klik "Toggle Debug" untuk melihat log aktivitas');
@@ -2084,8 +2085,8 @@
         // Login info di halaman
         loginInfo.classList.add('show');
         loginInfo.innerHTML = `
-            ℹ️ Gunakan NIS dan Password yang terdaftar di database.<br>
-            <small style="color:#666;">Contoh: NIS=admin, Password=admin123</small>
+            ℹ️ Hanya user dengan NIS <strong>${ALLOWED_NIS}</strong> yang diizinkan.<br>
+            <small style="color:#666;">Masukkan NIS dan Password yang sesuai di database.</small>
         `;
     </script>
 </body>
