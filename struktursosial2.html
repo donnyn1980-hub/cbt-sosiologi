@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Tebak Kata: Struktur Sosial</title>
+  <!-- QRCode.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --border-color: #cbd5e1;
+      --correct-color: #22c55e;
+      --wrong-color: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      padding: 12px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 600px;
+      width: 100%;
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    header h1 {
+      color: var(--primary);
+      font-size: 1.5rem;
+      margin-bottom: 4px;
+    }
+
+    header p {
+      color: #64748b;
+      font-size: 0.85rem;
+    }
+
+    /* Modal Form Identitas */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+
+    .modal-card {
+      background: var(--card-bg);
+      width: 100%;
+      max-width: 400px;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-card h2 {
+      color: var(--primary);
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .modal-card p {
+      font-size: 0.85rem;
+      color: #64748b;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus {
+      border-color: var(--primary);
+    }
+
+    .btn-start {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-start:hover {
+      background: var(--primary-hover);
+    }
+
+    /* Info Bar Peserta */
+    .player-bar {
+      display: none;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin-bottom: 16px;
+      font-size: 0.85rem;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .player-bar span {
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    /* Progress & Status */
+    .game-status {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #475569;
+    }
+
+    .lives-container {
+      color: var(--wrong-color);
+    }
+
+    /* Clue Box */
+    .clue-box {
+      background: #f1f5f9;
+      border-left: 4px solid var(--primary);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+    }
+
+    .clue-box h3 {
+      font-size: 0.85rem;
+      color: var(--primary);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .clue-box p {
+      font-size: 0.95rem;
+      color: #334155;
+      line-height: 1.4;
+    }
+
+    /* Word Slots Container */
+    .word-display {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+      min-height: 50px;
+    }
+
+    .word-group {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .letter-slot {
+      width: 36px;
+      height: 44px;
+      border-bottom: 3px solid #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: var(--text-main);
+      text-transform: uppercase;
+    }
+
+    .letter-slot.filled {
+      border-bottom-color: var(--primary);
+    }
+
+    .space-slot {
+      width: 16px;
+      height: 44px;
+    }
+
+    /* On-Screen Keyboard */
+    .keyboard {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .keyboard-row {
+      display: flex;
+      gap: 4px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .key-btn {
+      flex: 1;
+      max-width: 42px;
+      height: 44px;
+      background: #e2e8f0;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #334155;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s, color 0.15s, transform 0.1s;
+    }
+
+    .key-btn:active {
+      transform: scale(0.95);
+    }
+
+    .key-btn.correct {
+      background: var(--correct-color) !important;
+      color: white !important;
+      cursor: default;
+    }
+
+    .key-btn.wrong {
+      background: #cbd5e1 !important;
+      color: #94a3b8 !important;
+      cursor: default;
+      opacity: 0.6;
+    }
+
+    /* Action Message & Next Button */
+    .action-container {
+      text-align: center;
+      min-height: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .message {
+      font-weight: bold;
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+
+    .message.success { color: var(--correct-color); }
+    .message.error { color: var(--wrong-color); }
+
+    .btn-next {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: none;
+    }
+
+    .btn-next:hover {
+      background: var(--primary-hover);
+    }
+
+    /* Result & QR Code Display */
+    .result-card {
+      display: none;
+      margin-top: 16px;
+      background: #f0fdf4;
+      border: 2px solid var(--correct-color);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .result-card h2 {
+      color: #166534;
+      font-size: 1.3rem;
+      margin-bottom: 6px;
+    }
+
+    .result-card p {
+      font-size: 0.95rem;
+      color: #15803d;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    #qrcode {
+      display: flex;
+      justify-content: center;
+      margin: 16px auto;
+      padding: 12px;
+      background: white;
+      border-radius: 8px;
+      width: fit-content;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Modal Form Input Nama & NISN -->
+<div id="startModal" class="modal-overlay">
+  <div class="modal-card">
+    <h2>Tebak Kata Sosiologi</h2>
+    <p>Silakan masukkan identitas Anda sebelum memulai permainan Struktur Sosial.</p>
+    <form id="identityForm" onsubmit="startGame(event)">
+      <div class="form-group">
+        <label for="inputNama">Nama Lengkap</label>
+        <input type="text" id="inputNama" placeholder="Contoh: Budi Santoso" required>
+      </div>
+      <div class="form-group">
+        <label for="inputNISN">NISN</label>
+        <input type="number" id="inputNISN" placeholder="Contoh: 0051234567" required>
+      </div>
+      <button type="submit" class="btn-start">Mulai Permainan</button>
+    </form>
+  </div>
+</div>
+
+<div class="container">
+  header>
+    <h1>Tebak Kata: Struktur Sosial</h1>
+    <p>Tebak istilah berdasarkan petunjuk yang diberikan!</p>
+  </header>
+
+  <!-- Player Info Bar -->
+  <div id="playerBar" class="player-bar">
+    <div>Nama: <span id="displayName">-</span></div>
+    <div>NISN: <span id="displayNISN">-</span></div>
+  </div>
+
+  <!-- Game Area -->
+  <div id="gameArea" style="display: none;">
+    <div class="game-status">
+      <div>Soal: <span id="questionNum">1</span> / 5</div>
+      <div>Skor: <span id="scoreText">0</span></div>
+      <div class="lives-container">Kesempatan: <span id="livesText">❤️❤️❤️❤️❤️</span></div>
+    </div>
+
+    <div class="clue-box">
+      <h3>Petunjuk / Clue:</h3>
+      <p id="clueText">Loading...</p>
+    </div>
+
+    <div class="word-display" id="wordDisplay"></div>
+
+    <div class="keyboard" id="keyboard"></div>
+
+    <div class="action-container">
+      <div id="messageText" class="message"></div>
+      <button id="btnNext" class="btn-next" onclick="nextQuestion()">Soal Berikutnya ➔</button>
+    </div>
+  </div>
+
+  <!-- Hasil Akhir & QR Code -->
+  <div id="resultCard" class="result-card">
+    <h2>🎉 Permainan Selesai!</h2>
+    <p id="completionText"></p>
+    <div id="qrcode"></div>
+    <span style="font-size: 0.75rem; color: #64748b;">Scan QR Code di atas untuk memverifikasi NISN & Bukti Penyelesaian.</span>
+  </div>
+</div>
+
+<script>
+  let playerNama = "";
+  let playerNISN = "";
+
+  // Bank Data Kata & Petunjuk Struktur Sosial
+  const ALL_QUESTIONS = [
+    { word: "STRATIFIKASI SOSIAL", clue: "Pelapisan masyarakat secara bertingkat atau vertikal berdasarkan kriteria tertentu." },
+    { word: "DIFFERENSIASI SOSIAL", clue: "Pembedaan masyarakat secara horizontal atau sejajar tanpa tingkatan (misal: ras, agama, suku)." },
+    { word: "ACHIEVED STATUS", clue: "Kedudukan atau posisi sosial yang diperoleh seseorang melalui usaha dan kerja keras." },
+    { word: "ASCRIBED STATUS", clue: "Kedudukan sosial yang diperoleh seseorang secara otomatis sejak lahir tanpa usaha." },
+    { word: "ASSIGNED STATUS", clue: "Kedudukan yang diberikan masyarakat kepada seseorang atas jasa atau penghargaannya." },
+    { word: "PERAN SOSIAL", clue: "Perilaku yang diharapkan dari seseorang sesuai dengan status sosial yang dimilikinya." },
+    { word: "MOBILITAS SOSIAL", clue: "Perpindahan posisi atau kedudukan individu/kelompok dari satu lapisan ke lapisan lain." },
+    { word: "INTERSEKSI", clue: "Persilangan atau pertemuan keanggotaan individu dalam berbagai kelompok sosial." },
+    { word: "KONSOLIDASI", clue: "Penguatan kembali keanggotaan kelompok sosial yang tumpang tindih." },
+    { word: "SISTEM KASTA", clue: "Sistem stratifikasi sosial tertutup berbasis keturunan yang sangat ketat." },
+    { word: "FEODALISME", clue: "Sistem struktur sosial yang berbasis pada penguasaan tanah dan hubungan kepemilikan lahan." },
+    { word: "MERITOKRASI", clue: "Sistem yang memberikan penghargaan dan posisi berdasarkan kemampuan serta prestasi individu." },
+    { word: "KONFLIK PERAN", clue: "Kondisi ketika seseorang mengalami pertentangan antara dua peran atau lebih yang dijalani bersamaan." },
+    { word: "KELOMPOK ACUAN", clue: "Kelompok sosial yang menjadi patokan atau standar bagi seseorang untuk membentuk kepribadiannya." },
+    { word: "MONOPOLI STATUS", clue: "Penguasaan posisi atau peran penting dalam masyarakat yang terbatas hanya pada kelompok tertentu." }
+  ];
+
+  let selectedQuestions = [];
+  let currentQuestionIndex = 0;
+  let currentWord = "";
+  let currentClue = "";
+  let guessedLetters = new Set();
+  let lives = 5;
+  let score = 0;
+  let isGameOver = false;
+
+  function startGame(event) {
+    event.preventDefault();
+    playerNama = document.getElementById('inputNama').value.trim();
+    playerNISN = document.getElementById('inputNISN').value.trim();
+
+    if (!playerNama || !playerNISN) return;
+
+    document.getElementById('displayName').innerText = playerNama;
+    document.getElementById('displayNISN').innerText = playerNISN;
+    document.getElementById('startModal').style.display = 'none';
+    document.getElementById('playerBar').style.display = 'flex';
+    document.getElementById('gameArea').style.display = 'block';
+
+    // Acak & Ambil 5 Pertanyaan
+    selectedQuestions = [...ALL_QUESTIONS].sort(() => Math.random() - 0.5).slice(0, 5);
+    currentQuestionIndex = 0;
+    score = 0;
+
+    loadQuestion();
+  }
+
+  function loadQuestion() {
+    isGameOver = false;
+    guessedLetters.clear();
+    lives = 5;
+
+    const currentQ = selectedQuestions[currentQuestionIndex];
+    currentWord = currentQ.word.toUpperCase();
+    currentClue = currentQ.clue;
+
+    document.getElementById('questionNum').innerText = currentQuestionIndex + 1;
+    document.getElementById('scoreText').innerText = score;
+    document.getElementById('clueText').innerText = currentClue;
+    document.getElementById('messageText').innerText = "";
+    document.getElementById('messageText').className = "message";
+    document.getElementById('btnNext').style.display = 'none';
+
+    updateLivesDisplay();
+    renderWordDisplay();
+    renderKeyboard();
+  }
+
+  function updateLivesDisplay() {
+    let hearts = "";
+    for (let i = 0; i < lives; i++) hearts += "❤️";
+    for (let i = lives; i < 5; i++) hearts += "🖤";
+    document.getElementById('livesText').innerText = hearts;
+  }
+
+  function renderWordDisplay() {
+    const wordDisplayEl = document.getElementById('wordDisplay');
+    wordDisplayEl.innerHTML = '';
+
+    const words = currentWord.split(' ');
+    
+    words.forEach((w, wIndex) => {
+      const wordGroup = document.createElement('div');
+      wordGroup.className = 'word-group';
+
+      for (let char of w) {
+        const slot = document.createElement('div');
+        slot.className = 'letter-slot';
+        if (guessedLetters.has(char)) {
+          slot.innerText = char;
+          slot.classList.add('filled');
+        } else {
+          slot.innerText = '';
+        }
+        wordGroup.appendChild(slot);
+      }
+
+      wordDisplayEl.appendChild(wordGroup);
+
+      if (wIndex < words.length - 1) {
+        const spaceSlot = document.createElement('div');
+        spaceSlot.className = 'space-slot';
+        wordDisplayEl.appendChild(spaceSlot);
+      }
+    });
+  }
+
+  function renderKeyboard() {
+    const keyboardEl = document.getElementById('keyboard');
+    keyboardEl.innerHTML = '';
+
+    const rows = [
+      "QWERTYUIOP",
+      "ASDFGHJKL",
+      "ZXCVBNM"
+    ];
+
+    rows.forEach(row => {
+      const rowEl = document.createElement('div');
+      rowEl.className = 'keyboard-row';
+
+      for (let char of row) {
+        const btn = document.createElement('button');
+        btn.className = 'key-btn';
+        btn.innerText = char;
+        btn.dataset.key = char;
+
+        if (guessedLetters.has(char)) {
+          if (currentWord.includes(char)) {
+            btn.classList.add('correct');
+          } else {
+            btn.classList.add('wrong');
+          }
+          btn.disabled = true;
+        } else {
+          btn.addEventListener('click', () => handleGuess(char));
+        }
+
+        rowEl.appendChild(btn);
+      }
+      keyboardEl.appendChild(rowEl);
+    });
+  }
+
+  function handleGuess(letter) {
+    if (isGameOver || guessedLetters.has(letter)) return;
+
+    guessedLetters.add(letter);
+
+    if (currentWord.includes(letter)) {
+      renderWordDisplay();
+      renderKeyboard();
+      checkQuestionWin();
+    } else {
+      lives--;
+      updateLivesDisplay();
+      renderKeyboard();
+      checkQuestionLoss();
+    }
+  }
+
+  function checkQuestionWin() {
+    const lettersOnly = currentWord.replace(/\s+/g, '').split('');
+    const isWon = lettersOnly.every(char => guessedLetters.has(char));
+    
+    if (isWon) {
+      isGameOver = true;
+      score += 20;
+      document.getElementById('scoreText').innerText = score;
+      
+      const msgEl = document.getElementById('messageText');
+      msgEl.innerText = "✨ Tepat sekali! Istilah berhasil ditebak.";
+      msgEl.className = "message success";
+      
+      disableAllKeyboard();
+      showNextButton();
+    }
+  }
+
+  function checkQuestionLoss() {
+    if (lives <= 0) {
+      isGameOver = true;
+      
+      // Buka seluruh kata
+      for (let char of currentWord) {
+        if (char !== ' ') guessedLetters.add(char);
+      }
+      renderWordDisplay();
+
+      const msgEl = document.getElementById('messageText');
+      msgEl.innerText = `❌ Kesempatan habis! Istilah yang benar adalah: ${currentWord}`;
+      msgEl.className = "message error";
+
+      disableAllKeyboard();
+      showNextButton();
+    }
+  }
+
+  function disableAllKeyboard() {
+    document.querySelectorAll('.key-btn').forEach(btn => btn.disabled = true);
+  }
+
+  function showNextButton() {
+    const btnNext = document.getElementById('btnNext');
+    if (currentQuestionIndex < 4) {
+      btnNext.innerText = "Soal Berikutnya ➔";
+    } else {
+      btnNext.innerText = "Lihat Hasil Akhir 🏆";
+    }
+    btnNext.style.display = 'inline-block';
+  }
+
+  function nextQuestion() {
+    if (currentQuestionIndex < 4) {
+      currentQuestionIndex++;
+      loadQuestion();
+    } else {
+      showCompletion();
+    }
+  }
+
+  function showCompletion() {
+    document.getElementById('gameArea').style.display = 'none';
+
+    const completionText = `${playerNama}, Anda telah menyelesaikan 5 soal Tebak Kata Struktur Sosial dengan Skor Akhir: ${score} / 100!`;
+    document.getElementById('completionText').innerText = completionText;
+
+    // Generate QR Code dari NISN yang diinput
+    document.getElementById('qrcode').innerHTML = '';
+    new QRCode(document.getElementById('qrcode'), {
+      text: playerNISN,
+      width: 140,
+      height: 140,
+      colorDark: "#0f172a",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+
+    document.getElementById('resultCard').style.display = 'block';
+    document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
