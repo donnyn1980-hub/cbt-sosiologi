@@ -419,7 +419,7 @@ h1 {
     }
 }
 .highlight-box {
-    background: linear-gradient(135deg, #ffe5c4 0%, #ffd194 50%, #f7b05b 100%);
+    background: linear-gradient(135deg, #a8e063 0%, #56ab2f 50%, #2d7d1f 100%);
     background-size: 200% 200%;
     border: 2px solid #e09f53;
     border-radius: 20px;
@@ -427,7 +427,7 @@ h1 {
     color: #3d2208;
     font-weight: 700;
     display: inline-block;
-    animation: highlightGlow 3s infinite ease-in-out;
+    animation: highlightGlow 0.3s infinite ease-in-out;
     max-width: 100%;
     word-break: break-word;
 }
