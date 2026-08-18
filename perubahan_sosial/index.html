@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ujian Sosiologi</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="exam-wrapper">
+    <h1>📚 Sosiologi</h1>
+
+    <div id="warningMessage" class="warning-message"></div>
+
+    <div id="identitySection" class="identity-card">
+        <h2 style="color: #3d2c1e; font-size: 1.3rem;">📋 Data Peserta Ujian</h2>
+        <div class="form-group">
+            <label for="namaLengkap">Nama Lengkap</label>
+            <input type="text" id="namaLengkap" class="form-input" placeholder="Masukkan nama lengkap..." autocomplete="off">
+        </div>
+        <div class="form-group">
+            <label for="nisnInput">NISN</label>
+            <input type="text" id="nisnInput" class="form-input" placeholder="Masukkan NISN..." autocomplete="off">
+        </div>
+        <button type="button" class="btn btn-primary" id="startExamBtn" style="margin-top: 0.5rem; justify-content: center;">🚀 Mulai Ujian</button>
+    </div>
+
+    <div id="examSection" style="display: none;">
+        <div class="progress-info">
+            <span>📊 Progress</span>
+            <span class="progress-badge" id="progressBadge">0 / 0</span>
+        </div>
+
+        <div id="soalContainer" class="soal-container">
+        </div>
+
+        <div class="aksi-area">
+            <div class="btn-group">
+                <button type="button" class="btn btn-secondary" id="resetBtn" disabled>🔄 Mulai ulang</button>
+            </div>
+            <div id="statusMessage">📖 Membaca soal...</div>
+        </div>
+
+        <div id="reviewArea" class="review-area" style="display: none;">
+            <button type="button" class="btn btn-success" id="lihatSemuaBtn" style="padding: 0.4rem 1.4rem; font-size: 0.9rem;">📋 Lihat semua jawaban</button>
+        </div>
+
+        <div class="footer-note">Gunakan tombol toggle untuk beralih antara soal dan pilihan jawaban.</div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
