@@ -1,124 +1,124 @@
-// Data Soal Tema "Struktur Sosial"
+// Data Soal Tema "Perubahan Sosial"
 const SOAL_ASLI = [
     {
         id: 1,
-        teks: "Struktur sosial mencakup jalinan unsur-unsur sosial yang pokok dalam masyarakat, seperti norma, lembaga, dan kelompok sosial. Salah satu fungsi utama struktur sosial adalah.",
+        teks: "Masyarakat Baduy Dalam yang dahulu sangat tertutup kini mulai mengenal dan memperbolehkan penggunaan peralatan modern tertentu dalam kehidupan sehari-hari. Fenomena pergeseran norma serta kebiasaan hidup secara berkesinambungan ini menunjukkan bahwa struktur tata nilai dalam suatu kelompok sosial tidak pernah benar-benar berhenti bergerak. Berdasarkan keterkaitan antara fenomena tersebut dan dinamika norma masyarakat, bagaimanakah karakteristik utama dari sifat masyarakat dalam merespons perjalanan waktu?",
         opsi: [
-            "Menghilangkan perbedaan kelas sosial secara total",
-            "Mendorong lahirnya konflik secara berkelanjutan",
-            "Menjaga keteraturan dan stabilitas dalam masyarakat",
-            "Membatasi perkembangan kebudayaan lokal",
-            "Menghapus seluruh hierarki dan peran sosial"
+            "Statis dan tidak pernah berkembang",
+            "Dinamis dan selalu mengalami perubahan",
+            "Hanya terjadi pada masyarakat modern",
+            "Berhenti setelah mencapai kemakmuran",
+            "Selalu membawa dampak negatif"
         ],
-        jawabanBenar: 2
+        jawabanBenar: 1
     },
     {
         id: 2,
-        teks: "Diferensiasi sosial merupakan pembagian masyarakat secara horizontal tanpa membedakan tingkatan kelas. Contoh bentuk diferensiasi sosial yang didasarkan pada ciri fisik bawaan adalah.",
+        teks: "Kehadiran platform lokapasar (e-commerce) seperti Tokopedia dan Shopee telah menggeser pola belanja masyarakat Indonesia dari toko fisik ke transaksi digital. Inovasi teknologi yang lahir dari daya cipta manusia ini memicu efisiensi tinggi serta transformasi mendasar dalam aktivitas ekonomi masyarakat. Apabila dikaitkan dengan sumber pemicunya, fenomena munculnya penemuan teknologi tersebut tergolong ke dalam pendorong perubahan sosial yang bersumber dari?",
         opsi: [
-            "Diferensiasi berdasarkan tingkat pendidikan",
-            "Diferensiasi berdasarkan ras",
-            "Diferensiasi berdasarkan kekayaan",
-            "Diferensiasi berdasarkan jabatan politik",
-            "Diferensiasi berdasarkan kepemilikan tanah"
+            "Bencana alam",
+            "Penemuan baru (inovasi)",
+            "Peperangan antarnegara",
+            "Pengaruh kebudayaan masyarakat lain",
+            "Perubahan iklim global"
         ],
         jawabanBenar: 1
     },
     {
         id: 3,
-        teks: "Stratifikasi sosial membagi masyarakat ke dalam lapisan-lapisan bertingkat secara vertikal. Salah satu kriteria utama yang menentukan posisi seseorang dalam stratifikasi sosial adalah.",
+        teks: "Masyarakat berburu dan meramu secara perlahan bertransformasi menjadi masyarakat agraris hingga akhirnya berkembang menjadi masyarakat industri berteknologi tinggi. Proses transisi berkesinambungan yang memakan waktu sangat panjang ini menggambarkan pertumbuhan struktur sosial dari bentuk yang paling sederhana menuju tingkat yang lebih kompleks. Mengacu pada keterkaitan antara tahapan perkembangan tersebut dan rentang waktu yang dibutuhkan, pandangan ini sejalan dengan teori perubahan sosial yaitu?",
         opsi: [
-            "Hobi dan kegemaran",
-            "Jenis kelamin",
-            "Kekayaan dan kekuasaan",
-            "Asal suku bangsa",
-            "Agama yang dianut"
-        ],
-        jawabanBenar: 2
-    },
-    {
-        id: 4,
-        teks: "Pada masyarakat Bali tradisional, sistem kasta membuat seseorang sulit untuk berpindah lapisan sosial dari kasta bawah ke kasta yang lebih tinggi. Bentuk stratifikasi sosial ini dinamakan.",
-        opsi: [
-            "Stratifikasi sosial terbuka",
-            "Stratifikasi sosial tertutup",
-            "Stratifikasi sosial campuran",
-            "Stratifikasi sosial horizontal",
-            "Stratifikasi sosial dinamis"
+            "Siklus",
+            "Evolusi",
+            "Revolusi",
+            "Konflik",
+            "Linear"
         ],
         jawabanBenar: 1
     },
     {
-        id: 5,
-        teks: "Seorang anak dari keluarga kurang mampu berhasil menyelesaikan pendidikan tingginya dan menjadi seorang direktur perusahaan ternama. Peristiwa ini menggambarkan terjadinya mobilitas sosial.",
+        id: 4,
+        teks: "Penemuan mesin uap oleh James Watt dengan cepat menggantikan peran tenaga kerja manusia serta hewan dalam manufaktur tekstil di Inggris pada abad ke-18. Peralihan sistem produksi berskala besar dalam tempo singkat tersebut berdampak luas terhadap struktur tatanan sosial dan ekonomi masyarakat secara mendadak. Berdasarkan hubungan antara kecepatan transisi teknologi dan dampaknya terhadap tatanan masyarakat, fenomena tersebut dikategorikan sebagai bentuk?",
         opsi: [
-            "Mobilitas sosial vertikal turun",
-            "Mobilitas sosial horizontal",
-            "Mobilitas sosial vertikal naik",
-            "Mobilitas sosial lateral",
-            "Mobilitas sosial geografis"
+            "Perubahan lambat (evolusi)",
+            "Perubahan kecil",
+            "Perubahan cepat (revolusi)",
+            "Perubahan yang tidak direncanakan",
+            "Perubahan regresif"
+        ],
+        jawabanBenar: 2
+    },
+    {
+        id: 5,
+        teks: "Sebagian kelompok masyarakat adat memilih menolak fasilitas medis modern dan bantuan teknologi demi mempertahankan kebiasaan leluhur mereka secara mutlak. Sikap tertutup yang mengagungkan tradisi lama ini mengidentifikasikan adanya kecenderungan membendung masuknya pembaruan yang dapat memajukan kehidupan sosial. Mengacu pada korelasi antara penolakan nilai baru dan hambatan kemajuan, faktor apakah yang menjadi penghambat utama perubahan sosial pada kasus tersebut?",
+        opsi: [
+            "Sikap terbuka terhadap hal baru",
+            "Sistem pendidikan yang maju",
+            "Sikap tradisional yang kolot",
+            "Heterogenitas penduduk",
+            "Toleransi terhadap penyimpangan"
         ],
         jawabanBenar: 2
     },
     {
         id: 6,
-        teks: "Status sosial seseorang yang diperoleh secara otomatis sejak lahir tanpa memerlukan usaha khusus disebut sebagai ascribed status. Contoh dari ascribed status adalah.",
+        teks: "Di era digital saat ini, masyarakat sangat cepat mengadopsi gawai tercanggih namun belum diimbangi dengan etika bermedia sosial yang bijak sehingga marak timbul hoaks. Ketimpangan percepatan antara perkembangan teknologi fisik yang pesat dan kesiapan mentalitas budaya masyarakat ini memicu terjadinya keterasian sosial. Berdasarkan hubungan antara kemajuan material dan ketidaksiapan mental kebudayaan tersebut, fenomena yang dimaksud dinamakan?",
         opsi: [
-            "Gelar sarjana yang diraih mahasiswa",
-            "Gelar kebangsawaan yang diperoleh sejak lahir",
-            "Jabatan kepala desa hasil pemilihan",
-            "Penghargaan sebagai atlet berprestasi",
-            "Pangkat militer setelah kenaikan jabatan"
+            "Cultural shock",
+            "Cultural lag",
+            "Globalisasi",
+            "Asimilasi",
+            "Akulturasi"
         ],
         jawabanBenar: 1
     },
     {
         id: 7,
-        teks: "Achieved status merupakan status sosial yang didapatkan melalui usaha dan kerja keras secara sengaja. Contoh yang paling tepat mengenai achieved status adalah.",
+        teks: "Tren pakaian Oversized dan gaya rambut K-Pop dengan cepat menjamur di kalangan remaja kota besar dalam kurun waktu satu tahun terakhir. Pergeseran selera gaya hidup musiman ini terbukti tidak memberikan pengaruh yang mendasar terhadap struktur organisasi maupun tatanan lembaga kemasyarakatan. Mengingat pengaruh tren tersebut hanya terbatas pada gaya hidup tanpa mengubah struktur dasar masyarakat, maka perubahan ini termasuk bentuk?",
         opsi: [
-            "Jenis kelamin pria atau wanita",
-            "Keturunan raja atau bangsawan",
-            "Gelar dokter yang diraih setelah lulus kuliah",
-            "Ras dan ciri fisik bawaan",
-            "Marga keluarga yang diwariskan"
+            "Perubahan berpengaruh besar",
+            "Perubahan berpengaruh kecil",
+            "Perubahan struktural",
+            "Perubahan direncanakan",
+            "Perubahan revolusioner"
         ],
-        jawabanBenar: 2
+        jawabanBenar: 1
     },
     {
         id: 8,
-        teks: "Kemajemukan masyarakat Indonesia ditandai dengan keberagaman suku, agama, dan budaya yang hidup berdampingan. Fenomena sosial ini dalam konteks struktur sosial termasuk ke dalam bentuk.",
+        teks: "Pertunjukan Candi Prambanan memadukan seni tari tradisional Jawa dengan teknik pencahayaan serta alat musik modern barat secara harmonis. Interaksi dua kebudayaan berbeda ini saling melengkapi tanpa menghilangkan jati diri dan ciri khas dari kebudayaan lokal aslinya. Mengacu pada bentuk perpaduan dua kebudayaan yang tetap mempertahankan kepribadian budaya setempat, proses sosial tersebut dinamakan?",
         opsi: [
-            "Stratifikasi sosial tertutup",
-            "Diferensiasi sosial",
-            "Konsolidasi vertikal",
-            "Disintegrasi sosial",
-            "Asimilasi budaya"
+            "Asimilasi",
+            "Akulturasi",
+            "Difusi",
+            "Amalgamasi",
+            "Demonstrasi"
         ],
         jawabanBenar: 1
     },
     {
         id: 9,
-        teks: "Ketika seseorang memiliki peran sosial yang saling berbenturan dalam waktu yang bersamaan, seperti seorang ibu rumah tangga yang juga menjadi manajer perusahaan, kondisi ini memicu terjadinya.",
+        teks: "Gelombang tsunami di Aceh tahun 2004 merusak seluruh tatanan fasilitas umum dan memaksa ribuan warga berpindah ke pemukiman baru. Bencana alam dahsyat dari kondisi lingkungan alamiah ini menuntut masyarakat untuk merombak pola interaksi dan adaptasi sosial di tempat tinggal yang baru. Berdasarkan asal muasal pemicunya yang berada di luar kendali internal masyarakat, fenomena tersebut tergolong dalam?",
         opsi: [
-            "Peran ideal",
-            "Konflik peran",
-            "Ketimpangan status",
-            "Mobilitas horizontal",
-            "Ketiadaan peran"
+            "Faktor internal",
+            "Faktor eksternal",
+            "Faktor demografi",
+            "Faktor budaya",
+            "Faktor inovasi"
         ],
         jawabanBenar: 1
     },
     {
         id: 10,
-        teks: "Dalam era modern, tingkat pendidikan dan keahlian profesi semakin dominan dalam menentukan kasta atau lapisan sosial seseorang. Hal ini menandakan bahwa masyarakat modern cenderung menerapkan sistem.",
+        teks: "Budaya pop luar negeri seperti drama Korea dan musik Barat saat ini sangat mudah diakses serta memengaruhi gaya hidup generasi muda Indonesia secara masif. Derasnya arus informasi tanpa sekat ini membutuhkan adanya landasan nilai agar identitas nasional bangsa tidak terkikis dan hilang. Berdasarkan tantangan penetrasi budaya asing tersebut terhadap keberlanjutan tradisi lokal, bagaimana bentuk penanganan yang paling tepat?",
         opsi: [
-            "Stratifikasi sosial tertutup",
-            "Stratifikasi sosial terbuka",
-            "Diferensiasi feodal",
-            "Sistem kasta mengikat",
-            "Isolasi sosial"
+            "Menutup diri dari perkembangan zaman",
+            "Menerima semua budaya asing secara mentah",
+            "Menyaring budaya asing sesuai nilai pancasila",
+            "Menghapus seluruh budaya lokal",
+            "Menolak penggunaan teknologi modern"
         ],
-        jawabanBenar: 1
+        jawabanBenar: 2
     }
 ];
 
