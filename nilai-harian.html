@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Nilai Sosiologi</title>
+    <style>
+        /* ============================================
+                   GLOBAL STYLES
+                   ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        /* ============================================
+                   CONTAINER
+                   ============================================ */
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            animation: slideIn 0.5s ease-out;
+            position: relative;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ============================================
+                   LOGIN SECTION
+                   ============================================ */
+        .login-section {
+            display: block;
+        }
+
+        .login-section.hidden {
+            display: none;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .login-header .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .login-header .icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: #f8f9fa;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* ============================================
+                   BUTTONS
+                   ============================================ */
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ============================================
+                   ERROR MESSAGE
+                   ============================================ */
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-10px);
+            }
+            75% {
+                transform: translateX(10px);
+            }
+        }
+
+        /* ============================================
+                   DASHBOARD SECTION
+                   ============================================ */
+        .dashboard-section {
+            display: none;
+        }
+
+        .dashboard-section.active {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .user-info h2 {
+            color: #333;
+            font-size: 24px;
+        }
+
+        .user-info .detail {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .logout-btn {
+            padding: 10px 20px;
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #d32f2f;
+            transform: scale(1.05);
+        }
+
+        /* ============================================
+                   STATISTICS CARDS
+                   ============================================ */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-card .number {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .stat-card .label {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        /* ============================================
+                   MATERI GRID
+                   ============================================ */
+        .section-title {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .materi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .materi-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s;
+        }
+
+        .materi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .materi-card .materi-title {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .materi-card .materi-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .materi-card .materi-desc {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .materi-card.empty {
+            border-left-color: #ddd;
+            opacity: 0.6;
+        }
+
+        .materi-card.empty .materi-value {
+            color: #999;
+            font-size: 18px;
+        }
+
+        .materi-card .nilai-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .nilai-badge.baik {
+            background: #4caf50;
+            color: white;
+        }
+
+        .nilai-badge.sedang {
+            background: #ff9800;
+            color: white;
+        }
+
+        .nilai-badge.kurang {
+            background: #f44336;
+            color: white;
+        }
+
+        /* ============================================
+                   LOADING SPINNER
+                   ============================================ */
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ============================================
+                   RESPONSIVE DESIGN
+                   ============================================ */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .materi-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ============================================
+                   ANTI-PRINT / SCREEN PROTECTION OVERLAY
+                   ============================================ */
+        .print-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            z-index: 99999;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .print-overlay.show {
+            display: flex;
+        }
+
+        .print-overlay .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        /* Watermark untuk screenshot protection */
+        .watermark {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================ -->
+    <!-- PRINT PROTECTION OVERLAY                      -->
+    <!-- ============================================ -->
+    <div class="print-overlay" id="printOverlay">
+        <div>
+            <div class="icon">🚫</div>
+            <h2>Printing Disabled</h2>
+            <p>Fitur print tidak diizinkan untuk melindungi data siswa.</p>
+            <br>
+            <button onclick="document.getElementById('printOverlay').classList.remove('show')" 
+                    style="padding:12px 30px; background:#667eea; color:white; border:none; border-radius:8px; cursor:pointer; font-size:16px;">
+                Tutup
+            </button>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MAIN CONTAINER                               -->
+    <!-- ============================================ -->
+    <div class="container" id="mainContainer">
+
+        <!-- ========== LOGIN SECTION ========== -->
+        <div id="loginSection" class="login-section">
+            <div class="login-header">
+                <div class="icon">📚</div>
+                <h1>Sistem Nilai Sosiologi</h1>
+                <p class="subtitle">Masukkan NIS dan Password untuk melihat nilai Anda</p>
+            </div>
+
+            <div id="loginError" class="error-message"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="nisInput">NIS (Username)</label>
+                    <input type="text" id="nisInput" placeholder="Contoh: 2024001" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="passwordInput">Password</label>
+                    <input type="password" id="passwordInput" placeholder="Masukkan password" required autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn" id="loginBtn">
+                    <span id="loginBtnText">Login</span>
+                    <span id="loginBtnLoading" style="display: none;">Loading...</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- ========== DASHBOARD SECTION ========== -->
+        <div id="dashboardSection" class="dashboard-section">
+            <div class="dashboard-header">
+                <div class="user-info">
+                    <h2 id="studentName">-</h2>
+                    <div class="detail" id="studentInfo">NIS: - | Kelas: -</div>
+                </div>
+                <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="number" id="totalMateri">0</div>
+                    <div class="label">Total Materi</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="totalNilai">0</div>
+                    <div class="label">Total Nilai</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="rataRata">0</div>
+                    <div class="label">Rata-rata</div>
+                </div>
+            </div>
+
+            <h3 class="section-title">📋 Daftar Materi & Nilai</h3>
+            <div id="materiGrid" class="materi-grid">
+                <!-- Akan diisi oleh JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- LOAD EXTERNAL JAVASCRIPT                     -->
+    <!-- ============================================ -->
+    <script src="jsnilai.js"></script>
+
+    <!-- ============================================ -->
+    <!-- ADDITIONAL PROTECTION (INLINE)               -->
+    <!-- ============================================ -->
+    <script>
+        // ============================================
+        // EXTRA SECURITY - DISABLE PRINT
+        // ============================================
+        (function() {
+            // Disable print using beforeprint event
+            window.addEventListener('beforeprint', function(e) {
+                e.preventDefault();
+                document.getElementById('printOverlay').classList.add('show');
+                return false;
+            });
+
+            // Disable Ctrl+P
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    document.getElementById('printOverlay').classList.add('show');
+                    return false;
+                }
+            });
+
+            // Disable print screen key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'PrintScreen') {
+                    e.preventDefault();
+                    alert('📸 Screenshot tidak diizinkan!');
+                    return false;
+                }
+            });
+
+            // Override window.print
+            window.print = function() {
+                document.getElementById('printOverlay').classList.add('show');
+                return false;
+            };
+
+            // Disable context menu (right click)
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // Disable text selection via mouse
+            document.addEventListener('selectstart', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // Disable copy
+            document.addEventListener('copy', function(e) {
+                e.preventDefault();
+                alert('📋 Copy tidak diizinkan!');
+                return false;
+            });
+
+            // Disable paste
+            document.addEventListener('paste', function(e) {
+                e.preventDefault();
+                alert('📋 Paste tidak diizinkan!');
+                return false;
+            });
+
+            // Disable cut
+            document.addEventListener('cut', function(e) {
+                e.preventDefault();
+                alert('✂️ Cut tidak diizinkan!');
+                return false;
+            });
+
+            // Disable drag
+            document.addEventListener('dragstart', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // Disable drop
+            document.addEventListener('drop', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // Disable F12 (DevTools)
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'F12') {
+                    e.preventDefault();
+                    alert('🔒 Developer Tools tidak diizinkan!');
+                    return false;
+                }
+            });
+
+            // Disable Ctrl+Shift+I (DevTools)
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'I' || e.key === 'i')) {
+                    e.preventDefault();
+                    alert('🔒 Developer Tools tidak diizinkan!');
+                    return false;
+                }
+            });
+
+            // Disable Ctrl+Shift+J (DevTools Console)
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'J' || e.key === 'j')) {
+                    e.preventDefault();
+                    alert('🔒 Developer Tools tidak diizinkan!');
+                    return false;
+                }
+            });
+
+            // Disable Ctrl+U (View Source)
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && (e.key === 'U' || e.key === 'u')) {
+                    e.preventDefault();
+                    alert('🔒 View Source tidak diizinkan!');
+                    return false;
+                }
+            });
+
+            // Disable Ctrl+S (Save)
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && (e.key === 'S' || e.key === 's')) {
+                    e.preventDefault();
+                    alert('💾 Save tidak diizinkan!');
+                    return false;
+                }
+            });
+
+            console.log('🛡️ Security features enabled');
+            console.log('✅ Disabled: right-click, copy, paste, cut, print, view source, inspect, save');
+        })();
+    </script>
+
+</body>
+</html>
