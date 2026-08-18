@@ -1,4 +1,4 @@
-// Data Soal Tema "Perubahan Sosial"
+// Data Soal Tema "Struktur Sosial"
 const SOAL_ASLI = [
     {
         id: 1,
