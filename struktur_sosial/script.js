@@ -2,123 +2,123 @@
 const SOAL_ASLI = [
     {
         id: 1,
-        teks: "Masyarakat Baduy Dalam yang dahulu sangat tertutup kini mulai mengenal dan memperbolehkan penggunaan peralatan modern tertentu dalam kehidupan sehari-hari. Fenomena pergeseran norma serta kebiasaan hidup secara berkesinambungan ini menunjukkan bahwa struktur tata nilai dalam suatu kelompok sosial tidak pernah benar-benar berhenti bergerak. Berdasarkan keterkaitan antara fenomena tersebut dan dinamika norma masyarakat, bagaimanakah karakteristik utama dari sifat masyarakat dalam merespons perjalanan waktu?",
+        teks: "Sistem kasta di Bali membagi tingkat sosial masyarakat berdasarkan garis keturunan seperti Brahmana, Ksatria, Waisya, dan Sudra. Kedudukan sosial yang didapatkan sejak lahir tanpa memandang usaha maupun prestasi individu ini membentuk garis hierarki yang relatif kaku. Berdasarkan keterkaitan antara cara memperoleh status tersebut dan sifat pelapisannya, fenomena ini merupakan contoh dari?",
         opsi: [
-            "Statis dan tidak pernah berkembang",
-            "Dinamis dan selalu mengalami perubahan",
-            "Hanya terjadi pada masyarakat modern",
-            "Berhenti setelah mencapai kemakmuran",
-            "Selalu membawa dampak negatif"
+            "Ascribed status dalam stratifikasi sosial tertutup",
+            "Achieved status dalam stratifikasi sosial terbuka",
+            "Assigned status dalam diferensiasi sosial horizontal",
+            "Master status dalam mobilitas sosial geografis",
+            "Symbolic status dalam konsolidasi sosial"
         ],
-        jawabanBenar: 1
+        jawabanBenar: 0
     },
     {
         id: 2,
-        teks: "Kehadiran platform lokapasar (e-commerce) seperti Tokopedia dan Shopee telah menggeser pola belanja masyarakat Indonesia dari toko fisik ke transaksi digital. Inovasi teknologi yang lahir dari daya cipta manusia ini memicu efisiensi tinggi serta transformasi mendasar dalam aktivitas ekonomi masyarakat. Apabila dikaitkan dengan sumber pemicunya, fenomena munculnya penemuan teknologi tersebut tergolong ke dalam pendorong perubahan sosial yang bersumber dari?",
+        teks: "Di Indonesia terdapat beragam suku bangsa seperti Suku Jawa, Sunda, Batak, dan Dayak yang masing-masing memiliki adat istiadat khas. Pembagian kelompok berdasarkan ciri kebudayaan dan asal-usul ini bertumpu pada kesetaraan tanpa menandakan tingkatan mana yang lebih tinggi atau lebih rendah. Apabila dikaitkan dengan konsep pengelompokan masyarakat secara horizontal, fenomena perbedaan suku tersebut tergolong ke dalam?",
         opsi: [
-            "Bencana alam",
-            "Penemuan baru (inovasi)",
-            "Peperangan antarnegara",
-            "Pengaruh kebudayaan masyarakat lain",
-            "Perubahan iklim global"
+            "Stratifikasi sosial",
+            "Diferensiasi sosial",
+            "Interseksi sosial",
+            "Konsolidasi sosial",
+            "Sertifikasi sosial"
         ],
         jawabanBenar: 1
     },
     {
         id: 3,
-        teks: "Masyarakat berburu dan meramu secara perlahan bertransformasi menjadi masyarakat agraris hingga akhirnya berkembang menjadi masyarakat industri berteknologi tinggi. Proses transisi berkesinambungan yang memakan waktu sangat panjang ini menggambarkan pertumbuhan struktur sosial dari bentuk yang paling sederhana menuju tingkat yang lebih kompleks. Mengacu pada keterkaitan antara tahapan perkembangan tersebut dan rentang waktu yang dibutuhkan, pandangan ini sejalan dengan teori perubahan sosial yaitu?",
+        teks: "Seorang anak petani miskin belajar dengan tekun hingga berhasil menyelesaikan pendidikan dokter dan kini menjabat sebagai direktur rumah sakit. Keberhasilan individu dalam mengubah posisi sosialnya menuju tingkatan yang lebih tinggi ini sangat dipengaruhi oleh adanya akses pendidikan yang setara. Mengacu pada keterkaitan antara pencapaian status dan dinamika tatanan masyarakat, fenomena tersebut menunjukkan penerapan dari?",
         opsi: [
-            "Siklus",
-            "Evolusi",
-            "Revolusi",
-            "Konflik",
-            "Linear"
+            "Stratifikasi sosial tertutup",
+            "Stratifikasi sosial terbuka",
+            "Diferensiasi sosial rasial",
+            "Feodalisme tradisional",
+            "Sistem kasta mengikat"
         ],
         jawabanBenar: 1
     },
     {
         id: 4,
-        teks: "Penemuan mesin uap oleh James Watt dengan cepat menggantikan peran tenaga kerja manusia serta hewan dalam manufaktur tekstil di Inggris pada abad ke-18. Peralihan sistem produksi berskala besar dalam tempo singkat tersebut berdampak luas terhadap struktur tatanan sosial dan ekonomi masyarakat secara mendadak. Berdasarkan hubungan antara kecepatan transisi teknologi dan dampaknya terhadap tatanan masyarakat, fenomena tersebut dikategorikan sebagai bentuk?",
+        teks: "Gelar kebangsawanan Raden pada masyarakat Jawa kuno secara otomatis melekat pada anak yang dilahirkan oleh keluarga bangsawan. Perolehan kedudukan tinggi yang murni didasarkan pada faktor kelahiran dan keturunan ini tidak dapat diakses oleh masyarakat umum di luar garis darah tersebut. Berdasarkan hubungan antara cara perolehan posisi dan kriteria sosialnya, status sosial tersebut dinamakan?",
         opsi: [
-            "Perubahan lambat (evolusi)",
-            "Perubahan kecil",
-            "Perubahan cepat (revolusi)",
-            "Perubahan yang tidak direncanakan",
-            "Perubahan regresif"
+            "Achieved status",
+            "Assigned status",
+            "Ascribed status",
+            "Active status",
+            "Latent status"
         ],
         jawabanBenar: 2
     },
     {
         id: 5,
-        teks: "Sebagian kelompok masyarakat adat memilih menolak fasilitas medis modern dan bantuan teknologi demi mempertahankan kebiasaan leluhur mereka secara mutlak. Sikap tertutup yang mengagungkan tradisi lama ini mengidentifikasikan adanya kecenderungan membendung masuknya pembaruan yang dapat memajukan kehidupan sosial. Mengacu pada korelasi antara penolakan nilai baru dan hambatan kemajuan, faktor apakah yang menjadi penghambat utama perubahan sosial pada kasus tersebut?",
+        teks: "Seseorang yang berprofesi sebagai dosen dari Suku Minang berteman dekat dengan seorang pengusaha yang bersuku Minang di dalam suatu perkumpulan daerah. Pertemuan dan penguatan hubungan antarindividu yang didasarkan pada kesamaan latar belakang etnis ini memperkokoh keanggotaan dalam kelompok sosial mereka. Ditinjau dari parameter persilangan dan penguatan keanggotaan sosial, fenomena tersebut merupakan bentuk dari?",
         opsi: [
-            "Sikap terbuka terhadap hal baru",
-            "Sistem pendidikan yang maju",
-            "Sikap tradisional yang kolot",
-            "Heterogenitas penduduk",
-            "Toleransi terhadap penyimpangan"
+            "Interseksi sosial",
+            "Konsolidasi sosial",
+            "Integrasi sosial",
+            "Disintegrasi sosial",
+            "Reorganisasi sosial"
         ],
-        jawabanBenar: 2
+        jawabanBenar: 1
     },
     {
         id: 6,
-        teks: "Di era digital saat ini, masyarakat sangat cepat mengadopsi gawai tercanggih namun belum diimbangi dengan etika bermedia sosial yang bijak sehingga marak timbul hoaks. Ketimpangan percepatan antara perkembangan teknologi fisik yang pesat dan kesiapan mentalitas budaya masyarakat ini memicu terjadinya keterasian sosial. Berdasarkan hubungan antara kemajuan material dan ketidaksiapan mental kebudayaan tersebut, fenomena yang dimaksud dinamakan?",
+        teks: "Seseorang yang berhasil memenangkan pemilihan kepala daerah (Pilkada) secara resmi memperoleh wewenang untuk mengatur kebijakan di wilayahnya. Kedudukan serta kekuasaan yang didapatkan melalui proses perjuangan politik dan kompetisi terbuka ini mencerminkan penghargaan atas kemampuan individu. Berdasarkan kaitan antara usaha personal dan penghargaan status sosial, bentuk perolehan kedudukan ini disebut?",
         opsi: [
-            "Cultural shock",
-            "Cultural lag",
-            "Globalisasi",
-            "Asimilasi",
-            "Akulturasi"
+            "Ascribed status",
+            "Achieved status",
+            "Assigned status",
+            "Inherited status",
+            "Automatic status"
         ],
         jawabanBenar: 1
     },
     {
         id: 7,
-        teks: "Tren pakaian Oversized dan gaya rambut K-Pop dengan cepat menjamur di kalangan remaja kota besar dalam kurun waktu satu tahun terakhir. Pergeseran selera gaya hidup musiman ini terbukti tidak memberikan pengaruh yang mendasar terhadap struktur organisasi maupun tatanan lembaga kemasyarakatan. Mengingat pengaruh tren tersebut hanya terbatas pada gaya hidup tanpa mengubah struktur dasar masyarakat, maka perubahan ini termasuk bentuk?",
+        teks: "Pemerintah memberikan penghargaan Kalpataru kepada seorang warga desa yang secara konsisten menjaga kelestarian hutan di daerahnya. Penyerahan kedudukan terhormat dari pihak luar atau negara ini diberikan atas jasa besar individu bagi kepentingan masyarakat banyak. Mengacu pada kaitan antara pemberian penghargaan masyarakat dan kriteria status sosial, posisi yang didapatkan tersebut tergolong sebagai?",
         opsi: [
-            "Perubahan berpengaruh besar",
-            "Perubahan berpengaruh kecil",
-            "Perubahan struktural",
-            "Perubahan direncanakan",
-            "Perubahan revolusioner"
+            "Achieved status",
+            "Ascribed status",
+            "Assigned status",
+            "Primary status",
+            "Natural status"
         ],
-        jawabanBenar: 1
+        jawabanBenar: 2
     },
     {
         id: 8,
-        teks: "Pertunjukan Candi Prambanan memadukan seni tari tradisional Jawa dengan teknik pencahayaan serta alat musik modern barat secara harmonis. Interaksi dua kebudayaan berbeda ini saling melengkapi tanpa menghilangkan jati diri dan ciri khas dari kebudayaan lokal aslinya. Mengacu pada bentuk perpaduan dua kebudayaan yang tetap mempertahankan kepribadian budaya setempat, proses sosial tersebut dinamakan?",
+        teks: "Dalam sebuah organisasi perusahaan, karyawan berlatar belakang Suku Jawa dan Suku Sunda bekerja sama di bawah divisi pemasaran yang sama. Persilangan latar belakang etnis yang berbeda dalam satu wadah profesi dan identitas pekerjaan yang sama ini menyatukan keragaman masyarakat. Berdasarkan analisis keterikatan keanggotaan ganda dalam struktur sosial, fenomena ini merupakan contoh?",
         opsi: [
-            "Asimilasi",
-            "Akulturasi",
-            "Difusi",
-            "Amalgamasi",
-            "Demonstrasi"
+            "Konsolidasi sosial",
+            "Interseksi sosial",
+            "Polarisasi sosial",
+            "Stratifikasi sosial",
+            "Eksklusivisme sosial"
         ],
         jawabanBenar: 1
     },
     {
         id: 9,
-        teks: "Gelombang tsunami di Aceh tahun 2004 merusak seluruh tatanan fasilitas umum dan memaksa ribuan warga berpindah ke pemukiman baru. Bencana alam dahsyat dari kondisi lingkungan alamiah ini menuntut masyarakat untuk merombak pola interaksi dan adaptasi sosial di tempat tinggal yang baru. Berdasarkan asal muasal pemicunya yang berada di luar kendali internal masyarakat, fenomena tersebut tergolong dalam?",
+        teks: "Di daerah pedesaan tradisional, para pemuka agama dan tokoh masyarakat menduduki posisi paling atas dalam urutan penghormatan warga. Penempatan posisi terpandang yang didasarkan pada tingkat pengetahuan agama dan kearifan moral ini membentuk tingkatan penghargaan di tengah masyarakat. Mengacu pada kriteria pembentukan pelapisan masyarakat, fenomena ini bertumpu pada dasar stratifikasi berupa?",
         opsi: [
-            "Faktor internal",
-            "Faktor eksternal",
-            "Faktor demografi",
-            "Faktor budaya",
-            "Faktor inovasi"
+            "Ukuran kekayaan",
+            "Ukuran kekuasaan",
+            "Ukuran kehormatan dan ilmu pengetahuan",
+            "Ukuran keturunan darah",
+            "Ukuran kepemilikan tanah"
         ],
-        jawabanBenar: 1
+        jawabanBenar: 2
     },
     {
         id: 10,
-        teks: "Budaya pop luar negeri seperti drama Korea dan musik Barat saat ini sangat mudah diakses serta memengaruhi gaya hidup generasi muda Indonesia secara masif. Derasnya arus informasi tanpa sekat ini membutuhkan adanya landasan nilai agar identitas nasional bangsa tidak terkikis dan hilang. Berdasarkan tantangan penetrasi budaya asing tersebut terhadap keberlanjutan tradisi lokal, bagaimana bentuk penanganan yang paling tepat?",
+        teks: "Struktur organisasi sebuah PT terdiri dari Direktur Utama di posisi puncak, Manajer di tingkat menengah, dan Staf Operasional di tingkat bawah. Pembagian jenjang jabatan yang memiliki wewenang serta tanggung jawab berjenjang ini menentukan hak dan kewajiban masing-masing individu dalam perusahaan. Ditinjau dari kaitan antara hierarki kedudukan dan kekuasaan formal, tatanan tersebut merupakan bentuk dari?",
         opsi: [
-            "Menutup diri dari perkembangan zaman",
-            "Menerima semua budaya asing secara mentah",
-            "Menyaring budaya asing sesuai nilai pancasila",
-            "Menghapus seluruh budaya lokal",
-            "Menolak penggunaan teknologi modern"
+            "Diferensiasi sosial",
+            "Stratifikasi sosial",
+            "Interseksi sosial",
+            "Asimilasi sosial",
+            "Akulturasi sosial"
         ],
-        jawabanBenar: 2
+        jawabanBenar: 1
     }
 ];
 
