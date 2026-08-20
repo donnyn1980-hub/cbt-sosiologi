@@ -309,7 +309,7 @@ const SOAL_ASLI = [
     {
         id: 20,
         tipe: "Kategori",
-        teks: "Perhatikan Ilustrasi berikut! Seseorang dengan penghasilan tinggi menggunakan mobil mewah, seseorang dengan penghasilan sedang menggunakan motor, seseorang dengan penghasilan rendah berjalan kaki. Kriteria yang digunakan pada stratifikasi sosial pada ilustrasi tersebut adalah ....",
+        teks: "Perhatikan Gambar berikut! Seseorang dengan penghasilan tinggi menggunakan mobil mewah, seseorang dengan penghasilan sedang menggunakan motor, seseorang dengan penghasilan rendah berjalan kaki. Kriteria yang digunakan pada stratifikasi sosial pada ilustrasi tersebut adalah ....",
         pernyataan: [
             "Kasta sosial",
             "Kriteria sosial",
