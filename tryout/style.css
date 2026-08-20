@@ -36,6 +36,10 @@ h1 {
     flex-wrap: wrap;
 }
 
+/* ============================================================
+   IDENTITY / LOGIN SECTION
+   ============================================================ */
+
 .identity-card {
     background: #fcf8f4;
     border-radius: 28px;
@@ -76,6 +80,10 @@ h1 {
     cursor: not-allowed;
 }
 
+/* ============================================================
+   PROGRESS BAR
+   ============================================================ */
+
 .progress-info {
     display: flex;
     justify-content: space-between;
@@ -96,6 +104,11 @@ h1 {
     font-size: 0.9rem;
     letter-spacing: 0.3px;
 }
+
+/* ============================================================
+   SOAL CONTAINER
+   ============================================================ */
+
 .soal-container {
     background: #fcf8f4;
     border-radius: 28px;
@@ -108,6 +121,103 @@ h1 {
     flex-direction: column;
     position: relative;
 }
+
+/* ============================================================
+   GAMBAR SOAL
+   ============================================================ */
+
+.gambar-section {
+    margin-bottom: 0.8rem;
+    position: relative;
+}
+
+.gambar-container {
+    background: #f5efe9;
+    border-radius: 16px;
+    padding: 0.8rem;
+    border: 1px solid #ddd0c4;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    margin-bottom: 0.5rem;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.gambar-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 400px;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.gambar-soal {
+    max-width: 100%;
+    max-height: 380px;
+    width: auto;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    object-fit: contain;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.gambar-toggle-area {
+    display: flex;
+    justify-content: flex-start;
+    margin: 0.2rem 0 0.6rem 0;
+}
+
+.btn-toggle-gambar {
+    background: #d6c5b6;
+    border: none;
+    padding: 0.4rem 1.2rem;
+    border-radius: 40px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #2f1f12;
+    cursor: pointer;
+    transition: 0.15s;
+    border: 1px solid #c0ae9e;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-toggle-gambar:hover {
+    background: #cbb9aa;
+    transform: scale(1.02);
+}
+
+.btn-toggle-gambar.active {
+    background: #7f624a;
+    border-color: #6b4f3a;
+    color: white;
+    box-shadow: 0 3px 0 #4f392a;
+    transform: translateY(-1px);
+}
+
+.btn-toggle-gambar.active:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #4f392a;
+}
+
+.btn-toggle-gambar:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* ============================================================
+   TEKS SOAL - KALIMAT PER KALIMAT
+   ============================================================ */
+
 .soal-teks-container {
     position: relative;
     min-height: 100px;
@@ -174,6 +284,11 @@ h1 {
     font-weight: 500;
     margin-left: 8px;
 }
+
+/* ============================================================
+   OPSI JAWABAN
+   ============================================================ */
+
 .opsi-container {
     transition: opacity 0.4s ease;
     min-height: 120px;
@@ -263,6 +378,11 @@ h1 {
     font-size: 0.9rem;
     flex-shrink: 0;
 }
+
+/* ============================================================
+   TOGGLE AREA (Soal / Jawaban)
+   ============================================================ */
+
 .toggle-area {
     display: flex;
     gap: 12px;
@@ -307,6 +427,11 @@ h1 {
     transform: none;
     box-shadow: none;
 }
+
+/* ============================================================
+   AKSI AREA
+   ============================================================ */
+
 .aksi-area {
     display: flex;
     flex-wrap: wrap;
@@ -424,132 +549,8 @@ h1 {
     gap: 0.8rem 1.2rem;
 }
 
-/* --- Animasi Highlight Nama & Nilai --- */
-@keyframes highlightGlow {
-    0% {
-        background-position: 0% 50%;
-        box-shadow: 0 0 15px rgba(230, 160, 90, 0.4);
-        transform: scale(1);
-    }
-    50% {
-        background-position: 100% 50%;
-        box-shadow: 0 0 25px rgba(230, 160, 90, 0.8);
-        transform: scale(1.03);
-    }
-    100% {
-        background-position: 0% 50%;
-        box-shadow: 0 0 15px rgba(230, 160, 90, 0.4);
-        transform: scale(1);
-    }
-}
-.highlight-box {
-    background: linear-gradient(135deg, #a8e063 0%, #56ab2f 50%, #2d7d1f 100%);
-    background-size: 200% 200%;
-    border: 2px solid #e09f53;
-    border-radius: 20px;
-    padding: 0.6rem 1.5rem;
-    color: #3d2208;
-    font-weight: 700;
-    display: inline-block;
-    animation: highlightGlow 0.3s infinite ease-in-out;
-    max-width: 100%;
-    word-break: break-word;
-}
-
-/* Tampilan Hasil Akhir */
-.result-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 1.5rem 1rem;
-    gap: 1.2rem;
-    text-align: center;
-}
-.result-name {
-    font-size: 1.4rem;
-}
-.result-score {
-    font-size: 2.2rem;
-}
-.qr-wrapper {
-    background: #ffffff;
-    padding: 1rem;
-    border-radius: 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    border: 2px dashed #c9b6a2;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    max-width: 100%;
-}
-.qr-label {
-    font-size: 0.85rem;
-    color: #5d4430;
-    font-weight: 600;
-    word-break: break-all;
-}
-.result-actions {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 0.5rem;
-}
-
-/* Warning Message */
-.warning-message {
-    background: #ff6b6b;
-    color: white;
-    padding: 0.8rem 1.2rem;
-    border-radius: 12px;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 1rem;
-    display: none;
-    animation: shake 0.5s ease;
-}
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20% { transform: translateX(-10px); }
-    40% { transform: translateX(10px); }
-    60% { transform: translateX(-10px); }
-    80% { transform: translateX(10px); }
-}
-
-/* Print Protection */
-@media print {
-    body * {
-        visibility: hidden;
-    }
-    body::before {
-        content: "🚫 Dilarang mencetak soal ujian!";
-        visibility: visible;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 2rem;
-        font-weight: 700;
-        color: #c0392b;
-        background: white;
-        padding: 2rem 3rem;
-        border-radius: 20px;
-        border: 4px solid #c0392b;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        z-index: 9999;
-        text-align: center;
-        width: 90%;
-        max-width: 600px;
-    }
-    .exam-wrapper, .exam-wrapper * {
-        visibility: hidden;
-    }
-}
-
 /* ============================================================
-   TAMBAHAN UNTUK TIPE SOAL KATEGORI
+   TIPE SOAL KATEGORI (TABEL)
    ============================================================ */
 
 .kategori-table-wrapper {
@@ -639,7 +640,7 @@ h1 {
 }
 
 /* ============================================================
-   TAMBAHAN UNTUK TIPE SOAL MCMA
+   TIPE SOAL MCMA (Multiple Choice Multiple Answer)
    ============================================================ */
 
 .mcma-confirm-area {
@@ -664,7 +665,146 @@ h1 {
     font-style: italic;
 }
 
-/* Responsive */
+/* ============================================================
+   ANIMASI HIGHLIGHT NAMA & NILAI
+   ============================================================ */
+
+@keyframes highlightGlow {
+    0% {
+        background-position: 0% 50%;
+        box-shadow: 0 0 15px rgba(230, 160, 90, 0.4);
+        transform: scale(1);
+    }
+    50% {
+        background-position: 100% 50%;
+        box-shadow: 0 0 25px rgba(230, 160, 90, 0.8);
+        transform: scale(1.03);
+    }
+    100% {
+        background-position: 0% 50%;
+        box-shadow: 0 0 15px rgba(230, 160, 90, 0.4);
+        transform: scale(1);
+    }
+}
+.highlight-box {
+    background: linear-gradient(135deg, #a8e063 0%, #56ab2f 50%, #2d7d1f 100%);
+    background-size: 200% 200%;
+    border: 2px solid #e09f53;
+    border-radius: 20px;
+    padding: 0.6rem 1.5rem;
+    color: #3d2208;
+    font-weight: 700;
+    display: inline-block;
+    animation: highlightGlow 0.3s infinite ease-in-out;
+    max-width: 100%;
+    word-break: break-word;
+}
+
+/* ============================================================
+   HASIL AKHIR
+   ============================================================ */
+
+.result-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem 1rem;
+    gap: 1.2rem;
+    text-align: center;
+}
+.result-name {
+    font-size: 1.4rem;
+}
+.result-score {
+    font-size: 2.2rem;
+}
+.qr-wrapper {
+    background: #ffffff;
+    padding: 1rem;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border: 2px dashed #c9b6a2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    max-width: 100%;
+}
+.qr-label {
+    font-size: 0.85rem;
+    color: #5d4430;
+    font-weight: 600;
+    word-break: break-all;
+}
+.result-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 0.5rem;
+}
+
+/* ============================================================
+   WARNING MESSAGE
+   ============================================================ */
+
+.warning-message {
+    background: #ff6b6b;
+    color: white;
+    padding: 0.8rem 1.2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 1rem;
+    display: none;
+    animation: shake 0.5s ease;
+}
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-10px); }
+    40% { transform: translateX(10px); }
+    60% { transform: translateX(-10px); }
+    80% { transform: translateX(10px); }
+}
+
+/* ============================================================
+   PRINT PROTECTION
+   ============================================================ */
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    body::before {
+        content: "🚫 Dilarang mencetak soal ujian!";
+        visibility: visible;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2rem;
+        font-weight: 700;
+        color: #c0392b;
+        background: white;
+        padding: 2rem 3rem;
+        border-radius: 20px;
+        border: 4px solid #c0392b;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        z-index: 9999;
+        text-align: center;
+        width: 90%;
+        max-width: 600px;
+    }
+    .exam-wrapper, .exam-wrapper * {
+        visibility: hidden;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE DESIGN
+   ============================================================ */
+
 @media (max-width: 640px) {
     body {
         padding: 0.8rem 0.5rem;
@@ -757,6 +897,8 @@ h1 {
         width: 100%;
         justify-content: center;
     }
+    
+    /* Responsive Kategori Table */
     .kategori-table {
         font-size: 0.85rem;
     }
@@ -778,6 +920,8 @@ h1 {
     .kategori-cell input[type="radio"]:checked {
         border-width: 5px;
     }
+    
+    /* Responsive MCMA */
     .mcma-confirm-btn {
         min-width: 160px;
         font-size: 0.95rem;
@@ -786,11 +930,98 @@ h1 {
     .mcma-hint {
         font-size: 0.75rem;
     }
-    @media print {
-        body::before {
-            font-size: 1.3rem;
-            padding: 1.5rem;
-            width: 95%;
-        }
+    
+    /* Responsive Gambar */
+    .gambar-wrapper {
+        max-height: 280px;
+    }
+    .gambar-soal {
+        max-height: 260px;
+    }
+    .gambar-container {
+        padding: 0.5rem;
+        border-radius: 12px;
+    }
+    .btn-toggle-gambar {
+        font-size: 0.8rem;
+        padding: 0.3rem 1rem;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE PRINT
+   ============================================================ */
+
+@media print and (max-width: 640px) {
+    body::before {
+        font-size: 1.3rem;
+        padding: 1.5rem;
+        width: 95%;
+    }
+}
+
+/* ============================================================
+   EXTRA SMALL DEVICES
+   ============================================================ */
+
+@media (max-width: 400px) {
+    .exam-wrapper {
+        padding: 0.8rem 0.5rem;
+        border-radius: 20px;
+    }
+    h1 {
+        font-size: 1.1rem;
+        gap: 6px;
+    }
+    .soal-container {
+        padding: 0.8rem 0.6rem;
+        border-radius: 16px;
+        min-height: 200px;
+    }
+    .kalimat-item {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+    .opsi-item label {
+        font-size: 0.85rem;
+    }
+    .opsi-item {
+        padding: 0.4rem 0.6rem;
+        gap: 8px;
+    }
+    .btn {
+        font-size: 0.85rem;
+        padding: 0.5rem 1rem;
+    }
+    .btn-toggle {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.6rem;
+        min-width: 80px;
+    }
+    .gambar-soal {
+        max-height: 200px;
+    }
+    .gambar-wrapper {
+        max-height: 220px;
+    }
+    .kategori-table {
+        font-size: 0.75rem;
+    }
+    .pernyataan-cell {
+        font-size: 0.75rem;
+        min-width: 80px;
+    }
+    .kategori-cell {
+        width: 40px;
+    }
+    .kategori-cell input[type="radio"] {
+        width: 14px;
+        height: 14px;
+    }
+    .result-score {
+        font-size: 1.3rem;
+    }
+    .result-name {
+        font-size: 0.95rem;
     }
 }
