@@ -309,7 +309,7 @@ const SOAL_ASLI = [
     {
         id: 20,
         tipe: "Kategori",
-        teks: "Perhatikan Gambar berikut! Seseorang dengan penghasilan tinggi menggunakan mobil mewah, seseorang dengan penghasilan sedang menggunakan motor, seseorang dengan penghasilan rendah berjalan kaki. Kriteria yang digunakan pada stratifikasi sosial pada ilustrasi tersebut adalah ....",
+        teks: "Perhatikan Ilustrasi berikut! Seseorang dengan penghasilan tinggi menggunakan mobil mewah, seseorang dengan penghasilan sedang menggunakan motor, seseorang dengan penghasilan rendah berjalan kaki. Kriteria yang digunakan pada stratifikasi sosial pada ilustrasi tersebut adalah ....",
         pernyataan: [
             "Kasta sosial",
             "Kriteria sosial",
@@ -408,6 +408,49 @@ function generateQRCodeSVG(text) {
                  style="border-radius: 8px; max-width: 100%; height: auto;"
                  onerror="this.onerror=null; this.outerHTML='<div style=\'padding:10px;background:#eee;border-radius:8px;font-weight:bold;color:#333;\'>NISN: ${text}</div>';"/>`;
 }
+
+// ============================================================
+// GAMBAR FUNGSI
+// ============================================================
+
+function checkImageExists(soalId) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(true);
+        img.onerror = () => resolve(false);
+        img.src = `gbr/${soalId}.jpg`;
+    });
+}
+
+function getImageHtml(soalId, showImage = false) {
+    return `
+        <div class="gambar-container" id="gambarContainer_${soalId}" style="display: ${showImage ? 'block' : 'none'};">
+            <div class="gambar-wrapper">
+                <img src="gbr/${soalId}.jpg" 
+                     alt="Gambar soal ${soalId}" 
+                     class="gambar-soal"
+                     onerror="this.style.display='none'; document.getElementById('gambarContainer_${soalId}').style.display='none'; document.getElementById('toggleGambarBtn_${soalId}').style.display='none';" />
+            </div>
+        </div>
+    `;
+}
+
+// Fungsi global untuk toggle gambar
+window.toggleGambar = function(soalId) {
+    const container = document.getElementById(`gambarContainer_${soalId}`);
+    const btn = document.getElementById(`toggleGambarBtn_${soalId}`);
+    if (!container || !btn) return;
+    
+    if (container.style.display === 'none' || container.style.display === '') {
+        container.style.display = 'block';
+        btn.textContent = '🖼️ Sembunyikan Gambar';
+        btn.classList.add('active');
+    } else {
+        container.style.display = 'none';
+        btn.textContent = '🖼️ Tampilkan Gambar';
+        btn.classList.remove('active');
+    }
+};
 
 // ============================================================
 // MAIN APPLICATION
@@ -712,7 +755,31 @@ function generateQRCodeSVG(text) {
         kalimatIndex = 0;
         modeTampilan = 'soal';
 
+        // Cek gambar secara async
+        checkImageExists(soal.id).then(exists => {
+            const btn = document.getElementById(`toggleGambarBtn_${soal.id}`);
+            if (btn) {
+                btn.style.display = exists ? 'inline-flex' : 'none';
+            }
+            if (!exists) {
+                const container = document.getElementById(`gambarContainer_${soal.id}`);
+                if (container) container.style.display = 'none';
+            }
+        });
+
         let html = '';
+
+        // ---- Bagian Gambar (di atas teks soal) ----
+        html += `<div class="gambar-section">`;
+        html += getImageHtml(soal.id, false);
+        html += `</div>`;
+
+        // ---- Tombol Toggle Gambar ----
+        html += `<div class="gambar-toggle-area">`;
+        html += `<button type="button" class="btn-toggle-gambar" id="toggleGambarBtn_${soal.id}" style="display: none;" onclick="toggleGambar(${soal.id})">`;
+        html += `🖼️ Tampilkan Gambar`;
+        html += `</button>`;
+        html += `</div>`;
 
         // ---- Bagian Teks Soal (Kalimat per kalimat) ----
         html += `<div class="soal-teks-container" id="soalTeksContainer">`;
