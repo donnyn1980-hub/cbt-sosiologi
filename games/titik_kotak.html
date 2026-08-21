@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Dots and Boxes - MCMA Sosiologi</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #1a2639;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            transition: background 0.3s;
+        }
+        #inputScreen {
+            background: #2c3e50;
+            padding: 2rem 2.5rem;
+            border-radius: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            color: #ecf0f1;
+            transition: opacity 0.3s ease;
+        }
+        #inputScreen h1 {
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+            font-size: 2.2rem;
+            color: #f1c40f;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        #inputScreen .subtitle {
+            color: #bdc3c7;
+            margin-bottom: 1.2rem;
+            font-size: 0.95rem;
+        }
+        .input-group {
+            margin: 0.8rem 0;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+            font-size: 1rem;
+            color: #bdc3c7;
+        }
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            background: #34495e;
+            color: white;
+            outline: 2px solid transparent;
+            transition: 0.2s;
+        }
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: 2px solid #f1c40f;
+            background: #2c3e50;
+        }
+        .input-group input::placeholder {
+            color: #7f8c8d;
+            font-weight: 300;
+        }
+        .input-group select option {
+            background: #2c3e50;
+        }
+        #playerNamesContainer {
+            margin-top: 0.5rem;
+        }
+        .player-name-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0.4rem 0;
+            animation: slideDown 0.2s ease;
+        }
+        .player-name-row .color-badge {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        .player-name-row input {
+            flex: 1;
+        }
+        @keyframes slideDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        #startBtn {
+            background: #f1c40f;
+            border: none;
+            padding: 0.9rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1a2639;
+            margin-top: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #b7950b;
+            transition: 0.07s linear;
+            width: 100%;
+            letter-spacing: 1px;
+        }
+        #startBtn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #b7950b;
+        }
+        #gameScreen {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            background: #1a2639;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            position: relative;
+            box-sizing: border-box;
+        }
+        #gameScreen.active {
+            display: flex;
+        }
+        #gameHeader {
+            width: 100%;
+            max-width: 750px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #ecf0f1;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: #2c3e50cc;
+            backdrop-filter: blur(4px);
+            padding: 10px 20px;
+            border-radius: 60px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 8px 12px;
+            border: 1px solid #3d4e62;
+        }
+        .player-score {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+        }
+        .player-score .color-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: inline-block;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .player-score span {
+            background: #34495e;
+            padding: 2px 12px;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            min-width: 30px;
+            text-align: center;
+        }
+        .turn-indicator {
+            background: #f1c40f;
+            color: #1a2639;
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+        #resetBtn {
+            background: #e74c3c;
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 5px 16px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.15s;
+            border: 1px solid #c0392b;
+        }
+        #resetBtn:hover {
+            background: #c0392b;
+        }
+        #gameCanvas {
+            background: #2c3e50;
+            border-radius: 32px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+            width: 100%;
+            height: auto;
+            max-width: 700px;
+            aspect-ratio: 1 / 1;
+            display: block;
+            touch-action: none;
+            cursor: pointer;
+            border: 2px solid #3d4e62;
+        }
+        /* MODAL SOAL MCMA */
+        #questionModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+            animation: fadeIn 0.3s;
+        }
+        #questionModal.show {
+            display: flex;
+        }
+        .question-card {
+            background: #2c3e50;
+            padding: 2rem 2.5rem;
+            border-radius: 40px;
+            max-width: 580px;
+            width: 95%;
+            color: white;
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.9);
+            border: 2px solid #f1c40f;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .question-card .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            color: #f1c40f;
+            font-weight: 600;
+            font-size: 0.95rem;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .question-card .q-text {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+            color: #ecf0f1;
+        }
+        .question-card .q-hint {
+            font-size: 0.9rem;
+            color: #f1c40f;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+        .question-card .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+        }
+        .question-card .options button {
+            background: #34495e;
+            border: 2px solid #3d4e62;
+            padding: 0.8rem 1.2rem;
+            border-radius: 30px;
+            color: white;
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: 0.15s;
+            font-weight: 500;
+        }
+        .question-card .options button:hover {
+            background: #3d4e62;
+            border-color: #f1c40f;
+        }
+        .question-card .options button.selected {
+            border-color: #f1c40f;
+            background: #3d4e62;
+        }
+        .question-card .options button:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .question-card .feedback {
+            padding: 0.8rem 1rem;
+            border-radius: 20px;
+            margin: 0.5rem 0 1rem;
+            font-weight: 600;
+            text-align: center;
+            display: none;
+        }
+        .question-card .feedback.show {
+            display: block;
+        }
+        .question-card .feedback.success {
+            background: #27ae60;
+            color: white;
+        }
+        .question-card .feedback.fail {
+            background: #e74c3c;
+            color: white;
+        }
+        .question-card .btn-submit {
+            background: #f1c40f;
+            border: none;
+            padding: 0.7rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1a2639;
+            cursor: pointer;
+            transition: 0.1s;
+            box-shadow: 0 4px 0 #b7950b;
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+        .question-card .btn-submit:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #b7950b;
+        }
+        .question-card .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 4px 0 #b7950b;
+        }
+        .question-card .btn-next {
+            background: #3498db;
+            border: none;
+            padding: 0.7rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            transition: 0.1s;
+            box-shadow: 0 4px 0 #1f618d;
+            width: 100%;
+            display: none;
+        }
+        .question-card .btn-next:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #1f618d;
+        }
+        .question-card .btn-next.show {
+            display: block;
+        }
+        /* OVERLAY PEMENANG */
+        #winnerOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(6px);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            flex-direction: column;
+            padding: 20px;
+            animation: fadeIn 0.4s;
+        }
+        #winnerOverlay.show {
+            display: flex;
+        }
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .winner-card {
+            background: #2c3e50;
+            padding: 2rem 2.5rem;
+            border-radius: 60px;
+            text-align: center;
+            color: white;
+            max-width: 480px;
+            width: 90%;
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.8);
+            border: 2px solid #f1c40f;
+        }
+        .winner-card h2 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            color: #f1c40f;
+        }
+        .winner-card .ranking-list {
+            text-align: left;
+            margin: 1.2rem 0;
+            padding: 0 0.5rem;
+        }
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 6px 0;
+            border-bottom: 1px solid #3d4e62;
+            font-size: 1.05rem;
+        }
+        .ranking-item:last-child {
+            border-bottom: none;
+        }
+        .rank-badge {
+            font-weight: 700;
+            min-width: 50px;
+            color: #f1c40f;
+        }
+        .rank-player {
+            flex: 1;
+        }
+        .rank-score {
+            font-weight: 600;
+            background: #34495e;
+            padding: 2px 14px;
+            border-radius: 30px;
+            font-size: 0.95rem;
+        }
+        .winner-card .motivation {
+            font-size: 1.1rem;
+            background: #1a2639;
+            padding: 12px 18px;
+            border-radius: 40px;
+            margin: 14px 0 18px;
+            color: #ecf0f1;
+            border-left: 4px solid #f1c40f;
+            text-align: center;
+        }
+        .winner-card button {
+            background: #f1c40f;
+            border: none;
+            padding: 0.7rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1a2639;
+            cursor: pointer;
+            transition: 0.1s;
+            box-shadow: 0 4px 0 #b7950b;
+        }
+        .winner-card button:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #b7950b;
+        }
+        @media (max-width: 550px) {
+            #inputScreen {
+                padding: 1.5rem;
+            }
+            #gameHeader {
+                font-size: 0.75rem;
+                padding: 6px 12px;
+            }
+            .player-score {
+                font-size: 0.75rem;
+            }
+            .question-card {
+                padding: 1.5rem;
+            }
+            .question-card .q-text {
+                font-size: 1rem;
+            }
+            .winner-card {
+                padding: 1.5rem;
+            }
+            .ranking-item {
+                font-size: 0.95rem;
+            }
+            .rank-badge {
+                min-width: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LAYAR INPUT -->
+    <div id="inputScreen">
+        <h1>⚫ DOTS & BOXES</h1>
+        <div class="subtitle">📚 Sosiologi · Perubahan Sosial (MCMA)</div>
+        <div class="input-group">
+            <label>👥 Jumlah Pemain</label>
+            <select id="playerCountSelect">
+                <option value="2">2 Pemain</option>
+                <option value="3">3 Pemain</option>
+                <option value="4" selected>4 Pemain</option>
+            </select>
+        </div>
+        <div id="playerNamesContainer"></div>
+        <button id="startBtn">▶ Mulai Permainan</button>
+    </div>
+
+    <!-- LAYAR PERMAINAN -->
+    <div id="gameScreen">
+        <div id="gameHeader">
+            <div id="scoresContainer" style="display:flex; flex-wrap:wrap; gap:6px 14px; align-items:center;"></div>
+            <div class="turn-indicator" id="turnIndicator">🎯 Giliran: </div>
+            <button id="resetBtn">↺ Baru</button>
+        </div>
+        <canvas id="gameCanvas" width="600" height="600"></canvas>
+    </div>
+
+    <!-- MODAL SOAL MCMA -->
+    <div id="questionModal">
+        <div class="question-card">
+            <div class="q-header">
+                <span id="qPlayerName">Pemain 1</span>
+                <span id="qNumber">Soal 1/10</span>
+            </div>
+            <div class="q-text" id="qText">Loading soal...</div>
+            <div class="q-hint">⚠️ Pilih <strong>SEMUA</strong> jawaban yang benar (bisa lebih dari 1)</div>
+            <div class="options" id="qOptions"></div>
+            <div class="feedback" id="qFeedback"></div>
+            <button class="btn-submit" id="qSubmitBtn">✅ Kirim Jawaban</button>
+            <button class="btn-next" id="qNextBtn">Lanjutkan ▶</button>
+        </div>
+    </div>
+
+    <!-- OVERLAY PEMENANG -->
+    <div id="winnerOverlay">
+        <div class="winner-card">
+            <h2>🏆 Hasil Akhir</h2>
+            <div class="ranking-list" id="rankingList"></div>
+            <div class="motivation" id="motivationMsg">Terus berlatih, kamu hebat!</div>
+            <button id="playAgainBtn">🔄 Main Lagi</button>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ----- ELEMEN -----
+            const inputScreen = document.getElementById('inputScreen');
+            const gameScreen = document.getElementById('gameScreen');
+            const startBtn = document.getElementById('startBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const playAgainBtn = document.getElementById('playAgainBtn');
+            const winnerOverlay = document.getElementById('winnerOverlay');
+            const canvas = document.getElementById('gameCanvas');
+            const ctx = canvas.getContext('2d');
+            const playerCountSelect = document.getElementById('playerCountSelect');
+            const playerNamesContainer = document.getElementById('playerNamesContainer');
+            const scoresContainer = document.getElementById('scoresContainer');
+            const turnIndicator = document.getElementById('turnIndicator');
+            const rankingList = document.getElementById('rankingList');
+            const motivationMsg = document.getElementById('motivationMsg');
+
+            // Modal soal
+            const questionModal = document.getElementById('questionModal');
+            const qPlayerName = document.getElementById('qPlayerName');
+            const qNumber = document.getElementById('qNumber');
+            const qText = document.getElementById('qText');
+            const qOptions = document.getElementById('qOptions');
+            const qFeedback = document.getElementById('qFeedback');
+            const qSubmitBtn = document.getElementById('qSubmitBtn');
+            const qNextBtn = document.getElementById('qNextBtn');
+
+            // ----- BANK SOAL MCMA (Perubahan Sosial) -----
+            const questionBank = [{
+                question: 'Berikut ini yang termasuk contoh perubahan sosial yang direncanakan (planned change) adalah...',
+                options: ['Program keluarga berencana', 'Revolusi industri', 'Pembangunan infrastruktur', 'Bencana alam'],
+                correct: [0, 2]
+            }, {
+                question: 'Faktor-faktor yang mempengaruhi cepat atau lambatnya perubahan sosial antara lain...',
+                options: ['Kontak dengan budaya lain', 'Sistem pendidikan yang maju', 'Sikap tradisional masyarakat',
+                    'Keterbukaan terhadap inovasi'
+                ],
+                correct: [0, 1, 3]
+            }, {
+                question: 'Dampak negatif dari perubahan sosial di bidang teknologi antara lain...',
+                options: ['Kesenjangan digital', 'Cybercrime', 'Akses informasi mudah',
+                    'Pengangguran akibat otomatisasi'
+                ],
+                correct: [0, 1, 3]
+            }, {
+                question: 'Contoh perubahan sosial yang bersifat regresif (menurunkan kemajuan) adalah...',
+                options: ['Kembalinya praktik perbudakan modern', 'Meningkatnya angka putus sekolah',
+                    'Revolusi hijau di pertanian', 'Urbanisasi besar-besaran'
+                ],
+                correct: [0, 1]
+            }, {
+                question: 'Faktor internal yang dapat mendorong perubahan sosial dalam masyarakat adalah...',
+                options: ['Penemuan baru (inovasi)', 'Pertentangan sosial (konflik)', 'Perubahan iklim',
+                    'Bencana alam'
+                ],
+                correct: [0, 1]
+            }, {
+                question: 'Teori-teori tentang perubahan sosial antara lain dikemukakan oleh...',
+                options: ['Emile Durkheim', 'Karl Marx', 'Max Weber', 'Auguste Comte'],
+                correct: [0, 1, 2]
+            }, {
+                question: 'Proses akulturasi budaya dapat terjadi melalui...',
+                options: ['Pernikahan campuran', 'Perdagangan internasional', 'Kolonialisasi', 'Pendidikan formal'],
+                correct: [0, 1, 2]
+            }, {
+                question: 'Dampak positif globalisasi terhadap perubahan sosial adalah...',
+                options: ['Meningkatnya toleransi antarbudaya', 'Akses teknologi yang merata',
+                    'Lunturnya nilai-nilai lokal', 'Kerja sama internasional'
+                ],
+                correct: [0, 3]
+            }, {
+                question: 'Ciri-ciri perubahan sosial yang tidak dikehendaki (unplanned change) adalah...',
+                options: ['Terjadi secara tiba-tiba', 'Membawa dampak negatif', 'Dapat diprediksi',
+                    'Direncanakan oleh pemerintah'
+                ],
+                correct: [0, 1]
+            }, {
+                question: 'Sikap masyarakat yang dapat menghambat perubahan sosial adalah...',
+                options: ['Etnosentrisme', 'Konservatisme', 'Skeptisisme', 'Radikalisme'],
+                correct: [0, 1, 2]
+            }, {
+                question: 'Perubahan sosial yang disebabkan oleh penemuan baru di bidang transportasi contohnya...',
+                options: ['Penemuan mesin uap', 'Kendaraan listrik', 'Pesawat terbang', 'Kereta kuda'],
+                correct: [0, 1, 2]
+            }, {
+                question: 'Dampak perubahan sosial di bidang ekonomi yang positif adalah...',
+                options: ['Meningkatnya produktivitas', 'Terbukanya lapangan kerja baru', 'Kesenjangan ekonomi',
+                    'Urbanisasi'
+                ],
+                correct: [0, 1]
+            }, {
+                question: 'Contoh perubahan sosial yang bersifat siklus (berulang) adalah...',
+                options: ['Booming ekonomi', 'Musim kemarau', 'Pemilu', 'Tren fashion'],
+                correct: [0, 3]
+            }, {
+                question: 'Faktor eksternal yang memicu perubahan sosial antara lain...',
+                options: ['Bencana alam', 'Perang', 'Kebijakan pemerintah', 'Inovasi teknologi'],
+                correct: [0, 1, 2]
+            }, {
+                question: 'Modernisasi sebagai bentuk perubahan sosial membawa dampak...',
+                options: ['Individualisme meningkat', 'Solidaritas mekanik kuat', 'Mobilitas sosial tinggi',
+                    'Ketergantungan pada alam'
+                ],
+                correct: [0, 2]
+            }];
+
+            // ----- WARNA PEMAIN -----
+            const PLAYER_COLORS = [
+                { bg: '#3498db', light: '#5dade2', name: 'Biru' },
+                { bg: '#e67e22', light: '#f39c12', name: 'Oranye' },
+                { bg: '#2ecc71', light: '#58d68d', name: 'Hijau' },
+                { bg: '#e74c3c', light: '#ec7063', name: 'Merah' }
+            ];
+
+            // ----- STATE PERMAINAN -----
+            // Papan 3x5 kotak = 4 baris titik x 6 kolom titik
+            const ROWS = 4; // 4 baris titik -> 3 baris kotak
+            const COLS = 6; // 6 kolom titik -> 5 kolom kotak
+            const DOT_SPACING = 120;
+            const OFFSET_X = 60;
+            const OFFSET_Y = 75;
+
+            let players = [];
+            let scores = [];
+            let currentPlayer = 0;
+            let hEdges = [];
+            let vEdges = [];
+            let boxes = [];
+            let gameActive = true;
+            let gameOver = false;
+
+            // State untuk soal MCMA
+            let usedQuestions = [];
+            let isWaitingAnswer = false;
+            let pendingEdge = null;
+            let selectedAnswers = [];
+            let currentQuestionData = null;
+
+            // ----- FUNGSI INPUT DINAMIS -----
+            function renderPlayerInputs(count) {
+                playerNamesContainer.innerHTML = '';
+                for (let i = 0; i < count; i++) {
+                    const div = document.createElement('div');
+                    div.className = 'player-name-row';
+                    const color = PLAYER_COLORS[i % PLAYER_COLORS.length];
+                    const badge = document.createElement('span');
+                    badge.className = 'color-badge';
+                    badge.style.background = color.bg;
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.placeholder = `Nama Pemain ${i+1}`;
+                    input.value = `Pemain ${i+1}`;
+                    input.dataset.index = i;
+                    div.appendChild(badge);
+                    div.appendChild(input);
+                    playerNamesContainer.appendChild(div);
+                }
+            }
+
+            playerCountSelect.addEventListener('change', function() {
+                renderPlayerInputs(parseInt(this.value));
+            });
+            renderPlayerInputs(4);
+
+            // ----- INISIALISASI PERMAINAN -----
+            function initGame() {
+                hEdges = Array.from({ length: ROWS }, () => Array(COLS - 1).fill(false));
+                vEdges = Array.from({ length: ROWS - 1 }, () => Array(COLS).fill(false));
+                boxes = Array.from({ length: ROWS - 1 }, () => Array(COLS - 1).fill(0));
+                const count = players.length;
+                scores = new Array(count).fill(0);
+                currentPlayer = 0;
+                gameActive = true;
+                gameOver = false;
+                usedQuestions = [];
+                pendingEdge = null;
+                isWaitingAnswer = false;
+                selectedAnswers = [];
+                currentQuestionData = null;
+                winnerOverlay.classList.remove('show');
+                questionModal.classList.remove('show');
+                updateScoreAndTurn();
+                drawBoard();
+            }
+
+            // ----- UPDATE SKOR & GILIRAN -----
+            function updateScoreAndTurn() {
+                let html = '';
+                for (let i = 0; i < players.length; i++) {
+                    const color = PLAYER_COLORS[i % PLAYER_COLORS.length];
+                    html += `<div class="player-score">
+                        <span class="color-dot" style="background:${color.bg}"></span>
+                        ${players[i]} <span>${scores[i]}</span>
+                    </div>`;
+                }
+                scoresContainer.innerHTML = html;
+
+                const name = players[currentPlayer] || `Pemain ${currentPlayer+1}`;
+                turnIndicator.textContent = `🎯 Giliran: ${name}`;
+                const color = PLAYER_COLORS[currentPlayer % PLAYER_COLORS.length];
+                turnIndicator.style.background = color.bg;
+                turnIndicator.style.color = 'white';
+            }
+
+            // ----- GAMBAR BOARD 3x5 KOTAK -----
+            function drawBoard() {
+                const w = canvas.width,
+                    h = canvas.height;
+                ctx.clearRect(0, 0, w, h);
+                ctx.fillStyle = '#2c3e50';
+                ctx.fillRect(0, 0, w, h);
+
+                const dotRadius = 6;
+
+                // Gambar semua titik
+                ctx.fillStyle = '#ecf0f1';
+                for (let r = 0; r < ROWS; r++) {
+                    for (let c = 0; c < COLS; c++) {
+                        ctx.beginPath();
+                        ctx.arc(OFFSET_X + c * DOT_SPACING, OFFSET_Y + r * DOT_SPACING, dotRadius, 0, 2 * Math.PI);
+                        ctx.fill();
+                    }
+                }
+
+                ctx.strokeStyle = '#ecf0f1';
+                ctx.lineWidth = 4;
+
+                // Edge horizontal
+                for (let r = 0; r < ROWS; r++) {
+                    for (let c = 0; c < COLS - 1; c++) {
+                        if (hEdges[r][c]) {
+                            ctx.beginPath();
+                            ctx.moveTo(OFFSET_X + c * DOT_SPACING, OFFSET_Y + r * DOT_SPACING);
+                            ctx.lineTo(OFFSET_X + (c + 1) * DOT_SPACING, OFFSET_Y + r * DOT_SPACING);
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                // Edge vertikal
+                for (let r = 0; r < ROWS - 1; r++) {
+                    for (let c = 0; c < COLS; c++) {
+                        if (vEdges[r][c]) {
+                            ctx.beginPath();
+                            ctx.moveTo(OFFSET_X + c * DOT_SPACING, OFFSET_Y + r * DOT_SPACING);
+                            ctx.lineTo(OFFSET_X + c * DOT_SPACING, OFFSET_Y + (r + 1) * DOT_SPACING);
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                // Kotak yang sudah diisi (3x5 = 15 kotak)
+                for (let r = 0; r < ROWS - 1; r++) {
+                    for (let c = 0; c < COLS - 1; c++) {
+                        const owner = boxes[r][c];
+                        if (owner > 0) {
+                            const color = PLAYER_COLORS[(owner - 1) % PLAYER_COLORS.length];
+                            ctx.fillStyle = color.bg;
+                            const x = OFFSET_X + c * DOT_SPACING + 2;
+                            const y = OFFSET_Y + r * DOT_SPACING + 2;
+                            const size = DOT_SPACING - 4;
+                            ctx.fillRect(x, y, size, size);
+                            ctx.fillStyle = 'white';
+                            ctx.font = 'bold 24px sans-serif';
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+                            ctx.fillText('■', OFFSET_X + c * DOT_SPACING + DOT_SPACING / 2, OFFSET_Y + r * DOT_SPACING +
+                                DOT_SPACING / 2);
+                        }
+                    }
+                }
+            }
+
+            // ----- CEK APAKAH ADA POTENSI SKOR (3 sisi sudah terisi) -----
+            function hasPotentialScore(row, col, type) {
+                const boxesToCheck = [];
+                if (type === 'h') {
+                    if (row > 0) boxesToCheck.push([row - 1, col]);
+                    if (row < ROWS - 1) boxesToCheck.push([row, col]);
+                } else {
+                    if (col > 0) boxesToCheck.push([row, col - 1]);
+                    if (col < COLS - 1) boxesToCheck.push([row, col]);
+                }
+                for (let [r, c] of boxesToCheck) {
+                    if (boxes[r][c] !== 0) continue;
+                    let sides = 0;
+                    if (hEdges[r][c]) sides++;
+                    if (hEdges[r + 1][c]) sides++;
+                    if (vEdges[r][c]) sides++;
+                    if (vEdges[r][c + 1]) sides++;
+                    if (sides === 3) return true;
+                }
+                return false;
+            }
+
+            // ----- CEK DAN KLAIM KOTAK -----
+            function checkAndClaimBoxes(row, col, player) {
+                let claimed = 0;
+                const boxesToCheck = [];
+                if (row >= 0 && row < ROWS && col >= 0 && col < COLS - 1) {
+                    if (row > 0) boxesToCheck.push([row - 1, col]);
+                    if (row < ROWS - 1) boxesToCheck.push([row, col]);
+                }
+                if (row >= 0 && row < ROWS - 1 && col >= 0 && col < COLS) {
+                    if (col > 0) boxesToCheck.push([row, col - 1]);
+                    if (col < COLS - 1) boxesToCheck.push([row, col]);
+                }
+                const unique = [];
+                const seen = new Set();
+                for (let [r, c] of boxesToCheck) {
+                    const key = `${r},${c}`;
+                    if (!seen.has(key)) { seen.add(key);
+                        unique.push([r, c]); }
+                }
+                for (let [r, c] of unique) {
+                    if (boxes[r][c] !== 0) continue;
+                    if (hEdges[r][c] && hEdges[r + 1][c] && vEdges[r][c] && vEdges[r][c + 1]) {
+                        boxes[r][c] = player + 1;
+                        scores[player] += 1;
+                        claimed++;
+                    }
+                }
+                return claimed;
+            }
+
+            // ----- CEK GAME OVER (15 kotak) -----
+            function checkGameOver() {
+                const total = (ROWS - 1) * (COLS - 1); // 3*5 = 15
+                if (scores.reduce((a, b) => a + b, 0) === total) {
+                    gameActive = false;
+                    gameOver = true;
+                    showRanking();
+                    return true;
+                }
+                return false;
+            }
+
+            // ----- TAMPILKAN RANKING -----
+            function showRanking() {
+                const indexed = players.map((name, i) => ({
+                    index: i,
+                    name: name,
+                    score: scores[i],
+                    color: PLAYER_COLORS[i % PLAYER_COLORS.length]
+                }));
+                indexed.sort((a, b) => b.score - a.score);
+                let ranking = [];
+                let currentRank = 1;
+                let i = 0;
+                while (i < indexed.length) {
+                    let group = [];
+                    let score = indexed[i].score;
+                    while (i < indexed.length && indexed[i].score === score) {
+                        group.push(indexed[i]);
+                        i++;
+                    }
+                    ranking.push({
+                        rank: currentRank,
+                        players: group,
+                        score: score
+                    });
+                    currentRank += group.length;
+                }
+                let html = '';
+                for (let r = 0; r < ranking.length; r++) {
+                    const item = ranking[r];
+                    const rankLabel = `#${item.rank}`;
+                    const playerNames = item.players.map(p => p.name).join(' & ');
+                    const color = item.players[0].color;
+                    html += `
+                        <div class="ranking-item">
+                            <span class="rank-badge">${rankLabel}</span>
+                            <span class="color-dot" style="background:${color.bg}; width:14px; height:14px; border-radius:50%; display:inline-block; border:1px solid rgba(255,255,255,0.2);"></span>
+                            <span class="rank-player">${playerNames}</span>
+                            <span class="rank-score">${item.score} kotak</span>
+                        </div>
+                    `;
+                }
+                rankingList.innerHTML = html;
+                if (ranking.length > 1) {
+                    const juara1 = ranking[0].players.map(p => p.name).join(' & ');
+                    const others = ranking.slice(1).flatMap(item => item.players.map(p => p.name));
+                    if (others.length > 0) {
+                        motivationMsg.textContent = `💪 ${others.join(' & ')}, jangan menyerah! Terus berlatih untuk mengejar ${juara1}.`;
+                    } else {
+                        motivationMsg.textContent = `🎉 Semua pemain hebat! Pertahankan semangatnya!`;
+                    }
+                } else {
+                    motivationMsg.textContent = `🎉 Semua pemain hebat! Pertahankan semangatnya!`;
+                }
+                winnerOverlay.classList.add('show');
+            }
+
+            // ----- FUNGSI SOAL MCMA -----
+            function getRandomQuestion() {
+                if (usedQuestions.length >= questionBank.length) {
+                    usedQuestions = [];
+                }
+                let available = [];
+                for (let i = 0; i < questionBank.length; i++) {
+                    if (!usedQuestions.includes(i)) available.push(i);
+                }
+                if (available.length === 0) {
+                    usedQuestions = [];
+                    available = questionBank.map((_, i) => i);
+                }
+                const randIdx = available[Math.floor(Math.random() * available.length)];
+                usedQuestions.push(randIdx);
+                return questionBank[randIdx];
+            }
+
+            function showQuestion() {
+                const q = getRandomQuestion();
+                currentQuestionData = q;
+                const playerName = players[currentPlayer] || `Pemain ${currentPlayer+1}`;
+                qPlayerName.textContent = `🎯 ${playerName}`;
+                qNumber.textContent = `Soal ${usedQuestions.length}/${questionBank.length}`;
+                qText.textContent = q.question;
+                qOptions.innerHTML = '';
+                qFeedback.className = 'feedback';
+                qFeedback.textContent = '';
+                qFeedback.style.display = 'none';
+                qSubmitBtn.style.display = 'block';
+                qSubmitBtn.disabled = true;
+                qNextBtn.className = 'btn-next';
+                qNextBtn.style.display = 'none';
+                selectedAnswers = [];
+
+                const labels = ['A', 'B', 'C', 'D'];
+                q.options.forEach((opt, idx) => {
+                    const btn = document.createElement('button');
+                    btn.textContent = `${labels[idx]}. ${opt}`;
+                    btn.dataset.index = idx;
+                    btn.addEventListener('click', function() {
+                        if (isWaitingAnswer) return;
+                        if (this.classList.contains('selected')) {
+                            this.classList.remove('selected');
+                            selectedAnswers = selectedAnswers.filter(i => i !== idx);
+                        } else {
+                            this.classList.add('selected');
+                            selectedAnswers.push(idx);
+                        }
+                        qSubmitBtn.disabled = selectedAnswers.length === 0;
+                    });
+                    qOptions.appendChild(btn);
+                });
+
+                isWaitingAnswer = false;
+                qSubmitBtn.onclick = function() {
+                    if (isWaitingAnswer || selectedAnswers.length === 0) return;
+                    handleMCMAAnswer(selectedAnswers, q.correct);
+                };
+                questionModal.classList.add('show');
+            }
+
+            function handleMCMAAnswer(selected, correct) {
+                isWaitingAnswer = true;
+                const buttons = qOptions.querySelectorAll('button');
+                buttons.forEach((btn) => {
+                    btn.disabled = true;
+                });
+
+                // Cek apakah jawaban benar semua
+                const allCorrect = correct.every(c => selected.includes(c));
+                const allSelectedCorrect = selected.every(s => correct.includes(s));
+                const isFullyCorrect = allCorrect && allSelectedCorrect && selected.length === correct.length;
+
+                // Tampilkan feedback benar/salah (tanpa menunjukkan jawaban benar)
+                qFeedback.style.display = 'block';
+                if (isFullyCorrect) {
+                    qFeedback.className = 'feedback show success';
+                    qFeedback.textContent = '✅ Jawaban Benar! Silakan letakkan garis.';
+                } else {
+                    qFeedback.className = 'feedback show fail';
+                    qFeedback.textContent = '❌ Jawaban Salah. Kesempatan berpindah ke pemain berikutnya.';
+                }
+
+                qSubmitBtn.style.display = 'none';
+                qNextBtn.className = 'btn-next show';
+                qNextBtn.style.display = 'block';
+                qNextBtn.textContent = 'Lanjutkan ▶';
+
+                // Eksekusi berdasarkan jawaban
+                if (isFullyCorrect) {
+                    executePendingEdge(true);
+                } else {
+                    executePendingEdge(false);
+                }
+
+                qNextBtn.onclick = function() {
+                    questionModal.classList.remove('show');
+                    isWaitingAnswer = false;
+                    pendingEdge = null;
+                    if (gameActive && !gameOver) {
+                        updateScoreAndTurn();
+                        drawBoard();
+                    }
+                    checkGameOver();
+                };
+            }
+
+            function executePendingEdge(success) {
+                if (!pendingEdge) return;
+                const { type, row, col } = pendingEdge;
+                if (success) {
+                    let claimed = 0;
+                    if (type === 'h') {
+                        hEdges[row][col] = true;
+                        claimed = checkAndClaimBoxes(row, col, currentPlayer);
+                    } else {
+                        vEdges[row][col] = true;
+                        claimed = checkAndClaimBoxes(row, col, currentPlayer);
+                    }
+                    updateScoreAndTurn();
+                    drawBoard();
+                    if (claimed === 0) {
+                        currentPlayer = (currentPlayer + 1) % players.length;
+                    } else {
+                        updateScoreAndTurn();
+                    }
+                    if (checkGameOver()) {
+                        gameActive = false;
+                        drawBoard();
+                    }
+                } else {
+                    currentPlayer = (currentPlayer + 1) % players.length;
+                    updateScoreAndTurn();
+                    drawBoard();
+                }
+                pendingEdge = null;
+            }
+
+            // ----- HANDLE KLIK CANVAS -----
+            function handleCanvasClick(e) {
+                if (!gameActive || gameOver) return;
+                if (questionModal.classList.contains('show')) return;
+                if (isWaitingAnswer) return;
+
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                let clientX, clientY;
+                if (e.touches) {
+                    clientX = e.touches[0].clientX;
+                    clientY = e.touches[0].clientY;
+                    e.preventDefault();
+                } else {
+                    clientX = e.clientX;
+                    clientY = e.clientY;
+                }
+                const canvasX = (clientX - rect.left) * scaleX;
+                const canvasY = (clientY - rect.top) * scaleY;
+
+                const threshold = 25;
+                let minDist = threshold;
+                let targetEdge = null;
+
+                // Cek edge horizontal
+                for (let r = 0; r < ROWS; r++) {
+                    for (let c = 0; c < COLS - 1; c++) {
+                        if (hEdges[r][c]) continue;
+                        const x1 = OFFSET_X + c * DOT_SPACING;
+                        const x2 = OFFSET_X + (c + 1) * DOT_SPACING;
+                        const y = OFFSET_Y + r * DOT_SPACING;
+                        const midX = (x1 + x2) / 2;
+                        const dist = Math.hypot(canvasX - midX, canvasY - y);
+                        if (dist < minDist) { minDist = dist;
+                            targetEdge = { type: 'h', row: r, col: c }; }
+                    }
+                }
+
+                // Cek edge vertikal
+                for (let r = 0; r < ROWS - 1; r++) {
+                    for (let c = 0; c < COLS; c++) {
+                        if (vEdges[r][c]) continue;
+                        const x = OFFSET_X + c * DOT_SPACING;
+                        const y1 = OFFSET_Y + r * DOT_SPACING;
+                        const y2 = OFFSET_Y + (r + 1) * DOT_SPACING;
+                        const midY = (y1 + y2) / 2;
+                        const dist = Math.hypot(canvasX - x, canvasY - midY);
+                        if (dist < minDist) { minDist = dist;
+                            targetEdge = { type: 'v', row: r, col: c }; }
+                    }
+                }
+
+                if (!targetEdge) return;
+
+                // CEK POTENSI SKOR: jika ada potensi, munculkan soal
+                if (hasPotentialScore(targetEdge.row, targetEdge.col, targetEdge.type)) {
+                    pendingEdge = targetEdge;
+                    showQuestion();
+                } else {
+                    // Tidak ada potensi skor, langsung eksekusi tanpa soal
+                    const { type, row, col } = targetEdge;
+                    let claimed = 0;
+                    if (type === 'h') {
+                        hEdges[row][col] = true;
+                        claimed = checkAndClaimBoxes(row, col, currentPlayer);
+                    } else {
+                        vEdges[row][col] = true;
+                        claimed = checkAndClaimBoxes(row, col, currentPlayer);
+                    }
+                    updateScoreAndTurn();
+                    drawBoard();
+                    if (claimed === 0) {
+                        currentPlayer = (currentPlayer + 1) % players.length;
+                        updateScoreAndTurn();
+                    } else {
+                        updateScoreAndTurn();
+                    }
+                    if (checkGameOver()) {
+                        gameActive = false;
+                        drawBoard();
+                    }
+                }
+            }
+
+            // ----- RESET -----
+            function resetGame() {
+                initGame();
+                drawBoard();
+                winnerOverlay.classList.remove('show');
+                questionModal.classList.remove('show');
+                gameActive = true;
+                gameOver = false;
+                pendingEdge = null;
+                isWaitingAnswer = false;
+                selectedAnswers = [];
+                currentQuestionData = null;
+                updateScoreAndTurn();
+            }
+
+            // ----- START GAME -----
+            function startGame() {
+                const count = parseInt(playerCountSelect.value);
+                const inputs = playerNamesContainer.querySelectorAll('input');
+                const names = [];
+                for (let i = 0; i < count; i++) {
+                    const val = inputs[i]?.value.trim() || `Pemain ${i+1}`;
+                    names.push(val);
+                }
+                players = names;
+
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen().catch(() => {});
+                }
+
+                inputScreen.style.display = 'none';
+                gameScreen.classList.add('active');
+                initGame();
+                drawBoard();
+                updateScoreAndTurn();
+                setTimeout(resizeCanvas, 50);
+            }
+
+            // ----- RESIZE CANVAS -----
+            function resizeCanvas() {
+                if (!gameScreen.classList.contains('active')) return;
+                const container = gameScreen;
+                const w = container.clientWidth - 20;
+                const h = container.clientHeight - 100;
+                const size = Math.min(w, h, 700);
+                canvas.style.width = size + 'px';
+                canvas.style.height = size + 'px';
+            }
+            window.addEventListener('resize', resizeCanvas);
+
+            // ----- EVENT LISTENERS -----
+            startBtn.addEventListener('click', startGame);
+            resetBtn.addEventListener('click', resetGame);
+            playAgainBtn.addEventListener('click', () => {
+                winnerOverlay.classList.remove('show');
+                resetGame();
+            });
+            canvas.addEventListener('click', handleCanvasClick);
+            canvas.addEventListener('touchstart', handleCanvasClick, { passive: false });
+
+            document.querySelectorAll('#inputScreen input').forEach(inp => {
+                inp.addEventListener('keypress', (e) => { if (e.key === 'Enter') startGame(); });
+            });
+
+            inputScreen.style.display = 'block';
+            gameScreen.classList.remove('active');
+
+            const origResize = resizeCanvas;
+            resizeCanvas = function() {
+                if (gameScreen.classList.contains('active')) origResize();
+            };
+            window.addEventListener('resize', resizeCanvas);
+            setTimeout(() => { if (gameScreen.classList.contains('active')) resizeCanvas(); }, 100);
+        })();
+    </script>
+
+</body>
+</html>
