@@ -1,0 +1,1557 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raja Monster — Pertarungan Terakhir</title>
+<style>
+/* ============================================================
+   STYLE LENGKAP
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@500;600;700&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@500;700&display=swap');
+
+:root{
+  --void: #0c0714;
+  --surface: #1b1027;
+  --surface-2: #241536;
+  --parchment: #ece3d0;
+  --parchment-dim: #b8ac93;
+  --gold: #cfa438;
+  --gold-bright: #f0cf6e;
+  --blood: #8a2333;
+  --blood-bright: #d64858;
+  --ember: #d9642c;
+  --mist: #4fb8a5;
+  --mist-bright: #6fe0cb;
+  --line: rgba(207,164,56,0.25);
+  --shadow-deep: 0 20px 60px rgba(0,0,0,0.6);
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(138,35,51,0.25), transparent),
+    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(79,184,165,0.08), transparent),
+    var(--void);
+  color:var(--parchment);
+  font-family:'Spectral', serif;
+  padding:24px 16px 60px;
+  display:flex;
+  justify-content:center;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ============================================================
+   ANTI-CHEAT OVERLAY
+   ============================================================ */
+#blocker-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.92);
+  z-index: 99999;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 20px;
+}
+#blocker-overlay.show {
+  display: flex;
+}
+#blocker-overlay .big-icon {
+  font-size: 72px;
+  margin-bottom: 20px;
+}
+#blocker-overlay h2 {
+  color: var(--blood-bright);
+  font-family: 'Cinzel', serif;
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+#blocker-overlay p {
+  color: var(--parchment-dim);
+  font-size: 18px;
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   WARNING MESSAGE
+   ============================================================ */
+.warning-msg {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--blood);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 99998;
+  display: none;
+  animation: slideDown 0.4s ease;
+  border: 2px solid var(--blood-bright);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+  max-width: 90%;
+  text-align: center;
+}
+.warning-msg.show {
+  display: block;
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateX(-50%) translateY(-30px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+#app{ width:100%; max-width:840px; }
+
+h1,h2,h3{ font-family:'Cinzel', serif; margin:0; letter-spacing:0.02em; }
+
+.eyebrow{
+  font-family:'JetBrains Mono', monospace;
+  font-size:11px;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color:var(--gold);
+  opacity:0.85;
+}
+
+/* ---------- Title / signature banner ---------- */
+.title-block{ text-align:center; margin-bottom:28px; }
+.title-block .eyebrow{ display:block; margin-bottom:10px; }
+.title-crown{ width:64px; height:64px; margin:0 auto 8px; display:block; }
+.title-block h1{
+  font-family:'Cinzel Decorative', serif;
+  font-size:clamp(28px,6vw,42px);
+  color:var(--gold-bright);
+  text-shadow: 0 0 24px rgba(240,207,110,0.35), 0 4px 0 rgba(0,0,0,0.4);
+}
+.title-block p{ color:var(--parchment-dim); font-size:14px; margin-top:6px; }
+
+/* ---------- Panels ---------- */
+.panel{
+  background: linear-gradient(180deg, var(--surface), var(--surface-2));
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:22px;
+  box-shadow: var(--shadow-deep);
+  margin-bottom:18px;
+}
+
+/* ---------- Setup screen ---------- */
+.step-label{ font-family:'Cinzel', serif; font-size:15px; color:var(--gold-bright); margin-bottom:14px; }
+.count-row{ display:flex; gap:10px; flex-wrap:wrap; }
+#level-row.count-row .count-btn{ flex:1 1 50px; font-size:16px; padding:10px 0; }
+.count-btn{
+  flex:1 1 60px;
+  padding:14px 0;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:var(--void);
+  color:var(--parchment);
+  font-family:'Cinzel', serif;
+  font-size:20px;
+  cursor:pointer;
+  transition:transform .12s ease, border-color .12s ease, background .12s ease;
+}
+.count-btn:hover{ border-color:var(--gold); transform:translateY(-2px); }
+.count-btn.active{
+  background: linear-gradient(180deg, var(--gold), #a8801f);
+  color:#241100;
+  border-color:var(--gold-bright);
+}
+
+.name-fields{ margin-top:18px; display:flex; flex-direction:column; gap:12px; }
+.name-field label{
+  display:block; font-family:'JetBrains Mono',monospace; font-size:11px;
+  letter-spacing:0.1em; text-transform:uppercase; color:var(--parchment-dim); margin-bottom:6px;
+}
+.name-field input{
+  width:100%; padding:11px 14px; border-radius:8px; border:1px solid var(--line);
+  background:var(--void); color:var(--parchment); font-family:'Spectral',serif; font-size:15px;
+}
+.name-field input:focus{ outline:none; border-color:var(--gold); }
+
+.btn{
+  font-family:'Cinzel', serif;
+  font-size:14px;
+  letter-spacing:0.04em;
+  padding:13px 22px;
+  border-radius:9px;
+  border:1px solid var(--gold);
+  background: linear-gradient(180deg, var(--gold-bright), var(--gold));
+  color:#241100;
+  cursor:pointer;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.btn:hover{ transform:translateY(-2px); box-shadow:0 8px 20px rgba(207,164,56,0.3); }
+.btn:disabled{ opacity:0.4; cursor:not-allowed; transform:none; box-shadow:none; }
+.btn.ghost{
+  background:transparent; color:var(--parchment); border:1px solid var(--line);
+}
+.btn.blood{
+  background:linear-gradient(180deg, var(--blood-bright), var(--blood));
+  border-color:var(--blood-bright); color:#2a0208;
+}
+.btn.mist{
+  background:linear-gradient(180deg, var(--mist-bright), var(--mist));
+  border-color:var(--mist-bright); color:#052422;
+}
+.btn-row{ display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
+
+.err{ color:var(--blood-bright); font-size:13px; font-family:'JetBrains Mono',monospace; margin-top:10px; min-height:16px; }
+
+/* ---------- Battle screen ---------- */
+.round-banner{
+  text-align:center; margin-bottom:16px;
+}
+.round-banner .eyebrow{ margin-bottom:4px; }
+.round-banner h2{ font-size:20px; color:var(--parchment); }
+
+.monster-card{
+  position:relative;
+  text-align:center;
+  overflow:hidden;
+}
+.monster-card::before{
+  content:"";
+  position:absolute; inset:0;
+  background: radial-gradient(circle at 50% 20%, rgba(138,35,51,0.35), transparent 60%);
+  pointer-events:none;
+}
+.monster-svg{ width:120px; height:120px; margin:0 auto 6px; display:block; filter:drop-shadow(0 0 18px rgba(214,72,88,0.45)); }
+.monster-svg.hit{ animation:shake .4s ease; }
+@keyframes shake{
+  10%,90%{ transform:translate3d(-2px,0,0) rotate(-1deg); }
+  20%,80%{ transform:translate3d(4px,0,0) rotate(1deg); }
+  30%,50%,70%{ transform:translate3d(-8px,0,0) rotate(-2deg); }
+  40%,60%{ transform:translate3d(8px,0,0) rotate(2deg); }
+}
+.monster-card h2{ font-size:24px; color:var(--blood-bright); text-shadow:0 0 16px rgba(214,72,88,0.4); }
+.monster-stats{ display:flex; justify-content:center; gap:26px; margin-top:14px; font-family:'JetBrains Mono',monospace; font-size:13px; }
+.stat-chip{ color:var(--parchment-dim); }
+.stat-chip b{ display:block; font-size:18px; color:var(--parchment); }
+
+.bar-track{
+  width:100%; height:14px; border-radius:8px; background:rgba(0,0,0,0.45);
+  border:1px solid rgba(255,255,255,0.08); overflow:hidden; margin-top:12px;
+}
+.bar-fill{ height:100%; border-radius:8px; transition:width .5s ease; }
+.bar-fill.blood{ background:linear-gradient(90deg, var(--blood), var(--blood-bright)); }
+.bar-fill.mist{ background:linear-gradient(90deg, var(--mist), var(--mist-bright)); }
+
+.players-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:18px;
+}
+.player-card{
+  background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:14px;
+  transition:opacity .3s ease, border-color .2s ease;
+}
+.player-card.turn{ border-color:var(--gold-bright); box-shadow:0 0 0 1px var(--gold-bright), 0 0 18px rgba(240,207,110,0.25); }
+.player-card.dead{ opacity:0.35; }
+.player-card .pname{ font-family:'Cinzel',serif; font-size:14px; color:var(--gold-bright); margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;}
+.player-card .pname .tag{ font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--parchment-dim); }
+.player-card .pstats{ font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--parchment-dim); display:flex; justify-content:space-between; margin-top:6px; }
+
+/* ---------- Action / question panel ---------- */
+.action-panel h3{ font-size:17px; color:var(--gold-bright); margin-bottom:4px; }
+.action-panel .sub{ color:var(--parchment-dim); font-size:13px; margin-bottom:16px; }
+
+.choice-group{ margin-bottom:16px; }
+.choice-group .glabel{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--parchment-dim); margin-bottom:8px; display:block; }
+.choice-row{ display:flex; gap:10px; flex-wrap:wrap; }
+.choice-btn{
+  flex:1 1 100px; padding:12px 8px; border-radius:9px; border:1px solid var(--line);
+  background:var(--void); color:var(--parchment); font-family:'Cinzel',serif; font-size:13px;
+  cursor:pointer; text-align:center; transition:all .12s ease;
+}
+.choice-btn:hover{ border-color:var(--gold); }
+.choice-btn.selected{ background:linear-gradient(180deg,var(--gold-bright),var(--gold)); color:#241100; border-color:var(--gold-bright); }
+
+.question-box{
+  margin-top:18px; padding-top:18px; border-top:1px dashed var(--line);
+}
+.question-box .qtext{ font-size:16px; color:var(--parchment); margin-bottom:14px; line-height:1.5; }
+
+/* ===== SEDERHANA ===== */
+.qopt-wrapper{
+  display:flex; align-items:center; gap:12px; padding:10px 14px; margin:6px 0;
+  border-radius:8px; border:1px solid var(--line); cursor:pointer;
+  transition:all 0.15s ease;
+}
+.qopt-wrapper:hover{ border-color:var(--gold); background:rgba(207,164,56,0.05); }
+.qopt-wrapper input[type="radio"]{
+  accent-color:var(--gold); width:18px; height:18px; cursor:pointer; flex-shrink:0;
+}
+.qopt-wrapper label{ color:var(--parchment); font-size:14px; cursor:pointer; flex:1; }
+
+/* ===== KATEGORI ===== */
+.kategori-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 14px;
+  background: rgba(12,7,20,0.5);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.kategori-table th {
+  background: rgba(207,164,56,0.2);
+  color: var(--gold-bright);
+  padding: 10px 8px;
+  text-align: center;
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+}
+.kategori-table td {
+  padding: 8px 6px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+.kategori-table .pernyataan-cell {
+  text-align: left;
+  color: var(--parchment);
+  padding-right: 12px;
+}
+.kategori-table .kategori-cell {
+  text-align: center;
+  width: 60px;
+}
+.kategori-table .kategori-cell input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #7f6552;
+  border-radius: 50%;
+  outline: none;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s ease;
+}
+.kategori-table .kategori-cell input[type="radio"]:checked {
+  border: 6px solid var(--gold);
+  background: var(--gold);
+  box-shadow: 0 0 12px rgba(207,164,56,0.4);
+}
+.kategori-table .kategori-cell input[type="radio"]:hover {
+  border-color: var(--gold);
+}
+.kategori-table .kategori-label {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--parchment-dim);
+}
+.kategori-table tr:hover {
+  background: rgba(207,164,56,0.05);
+}
+.kategori-confirm-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line);
+}
+.kategori-confirm-btn {
+  min-width: 180px;
+}
+.kategori-hint {
+  font-size: 12px;
+  color: var(--parchment-dim);
+  font-style: italic;
+}
+
+/* ===== MCMA ===== */
+.mcma-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 12px 0;
+}
+.mcma-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: rgba(12,7,20,0.5);
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+.mcma-item:hover {
+  border-color: var(--gold);
+  background: rgba(207,164,56,0.05);
+}
+.mcma-item input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #7f6552;
+  border-radius: 4px;
+  outline: none;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+.mcma-item input[type="checkbox"]:checked {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+.mcma-item input[type="checkbox"]:checked::after {
+  content: '✓';
+  color: #241100;
+  font-size: 14px;
+  font-weight: bold;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.mcma-item label {
+  color: var(--parchment);
+  font-size: 14px;
+  cursor: pointer;
+  flex: 1;
+}
+.mcma-item .mcma-huruf {
+  font-weight: 700;
+  color: var(--gold);
+  background: rgba(207,164,56,0.15);
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 12px;
+  font-family: 'Cinzel', serif;
+  flex-shrink: 0;
+}
+.mcma-confirm-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line);
+}
+.mcma-confirm-btn {
+  min-width: 180px;
+}
+.mcma-hint {
+  font-size: 12px;
+  color: var(--parchment-dim);
+  font-style: italic;
+}
+
+/* ===== RESULT ===== */
+.result-msg{ margin-top:14px; font-family:'JetBrains Mono',monospace; font-size:13px; padding:12px; border-radius:8px; }
+.result-msg.win{ background:rgba(79,184,165,0.12); color:var(--mist-bright); border:1px solid rgba(79,184,165,0.3); }
+.result-msg.lose{ background:rgba(138,35,51,0.15); color:var(--blood-bright); border:1px solid rgba(138,35,51,0.35); }
+
+/* ---------- Log ---------- */
+.log-panel h3{ font-size:14px; color:var(--parchment-dim); margin-bottom:10px; font-family:'JetBrains Mono',monospace; letter-spacing:0.08em; text-transform:uppercase; }
+.log-list{ max-height:190px; overflow-y:auto; display:flex; flex-direction:column-reverse; gap:6px; padding-right:4px; }
+.log-item{ font-family:'JetBrains Mono',monospace; font-size:12.5px; color:var(--parchment-dim); border-left:2px solid var(--line); padding:4px 0 4px 10px; }
+.log-item b{ color:var(--parchment); }
+.log-item.hit-monster{ border-left-color:var(--ember); }
+.log-item.hit-player{ border-left-color:var(--blood-bright); }
+.log-item.boost{ border-left-color:var(--gold); }
+.log-item.fail{ border-left-color:var(--parchment-dim); opacity:0.7; }
+
+/* ---------- End screen ---------- */
+.end-panel{ text-align:center; padding:40px 24px; }
+.end-panel .big-icon{ width:90px; height:90px; margin:0 auto 12px; }
+.end-panel h2{ font-size:28px; margin-bottom:8px; }
+.end-panel p{ color:var(--parchment-dim); margin-bottom:22px; }
+
+.hidden{ display:none !important; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:520px){
+  .monster-stats{ gap:16px; }
+  .choice-btn{ flex:1 1 80px; }
+  .kategori-table { font-size: 12px; }
+  .kategori-table td { padding: 6px 4px; }
+  .kategori-table .kategori-cell { width: 40px; }
+  .mcma-item { padding: 8px 10px; }
+  .mcma-item label { font-size: 13px; }
+  .warning-msg { font-size: 12px; padding: 10px 16px; }
+}
+
+/* ============================================================
+   PRINT PROTECTION
+   ============================================================ */
+@media print {
+  body * { visibility: hidden; }
+  body::before {
+    content: "🚫 Dilarang mencetak!";
+    visibility: visible;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--blood-bright);
+    background: var(--void);
+    padding: 40px 60px;
+    border-radius: 20px;
+    border: 4px solid var(--blood-bright);
+    z-index: 99999;
+    text-align: center;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+   ANTI-CHEAT OVERLAY
+   ============================================================ -->
+<div id="blocker-overlay">
+  <div class="big-icon">🚫</div>
+  <h2>Akses Diblokir!</h2>
+  <p>Fitur ini tidak diizinkan selama ujian berlangsung.</p>
+</div>
+
+<!-- ============================================================
+   WARNING MESSAGE
+   ============================================================ -->
+<div id="warningMsg" class="warning-msg"></div>
+
+<!-- ============================================================
+   MAIN APP
+   ============================================================ -->
+<div id="app">
+
+  <div class="title-block">
+    <span class="eyebrow">Pertarungan Terakhir</span>
+    <svg class="title-crown" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6 26 L16 40 L24 20 L32 40 L40 20 L48 40 L58 26 L54 48 L10 48 Z" fill="#f0cf6e" stroke="#a8801f" stroke-width="2" stroke-linejoin="round"/>
+      <circle cx="16" cy="24" r="3" fill="#d64858"/>
+      <circle cx="32" cy="18" r="3" fill="#d64858"/>
+      <circle cx="48" cy="24" r="3" fill="#d64858"/>
+    </svg>
+    <h1>RAJA MONSTER</h1>
+    <p>Jawab dengan bijak, lipat gandakan kekuatanmu, dan tumbangkan sang raja.</p>
+  </div>
+
+  <!-- ===================== SETUP SCREEN ===================== -->
+  <div id="setup-screen">
+    <div class="panel">
+      <div class="step-label">Langkah 1 — Berapa jumlah pemain?</div>
+      <div class="count-row" id="count-row">
+        <button class="count-btn" data-n="1">1</button>
+        <button class="count-btn" data-n="2">2</button>
+        <button class="count-btn" data-n="3">3</button>
+        <button class="count-btn" data-n="4">4</button>
+      </div>
+
+      <div id="name-section" class="hidden">
+        <div class="step-label" style="margin-top:22px;">Langkah 2 — Siapa nama para pemberani?</div>
+        <div class="name-fields" id="name-fields"></div>
+      </div>
+
+      <div id="level-section" class="hidden">
+        <div class="step-label" style="margin-top:22px;">Langkah 3 — Pilih level Raja Monster</div>
+        <div class="count-row" id="level-row">
+          <button class="count-btn" data-lv="1">1</button>
+          <button class="count-btn" data-lv="2">2</button>
+          <button class="count-btn" data-lv="3">3</button>
+          <button class="count-btn" data-lv="4">4</button>
+          <button class="count-btn" data-lv="5">5</button>
+          <button class="count-btn" data-lv="6">6</button>
+          <button class="count-btn" data-lv="7">7</button>
+          <button class="count-btn" data-lv="8">8</button>
+          <button class="count-btn" data-lv="9">9</button>
+          <button class="count-btn" data-lv="10">10</button>
+          <button class="count-btn" data-lv="11">11</button>
+          <button class="count-btn" data-lv="12">12</button>
+          <button class="count-btn" data-lv="13">13</button>
+          <button class="count-btn" data-lv="14">14</button>
+          <button class="count-btn" data-lv="15">15</button>
+          <button class="count-btn" data-lv="16">16</button>
+        </div>
+        <div class="err" id="level-info" style="color:var(--parchment-dim);"></div>
+      </div>
+
+      <div class="err" id="setup-err"></div>
+      <div class="btn-row">
+        <button class="btn hidden" id="start-btn">Mulai Pertarungan ⚔</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== GAME SCREEN ===================== -->
+  <div id="game-screen" class="hidden">
+
+    <div class="round-banner">
+      <span class="eyebrow" id="round-label">RONDE 1</span>
+      <h2 id="phase-label">Persiapan</h2>
+    </div>
+
+    <div class="panel monster-card">
+      <svg class="monster-svg" id="monster-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <path d="M50 8 L60 22 L72 10 L70 28 L88 26 L74 40 Q90 46 88 62 Q86 82 50 90 Q14 82 12 62 Q10 46 26 40 L12 26 L30 28 L28 10 L40 22 Z" fill="#5c1420" stroke="#d64858" stroke-width="2" stroke-linejoin="round"/>
+        <circle cx="38" cy="52" r="5" fill="#f0cf6e"/>
+        <circle cx="62" cy="52" r="5" fill="#f0cf6e"/>
+        <circle cx="38" cy="52" r="2" fill="#0c0714"/>
+        <circle cx="62" cy="52" r="2" fill="#0c0714"/>
+        <path d="M32 70 Q50 82 68 70 L64 72 Q50 78 36 72 Z" fill="#f0cf6e"/>
+      </svg>
+      <h2>Raja Monster <span id="monster-level-tag" style="font-size:13px; color:var(--gold); font-family:'JetBrains Mono',monospace;"></span></h2>
+      <div class="bar-track"><div class="bar-fill blood" id="monster-bar" style="width:100%;"></div></div>
+      <div class="monster-stats">
+        <div class="stat-chip">ENERGI<b id="monster-energy">10000</b></div>
+        <div class="stat-chip">DAYA SERANG<b id="monster-attack">20</b></div>
+      </div>
+    </div>
+
+    <div class="players-grid" id="players-grid"></div>
+
+    <div class="panel action-panel" id="action-panel"></div>
+
+    <div class="panel log-panel">
+      <h3>Riwayat Pertempuran</h3>
+      <div class="log-list" id="log-list"></div>
+    </div>
+  </div>
+
+  <!-- ===================== END SCREEN ===================== -->
+  <div id="end-screen" class="hidden">
+    <div class="panel end-panel">
+      <svg class="big-icon" id="end-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"></svg>
+      <h2 id="end-title"></h2>
+      <p id="end-desc"></p>
+      <button class="btn" id="restart-btn">Tantang Lagi Sang Raja</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="soal-bank.js"></script>
+<script>
+(function(){
+
+/* ============================================================
+   ANTI-CHEAT SYSTEM
+   ============================================================ */
+
+const blocker = document.getElementById('blocker-overlay');
+const warningMsg = document.getElementById('warningMsg');
+let warningTimeout = null;
+
+function showWarning(text, isError = true) {
+  warningMsg.textContent = text;
+  warningMsg.style.background = isError ? 'var(--blood)' : 'var(--gold)';
+  warningMsg.style.color = isError ? 'white' : 'var(--void)';
+  warningMsg.className = 'warning-msg show';
+  clearTimeout(warningTimeout);
+  warningTimeout = setTimeout(() => {
+    warningMsg.className = 'warning-msg';
+  }, 3500);
+}
+
+function showBlocker(reason = 'Akses diblokir!') {
+  blocker.querySelector('h2').textContent = reason;
+  blocker.className = 'show';
+  setTimeout(() => {
+    blocker.className = '';
+  }, 2000);
+}
+
+// Blokir Klik Kanan
+document.addEventListener('contextmenu', function(e) {
+  e.preventDefault();
+  showWarning('⚠️ Klik kanan tidak diizinkan!');
+  return false;
+});
+
+// Blokir Keyboard Shortcuts
+document.addEventListener('keydown', function(e) {
+  const key = e.key;
+  const ctrl = e.ctrlKey || e.metaKey;
+  const shift = e.shiftKey;
+
+  // F12
+  if (key === 'F12') {
+    e.preventDefault();
+    showWarning('⚠️ Developer tools tidak diizinkan!');
+    return false;
+  }
+
+  // Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
+  if (ctrl && shift && (key === 'I' || key === 'J' || key === 'C')) {
+    e.preventDefault();
+    showWarning('⚠️ Developer tools tidak diizinkan!');
+    return false;
+  }
+
+  // Ctrl+U (View Source)
+  if (ctrl && (key === 'u' || key === 'U')) {
+    e.preventDefault();
+    showWarning('⚠️ View source tidak diizinkan!');
+    return false;
+  }
+
+  // Ctrl+P (Print)
+  if (ctrl && (key === 'p' || key === 'P')) {
+    e.preventDefault();
+    showWarning('⚠️ Mencetak tidak diizinkan!');
+    return false;
+  }
+
+  // Ctrl+S (Save)
+  if (ctrl && (key === 's' || key === 'S')) {
+    e.preventDefault();
+    showWarning('⚠️ Menyimpan halaman tidak diizinkan!');
+    return false;
+  }
+
+  // Ctrl+C (Copy)
+  if (ctrl && (key === 'c' || key === 'C')) {
+    e.preventDefault();
+    showWarning('⚠️ Menyalin teks tidak diizinkan!');
+    return false;
+  }
+
+  // Ctrl+X (Cut)
+  if (ctrl && (key === 'x' || key === 'X')) {
+    e.preventDefault();
+    showWarning('⚠️ Memotong teks tidak diizinkan!');
+    return false;
+  }
+
+  // Ctrl+V (Paste)
+  if (ctrl && (key === 'v' || key === 'V')) {
+    e.preventDefault();
+    showWarning('⚠️ Menempel teks tidak diizinkan!');
+    return false;
+  }
+
+  return true;
+});
+
+// Blokir Copy, Cut, Paste, Drag
+document.addEventListener('copy', function(e) {
+  e.preventDefault();
+  showWarning('⚠️ Copy tidak diizinkan!');
+});
+document.addEventListener('cut', function(e) {
+  e.preventDefault();
+  showWarning('⚠️ Cut tidak diizinkan!');
+});
+document.addEventListener('paste', function(e) {
+  e.preventDefault();
+  showWarning('⚠️ Paste tidak diizinkan!');
+});
+document.addEventListener('dragstart', function(e) {
+  e.preventDefault();
+  showWarning('⚠️ Drag tidak diizinkan!');
+});
+document.addEventListener('selectstart', function(e) {
+  e.preventDefault();
+});
+
+// Blokir seleksi teks
+document.addEventListener('mousedown', function(e) {
+  if (e.detail > 1) {
+    e.preventDefault();
+    showWarning('⚠️ Double click tidak diizinkan!');
+  }
+});
+
+// Blokir gambar di-drag
+document.addEventListener('dragstart', function(e) {
+  if (e.target.tagName === 'IMG') {
+    e.preventDefault();
+    showWarning('⚠️ Download gambar tidak diizinkan!');
+  }
+});
+
+// Blokir inspect element via right-click context menu
+document.addEventListener('contextmenu', function(e) {
+  if (e.target.closest('.panel') || e.target.closest('.monster-card')) {
+    e.preventDefault();
+    showWarning('⚠️ Menu konteks tidak diizinkan!');
+  }
+});
+
+// Blokir Ctrl+Shift+I untuk inspect
+document.addEventListener('keydown', function(e) {
+  if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) {
+    e.preventDefault();
+    showWarning('⚠️ Inspect element tidak diizinkan!');
+  }
+});
+
+// Blokir keluar dari halaman (visibility change)
+let isGameActive = false;
+
+document.addEventListener('visibilitychange', function() {
+  if (isGameActive && document.hidden) {
+    showWarning('⚠️ Jangan pindah tab! Kembali ke permainan!');
+  }
+});
+
+// Blokir window blur
+window.addEventListener('blur', function() {
+  if (isGameActive) {
+    showWarning('⚠️ Jangan keluar dari halaman permainan!');
+  }
+});
+
+/* ============================================================
+   GAME STATE
+   ============================================================ */
+let monster = null;
+let monsterMaxEnergy = 10000;
+let players = [];
+let round = 1;
+let boostQueue = [];
+let currentPlayerIdx = null;
+let pendingChoice = null;
+let selectedStat = null;
+let selectedMult = null;
+
+let usedSoalSederhana = new Set();
+let usedSoalKategori = new Set();
+let usedSoalMcma = new Set();
+
+/* ============================================================
+   DOM REFS
+   ============================================================ */
+const setupScreen = document.getElementById('setup-screen');
+const gameScreen = document.getElementById('game-screen');
+const endScreen = document.getElementById('end-screen');
+const countRow = document.getElementById('count-row');
+const nameSection = document.getElementById('name-section');
+const nameFields = document.getElementById('name-fields');
+const levelSection = document.getElementById('level-section');
+const levelRow = document.getElementById('level-row');
+const levelInfo = document.getElementById('level-info');
+const startBtn = document.getElementById('start-btn');
+const setupErr = document.getElementById('setup-err');
+
+let numPlayers = 0;
+let monsterLevel = null;
+
+/* ============================================================
+   FUNGSI BANK SOAL
+   ============================================================ */
+function getSoalSederhana() {
+  if (usedSoalSederhana.size >= SOAL_SEDERHANA.length) usedSoalSederhana.clear();
+  let idx;
+  do { idx = Math.floor(Math.random() * SOAL_SEDERHANA.length); } 
+  while (usedSoalSederhana.has(idx));
+  usedSoalSederhana.add(idx);
+  return { ...SOAL_SEDERHANA[idx], tipe: 'Sederhana', mult: 2 };
+}
+
+function getSoalKategori() {
+  if (usedSoalKategori.size >= SOAL_KATEGORI.length) usedSoalKategori.clear();
+  let idx;
+  do { idx = Math.floor(Math.random() * SOAL_KATEGORI.length); } 
+  while (usedSoalKategori.has(idx));
+  usedSoalKategori.add(idx);
+  return { ...SOAL_KATEGORI[idx], tipe: 'Kategori', mult: 3 };
+}
+
+function getSoalMcma() {
+  if (usedSoalMcma.size >= SOAL_MCMA.length) usedSoalMcma.clear();
+  let idx;
+  do { idx = Math.floor(Math.random() * SOAL_MCMA.length); } 
+  while (usedSoalMcma.has(idx));
+  usedSoalMcma.add(idx);
+  return { ...SOAL_MCMA[idx], tipe: 'MCMA', mult: 4 };
+}
+
+function pickSoal() {
+  const roll = Math.random();
+  if (roll < 0.33) return getSoalSederhana();
+  if (roll < 0.66) return getSoalKategori();
+  return getSoalMcma();
+}
+
+/* ============================================================
+   LEVEL STATS
+   ============================================================ */
+function levelStats(lv){
+  return { energy: 10000 * lv, attack: 20 + 10 * (lv - 1) };
+}
+
+/* ============================================================
+   SETUP EVENTS
+   ============================================================ */
+levelRow.addEventListener('click', (e)=>{
+  const btn = e.target.closest('.count-btn');
+  if(!btn) return;
+  monsterLevel = parseInt(btn.dataset.lv,10);
+  [...levelRow.children].forEach(c=>c.classList.toggle('active', c===btn));
+  const s = levelStats(monsterLevel);
+  levelInfo.style.color = 'var(--parchment-dim)';
+  levelInfo.textContent = `Raja Monster level ${monsterLevel}: energi ${s.energy}, daya serang awal ${s.attack}.`;
+});
+
+countRow.addEventListener('click', (e)=>{
+  const btn = e.target.closest('.count-btn');
+  if(!btn) return;
+  numPlayers = parseInt(btn.dataset.n,10);
+  [...countRow.children].forEach(c=>c.classList.toggle('active', c===btn));
+  nameSection.classList.remove('hidden');
+  levelSection.classList.remove('hidden');
+  startBtn.classList.remove('hidden');
+  nameFields.innerHTML = '';
+  for(let i=0;i<numPlayers;i++){
+    const div = document.createElement('div');
+    div.className = 'name-field';
+    div.innerHTML = `<label>Pemain ${i+1}</label><input type="text" maxlength="16" placeholder="Nama pemberani ${i+1}" id="pname-${i}">`;
+    nameFields.appendChild(div);
+  }
+  setupErr.textContent = '';
+});
+
+startBtn.addEventListener('click', ()=>{
+  const names = [];
+  for(let i=0;i<numPlayers;i++){
+    const val = document.getElementById(`pname-${i}`).value.trim();
+    if(!val){ setupErr.textContent = 'Isi semua nama pemain terlebih dahulu.'; return; }
+    names.push(val);
+  }
+  if(!monsterLevel){ setupErr.textContent = 'Pilih level Raja Monster terlebih dahulu.'; return; }
+  setupErr.textContent = '';
+  isGameActive = true;
+  initGame(names);
+});
+
+document.getElementById('restart-btn').addEventListener('click', ()=>{
+  isGameActive = false;
+  endScreen.classList.add('hidden');
+  setupScreen.classList.remove('hidden');
+  [...countRow.children].forEach(c=>c.classList.remove('active'));
+  [...levelRow.children].forEach(c=>c.classList.remove('active'));
+  nameSection.classList.add('hidden');
+  levelSection.classList.add('hidden');
+  startBtn.classList.add('hidden');
+  nameFields.innerHTML='';
+  levelInfo.textContent='';
+  monsterLevel = null;
+  usedSoalSederhana.clear();
+  usedSoalKategori.clear();
+  usedSoalMcma.clear();
+});
+
+/* ============================================================
+   INIT GAME
+   ============================================================ */
+function initGame(names){
+  const s = levelStats(monsterLevel);
+  monster = { energy: s.energy, attack: s.attack };
+  monsterMaxEnergy = s.energy;
+  players = names.map(n => ({ name:n, energy:100, attack:10, alive:true }));
+  round = 1;
+  usedSoalSederhana.clear();
+  usedSoalKategori.clear();
+  usedSoalMcma.clear();
+  document.getElementById('log-list').innerHTML = '';
+
+  setupScreen.classList.add('hidden');
+  gameScreen.classList.remove('hidden');
+
+  renderMonster();
+  renderPlayers();
+  log(`Sang Raja Monster (Level ${monsterLevel}) telah bangkit dengan energi ${monster.energy} dan daya serang ${monster.attack}.`, 'boost');
+  startRound();
+}
+
+/* ============================================================
+   RENDER FUNCTIONS
+   ============================================================ */
+function renderMonster(){
+  document.getElementById('monster-energy').textContent = Math.max(0,monster.energy);
+  document.getElementById('monster-attack').textContent = monster.attack;
+  const pct = Math.max(0, Math.min(100, (monster.energy/monsterMaxEnergy)*100));
+  document.getElementById('monster-bar').style.width = pct + '%';
+  document.getElementById('monster-level-tag').textContent = `— Level ${monsterLevel}`;
+}
+
+function renderPlayers(){
+  const grid = document.getElementById('players-grid');
+  grid.innerHTML = '';
+  players.forEach((p, i)=>{
+    const card = document.createElement('div');
+    card.className = 'player-card' + (!p.alive ? ' dead' : '') + (i===currentPlayerIdx && p.alive ? ' turn' : '');
+    card.innerHTML = `
+      <div class="pname"><span>${escapeHtml(p.name)}</span><span class="tag">${p.alive ? 'HIDUP' : 'GUGUR'}</span></div>
+      <div class="bar-track"><div class="bar-fill mist" style="width:${Math.max(0,Math.min(100,p.energy))}%;"></div></div>
+      <div class="pstats"><span>Energi: ${Math.max(0,p.energy)}</span><span>Serang: ${p.attack}</span></div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function setPhaseLabel(text){
+  document.getElementById('phase-label').textContent = text;
+  document.getElementById('round-label').textContent = `RONDE ${round}`;
+}
+
+function log(msg, cls){
+  const list = document.getElementById('log-list');
+  const item = document.createElement('div');
+  item.className = 'log-item' + (cls ? ' '+cls : '');
+  item.innerHTML = msg;
+  list.appendChild(item);
+}
+
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function shakeMonster(){
+  const svg = document.getElementById('monster-svg');
+  svg.classList.remove('hit');
+  void svg.offsetWidth;
+  svg.classList.add('hit');
+}
+
+/* ============================================================
+   ROUND FLOW
+   ============================================================ */
+function startRound(){
+  boostQueue = players.map((p,i)=>i).filter(i=>players[i].alive);
+  currentPlayerIdx = null;
+  nextBoostTurn();
+}
+
+function nextBoostTurn(){
+  if(boostQueue.length === 0){
+    currentPlayerIdx = null;
+    renderPlayers();
+    runPlayerAttackPhase();
+    return;
+  }
+  currentPlayerIdx = boostQueue.shift();
+  selectedStat = null;
+  selectedMult = null;
+  renderPlayers();
+  setPhaseLabel(`Giliran ${players[currentPlayerIdx].name} bersiap`);
+  renderBoostChoice();
+}
+
+function renderBoostChoice(){
+  const p = players[currentPlayerIdx];
+  const panel = document.getElementById('action-panel');
+  panel.innerHTML = `
+    <h3>${escapeHtml(p.name)}, tentukan strategimu</h3>
+    <div class="sub">Pilih apa yang ingin kamu tingkatkan, lalu pilih tipe soal untuk menentukan kelipatan.</div>
+
+    <div class="choice-group">
+      <span class="glabel">Tingkatkan apa?</span>
+      <div class="choice-row" id="stat-row">
+        <button class="choice-btn" data-stat="energy">⚡ Energi (${p.energy})</button>
+        <button class="choice-btn" data-stat="attack">🗡 Daya Serang (${p.attack})</button>
+      </div>
+    </div>
+
+    <div class="choice-group">
+      <span class="glabel">Pilih Tipe Soal & Kelipatan</span>
+      <div class="choice-row" id="mult-row">
+        <button class="choice-btn" data-mult="2">📝 Sederhana ×2</button>
+        <button class="choice-btn" data-mult="3">📊 Kategori ×3</button>
+        <button class="choice-btn" data-mult="4">✅ MCMA ×4</button>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn" id="confirm-choice-btn" disabled>Hadapi Pertanyaan →</button>
+    </div>
+  `;
+
+  panel.querySelector('#stat-row').addEventListener('click', (e)=>{
+    const btn = e.target.closest('.choice-btn'); if(!btn) return;
+    selectedStat = btn.dataset.stat;
+    [...panel.querySelector('#stat-row').children].forEach(c=>c.classList.toggle('selected', c===btn));
+    updateConfirmState();
+  });
+  panel.querySelector('#mult-row').addEventListener('click', (e)=>{
+    const btn = e.target.closest('.choice-btn'); if(!btn) return;
+    selectedMult = parseInt(btn.dataset.mult,10);
+    [...panel.querySelector('#mult-row').children].forEach(c=>c.classList.toggle('selected', c===btn));
+    updateConfirmState();
+  });
+  panel.querySelector('#confirm-choice-btn').addEventListener('click', ()=>{
+    pendingChoice = { stat: selectedStat, mult: selectedMult };
+    let soal;
+    if (selectedMult === 2) soal = getSoalSederhana();
+    else if (selectedMult === 3) soal = getSoalKategori();
+    else soal = getSoalMcma();
+    pendingChoice.soal = soal;
+    renderQuestion();
+  });
+
+  function updateConfirmState(){
+    panel.querySelector('#confirm-choice-btn').disabled = !(selectedStat && selectedMult);
+  }
+}
+
+/* ============================================================
+   RENDER PERTANYAAN
+   ============================================================ */
+function renderQuestion(){
+  const p = players[currentPlayerIdx];
+  const soal = pendingChoice.soal;
+  const panel = document.getElementById('action-panel');
+  const statLabel = pendingChoice.stat === 'energy' ? 'Energi' : 'Daya Serang';
+  const tipeLabel = soal.tipe === 'Sederhana' ? 'Sederhana (×2)' :
+                    soal.tipe === 'Kategori' ? 'Kategori (×3)' : 'MCMA (×4)';
+  
+  setPhaseLabel(`${p.name} menjawab soal ${tipeLabel}`);
+
+  let html = `
+    <h3>Pertanyaan untuk ${escapeHtml(p.name)}</h3>
+    <div class="sub">
+      Tipe: <b>${tipeLabel}</b> — 
+      Jawab benar untuk melipatgandakan <b>${statLabel} ×${pendingChoice.mult}</b>. 
+      Jawab salah dan ${statLabel.toLowerCase()} malah akan <b>terbagi ÷${pendingChoice.mult}</b>.
+    </div>
+    <div class="question-box">
+      <div class="qtext">${escapeHtml(soal.q)}</div>
+      <div id="qopts"></div>
+      <div id="qresult"></div>
+    </div>
+  `;
+
+  panel.innerHTML = html;
+
+  const optsWrap = document.getElementById('qopts');
+
+  if (soal.tipe === 'Sederhana') {
+    renderSederhana(soal, optsWrap);
+  } else if (soal.tipe === 'Kategori') {
+    renderKategori(soal, optsWrap);
+  } else if (soal.tipe === 'MCMA') {
+    renderMcma(soal, optsWrap);
+  }
+}
+
+/* ============================================================
+   RENDER SEDERHANA
+   ============================================================ */
+function renderSederhana(soal, optsWrap) {
+  soal.opts.forEach((optText, idx) => {
+    const div = document.createElement('div');
+    div.className = 'qopt-wrapper';
+    div.addEventListener('click', () => {
+      const radio = div.querySelector('input[type="radio"]');
+      radio.checked = true;
+      radio.dispatchEvent(new Event('change'));
+    });
+    div.innerHTML = `
+      <input type="radio" name="soal_sederhana" value="${idx}" id="qopt_${idx}">
+      <label for="qopt_${idx}">${escapeHtml(optText)}</label>
+    `;
+    optsWrap.appendChild(div);
+  });
+
+  const radios = optsWrap.querySelectorAll('input[type="radio"]');
+  radios.forEach(radio => {
+    radio.addEventListener('change', function() {
+      if (this.checked) {
+        const idx = parseInt(this.value);
+        const benar = idx === soal.a;
+        jawabSederhana(benar, soal, optsWrap);
+      }
+    });
+  });
+}
+
+/* ============================================================
+   RENDER KATEGORI (dengan tombol konfirmasi)
+   ============================================================ */
+function renderKategori(soal, optsWrap) {
+  const table = document.createElement('table');
+  table.className = 'kategori-table';
+  let tableHtml = `<thead><tr><th>Pernyataan</th>`;
+  soal.kategori.forEach(kat => {
+    tableHtml += `<th>${escapeHtml(kat)}</th>`;
+  });
+  tableHtml += `</tr></thead><tbody>`;
+
+  const jawabanUser = {};
+
+  soal.pernyataan.forEach((pernyataan, idx) => {
+    tableHtml += `<tr>`;
+    tableHtml += `<td class="pernyataan-cell">${escapeHtml(pernyataan)}</td>`;
+    soal.kategori.forEach((kat, katIdx) => {
+      const radioId = `kategori_${idx}_${katIdx}`;
+      tableHtml += `<td class="kategori-cell">
+        <input type="radio" name="kategori_${idx}" id="${radioId}" value="${katIdx}" 
+               data-baris="${idx}" data-kategori="${katIdx}">
+        <label for="${radioId}" class="kategori-label">✓</label>
+      </td>`;
+    });
+    tableHtml += `</tr>`;
+  });
+
+  tableHtml += `</tbody>`;
+  table.innerHTML = tableHtml;
+  optsWrap.appendChild(table);
+
+  // Tombol konfirmasi
+  const confirmArea = document.createElement('div');
+  confirmArea.className = 'kategori-confirm-area';
+  confirmArea.innerHTML = `
+    <button class="btn kategori-confirm-btn" id="kategoriConfirmBtn">✅ Konfirmasi Jawaban</button>
+    <span class="kategori-hint">Pilih jawaban untuk setiap pernyataan, lalu klik konfirmasi</span>
+  `;
+  optsWrap.appendChild(confirmArea);
+
+  const confirmBtn = document.getElementById('kategoriConfirmBtn');
+  
+  confirmBtn.addEventListener('click', function() {
+    const radios = table.querySelectorAll('input[type="radio"]:checked');
+    
+    if (radios.length < soal.pernyataan.length) {
+      const resultBox = document.getElementById('qresult');
+      resultBox.innerHTML = `<div class="result-msg lose">⚠️ Jawab semua pernyataan terlebih dahulu!</div>`;
+      return;
+    }
+
+    // Kumpulkan jawaban
+    const jawaban = {};
+    radios.forEach(radio => {
+      const baris = parseInt(radio.dataset.baris);
+      const kat = parseInt(radio.dataset.kategori);
+      jawaban[baris] = kat;
+    });
+
+    // Evaluasi
+    const benar = Array.from({length: soal.pernyataan.length}, (_, i) => i)
+      .every(i => jawaban[i] === soal.a[i]);
+
+    // Disable semua radio
+    table.querySelectorAll('input[type="radio"]').forEach(r => r.disabled = true);
+    confirmBtn.disabled = true;
+
+    jawabKategori(benar, soal, optsWrap);
+  });
+}
+
+/* ============================================================
+   RENDER MCMA
+   ============================================================ */
+function renderMcma(soal, optsWrap) {
+  const grid = document.createElement('div');
+  grid.className = 'mcma-grid';
+
+  soal.opts.forEach((optText, idx) => {
+    const div = document.createElement('div');
+    div.className = 'mcma-item';
+    const cbId = `mcma_${idx}`;
+    div.innerHTML = `
+      <input type="checkbox" id="${cbId}" value="${idx}" class="mcma-checkbox">
+      <span class="mcma-huruf">${String.fromCharCode(65 + idx)}</span>
+      <label for="${cbId}">${escapeHtml(optText)}</label>
+    `;
+    grid.appendChild(div);
+  });
+
+  const confirmArea = document.createElement('div');
+  confirmArea.className = 'mcma-confirm-area';
+  confirmArea.innerHTML = `
+    <button class="btn mcma-confirm-btn" id="mcmaConfirmBtn">✅ Konfirmasi Jawaban</button>
+    <span class="mcma-hint">Pilih semua jawaban yang benar, lalu klik konfirmasi</span>
+  `;
+
+  optsWrap.appendChild(grid);
+  optsWrap.appendChild(confirmArea);
+
+  const confirmBtn = document.getElementById('mcmaConfirmBtn');
+  confirmBtn.addEventListener('click', function() {
+    const checked = grid.querySelectorAll('.mcma-checkbox:checked');
+    const jawaban = Array.from(checked).map(cb => parseInt(cb.value));
+    
+    if (jawaban.length === 0) {
+      const resultBox = document.getElementById('qresult');
+      resultBox.innerHTML = `<div class="result-msg lose">⚠️ Pilih minimal satu jawaban!</div>`;
+      return;
+    }
+
+    const sortedJawaban = [...jawaban].sort();
+    const sortedKunci = [...soal.a].sort();
+    const benar = sortedJawaban.length === sortedKunci.length &&
+                  sortedJawaban.every((v, i) => v === sortedKunci[i]);
+
+    grid.querySelectorAll('.mcma-checkbox').forEach(cb => cb.disabled = true);
+    this.disabled = true;
+
+    jawabMcma(benar, soal, optsWrap);
+  });
+}
+
+/* ============================================================
+   FUNGSI JAWAB
+   ============================================================ */
+
+function jawabSederhana(benar, soal, optsWrap) {
+  const p = players[currentPlayerIdx];
+  const statLabel = pendingChoice.stat === 'energy' ? 'Energi' : 'Daya Serang';
+  const mult = pendingChoice.mult;
+  const resultBox = document.getElementById('qresult');
+
+  optsWrap.querySelectorAll('input[type="radio"]').forEach(r => r.disabled = true);
+
+  optsWrap.querySelectorAll('.qopt-wrapper').forEach((el, i) => {
+    if (i === soal.a) {
+      el.style.borderColor = 'var(--mist-bright)';
+      el.style.background = 'rgba(79,184,165,0.1)';
+    } else if (!benar && i === parseInt(el.querySelector('input[type="radio"]:checked')?.value || -1)) {
+      el.style.borderColor = 'var(--blood-bright)';
+      el.style.background = 'rgba(138,35,51,0.15)';
+    }
+  });
+
+  applyBoost(benar, p, statLabel, mult, resultBox, 'Sederhana');
+}
+
+function jawabKategori(benar, soal, optsWrap) {
+  const p = players[currentPlayerIdx];
+  const statLabel = pendingChoice.stat === 'energy' ? 'Energi' : 'Daya Serang';
+  const mult = pendingChoice.mult;
+  const resultBox = document.getElementById('qresult');
+
+  const rows = optsWrap.querySelectorAll('tr');
+  rows.forEach((row, idx) => {
+    if (idx === 0) return;
+    const cells = row.querySelectorAll('td.kategori-cell');
+    cells.forEach((cell, katIdx) => {
+      const radio = cell.querySelector('input[type="radio"]');
+      if (radio) {
+        if (katIdx === soal.a[idx - 1]) {
+          cell.style.background = 'rgba(79,184,165,0.15)';
+          cell.style.borderRadius = '4px';
+        } else if (radio.checked && katIdx !== soal.a[idx - 1]) {
+          cell.style.background = 'rgba(138,35,51,0.15)';
+          cell.style.borderRadius = '4px';
+        }
+      }
+    });
+  });
+
+  applyBoost(benar, p, statLabel, mult, resultBox, 'Kategori');
+}
+
+function jawabMcma(benar, soal, optsWrap) {
+  const p = players[currentPlayerIdx];
+  const statLabel = pendingChoice.stat === 'energy' ? 'Energi' : 'Daya Serang';
+  const mult = pendingChoice.mult;
+  const resultBox = document.getElementById('qresult');
+
+  const items = optsWrap.querySelectorAll('.mcma-item');
+  items.forEach((item, idx) => {
+    const cb = item.querySelector('.mcma-checkbox');
+    if (soal.a.includes(idx)) {
+      item.style.borderColor = 'var(--mist-bright)';
+      item.style.background = 'rgba(79,184,165,0.1)';
+    } else if (cb.checked && !soal.a.includes(idx)) {
+      item.style.borderColor = 'var(--blood-bright)';
+      item.style.background = 'rgba(138,35,51,0.15)';
+    }
+  });
+
+  applyBoost(benar, p, statLabel, mult, resultBox, 'MCMA');
+}
+
+function applyBoost(benar, p, statLabel, mult, resultBox, tipe) {
+  if (benar) {
+    if (pendingChoice.stat === 'energy') {
+      p.energy = p.energy * mult;
+    } else {
+      p.attack = p.attack * mult;
+    }
+    resultBox.innerHTML = `<div class="result-msg win">✅ Benar! ${statLabel} ${escapeHtml(p.name)} dilipatgandakan ×${mult}.</div>`;
+    log(`<b>${escapeHtml(p.name)}</b> menjawab benar (${tipe}) dan melipatgandakan ${statLabel.toLowerCase()} ×${mult}.`, 'boost');
+  } else {
+    if (pendingChoice.stat === 'energy') {
+      p.energy = Math.max(1, Math.ceil(p.energy / mult));
+    } else {
+      p.attack = Math.max(1, Math.ceil(p.attack / mult));
+    }
+    resultBox.innerHTML = `<div class="result-msg lose">❌ Salah! ${statLabel} ${escapeHtml(p.name)} terbagi ÷${mult}.</div>`;
+    log(`<b>${escapeHtml(p.name)}</b> menjawab salah (${tipe}), ${statLabel.toLowerCase()} terbagi ÷${mult}.`, 'fail');
+  }
+
+  renderPlayers();
+  showNextButton(resultBox);
+}
+
+function showNextButton(resultBox) {
+  const btn = document.createElement('button');
+  btn.className = 'btn';
+  btn.style.marginTop = '14px';
+  btn.textContent = boostQueue.length > 0 ? 'Lanjut ke Pemain Berikutnya →' : 'Lanjut ke Fase Serangan →';
+  btn.addEventListener('click', nextBoostTurn);
+  resultBox.appendChild(btn);
+}
+
+/* ============================================================
+   ATTACK PHASES
+   ============================================================ */
+function runPlayerAttackPhase(){
+  setPhaseLabel('Para pemain menyerang!');
+  const panel = document.getElementById('action-panel');
+  panel.innerHTML = `<h3>Serangan Balasan</h3><div class="sub">Setiap pemain yang masih hidup menyerang Raja Monster dengan daya serang terbaru.</div><div id="attack-feed"></div>`;
+  const feed = panel.querySelector('#attack-feed');
+
+  const alive = players.filter(p=>p.alive);
+  let i = 0;
+
+  function step(){
+    if(i >= alive.length || monster.energy <= 0){
+      finishPlayerAttacks();
+      return;
+    }
+    const p = alive[i];
+    monster.energy -= p.attack;
+    shakeMonster();
+    renderMonster();
+    const line = document.createElement('div');
+    line.className = 'result-msg win';
+    line.style.marginTop = '8px';
+    line.textContent = `${p.name} menyerang Raja Monster sebesar ${p.attack}! Sisa energi monster: ${Math.max(0,monster.energy)}.`;
+    feed.appendChild(line);
+    log(`<b>${escapeHtml(p.name)}</b> menghantam Raja Monster (-${p.attack} energi).`, 'hit-monster');
+    i++;
+    setTimeout(step, 550);
+  }
+  step();
+}
+
+function finishPlayerAttacks(){
+  const panel = document.getElementById('action-panel');
+  if(monster.energy <= 0){
+    endGame(true);
+    return;
+  }
+  const contBtn = document.createElement('button');
+  contBtn.className = 'btn blood';
+  contBtn.style.marginTop = '14px';
+  contBtn.textContent = 'Giliran Raja Monster Membalas →';
+  contBtn.addEventListener('click', runMonsterAttackPhase);
+  panel.querySelector('#attack-feed').appendChild(contBtn);
+}
+
+function runMonsterAttackPhase(){
+  setPhaseLabel('Raja Monster membalas!');
+  const panel = document.getElementById('action-panel');
+  panel.innerHTML = `<h3>Balasan Sang Raja</h3><div class="sub">Raja Monster menyerang setiap pemain yang masih hidup.</div><div id="monster-feed"></div>`;
+  const feed = panel.querySelector('#monster-feed');
+
+  const alive = players.filter(p=>p.alive);
+  let i = 0;
+
+  function step(){
+    const stillAlive = players.filter(p=>p.alive);
+    if(i >= alive.length || stillAlive.length === 0){
+      finishMonsterAttacks();
+      return;
+    }
+    const p = alive[i];
+    if(p.alive){
+      p.energy -= monster.attack;
+      if(p.energy <= 0){
+        p.energy = 0;
+        p.alive = false;
+      }
+      renderPlayers();
+      const line = document.createElement('div');
+      line.className = 'result-msg lose';
+      line.style.marginTop = '8px';
+      line.textContent = p.alive
+        ? `Raja Monster menyerang ${p.name} sebesar ${monster.attack}! Sisa energi: ${p.energy}.`
+        : `Raja Monster menyerang ${p.name} sebesar ${monster.attack}! ${p.name} telah gugur.`;
+      feed.appendChild(line);
+      log(`Raja Monster menerjang <b>${escapeHtml(p.name)}</b> (-${monster.attack} energi)${p.alive ? '' : ' — gugur!'}`, 'hit-player');
+    }
+    i++;
+    setTimeout(step, 550);
+  }
+  step();
+}
+
+function finishMonsterAttacks(){
+  const panel = document.getElementById('action-panel');
+  const anyAlive = players.some(p=>p.alive);
+  if(!anyAlive){
+    endGame(false);
+    return;
+  }
+  const contBtn = document.createElement('button');
+  contBtn.className = 'btn';
+  contBtn.style.marginTop = '14px';
+  contBtn.textContent = `Mulai Ronde ${round+1} →`;
+  contBtn.addEventListener('click', ()=>{
+    monster.attack *= 2;
+    renderMonster();
+    log(`👹 Raja Monster semakin murka! Daya serangnya berlipat ganda menjadi <b>${monster.attack}</b>.`, 'hit-player');
+    round++;
+    startRound();
+  });
+  panel.querySelector('#monster-feed').appendChild(contBtn);
+}
+
+/* ============================================================
+   END GAME
+   ============================================================ */
+function endGame(playersWon){
+  isGameActive = false;
+  gameScreen.classList.add('hidden');
+  endScreen.classList.remove('hidden');
+  const icon = document.getElementById('end-icon');
+  const title = document.getElementById('end-title');
+  const desc = document.getElementById('end-desc');
+
+  if(playersWon){
+    icon.innerHTML = `<path d="M32 6 L38 18 L52 8 L48 24 L60 22 L48 34 Q60 40 58 52 Q54 60 32 60 Q10 60 6 52 Q4 40 16 34 L4 22 L16 24 L12 8 L26 18 Z" fill="#f0cf6e" stroke="#a8801f" stroke-width="2" stroke-linejoin="round"/>`;
+    title.textContent = 'Kemenangan Para Pemberani!';
+    title.style.color = 'var(--gold-bright)';
+    desc.textContent = 'Raja Monster telah tumbang. Kerajaan kembali damai berkat kecerdasan dan keberanian kalian.';
+    log('👑 <b>Raja Monster telah dikalahkan!</b> Para pemain menang.', 'boost');
+  } else {
+    icon.innerHTML = `<path d="M32 6 L42 20 L58 12 L54 32 Q62 40 58 54 Q52 60 32 60 Q12 60 6 54 Q2 40 10 32 L6 12 L22 20 Z" fill="#8a2333" stroke="#d64858" stroke-width="2" stroke-linejoin="round"/><circle cx="24" cy="34" r="3" fill="#0c0714"/><circle cx="40" cy="34" r="3" fill="#0c0714"/>`;
+    title.textContent = 'Sang Raja Monster Menang';
+    title.style.color = 'var(--blood-bright)';
+    desc.textContent = 'Seluruh pemain telah gugur. Raja Monster masih berkuasa... untuk saat ini.';
+    log('💀 <b>Semua pemain telah gugur.</b> Raja Monster menang.', 'fail');
+  }
+}
+
+})();
+</script>
+</body>
+</html>
