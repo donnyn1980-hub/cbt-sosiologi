@@ -4,52 +4,645 @@
 // ============================================================
 
 const SOAL_ASLI = [
+    // --- 1. Sosiologi sebagai Ilmu Pengetahuan ---
     {
         id: 1,
-        kode: "001",
+        kode: "842",
         tipe: "Sederhana",
-        teks: "Seorang peneliti melakukan pengamatan terhadap pola interaksi antar pedagang di pasar tradisional tanpa menghakimi apakah kebiasaan mereka baik atau buruk. Ciri sosiologi yang ditunjukkan adalah ....",
-        opsi: ["Empiris", "Teoretis", "Kumulatif", "Nonetis", "Spekulatif"],
-        jawabanBenar: 3,
-        pembahasan: "Ciri **Nonetis** berarti sosiologi tidak menilai baik atau buruknya suatu fakta sosial di masyarakat, melainkan menjelaskan fakta tersebut secara analitis dan obyektif."
+        teks: "Sosiologi merupakan ilmu pengetahuan yang didasarkan pada observasi terhadap kenyataan dan akal sehat yang hasilnya tidak bersifat spekulatif. Hal ini menunjukkan ciri sosiologi, yaitu ....",
+        opsi: ["Empiris", "Teoretis", "Kumulatif", "Nonetis", "Kualitatif"],
+        jawabanBenar: 0,
+        pembahasan: "Ciri **Empiris** berarti ilmu sosiologi didasarkan pada pengamatan (observasi) nyata di lapangan dan akal sehat, bukan bersumber dari spekulasi."
     },
     {
         id: 2,
-        kode: "002",
+        kode: "159",
         tipe: "MCMA",
-        teks: "Sosiologi lahir di Eropa pada abad ke-19. Peristiwa penting yang menjadi latar belakang munculnya sosiologi sebagai ilmu pengetahuan adalah ....",
+        teks: "Pernyataan berikut yang mencerminkan hakikat sosiologi sebagai ilmu pengetahuan adalah ....",
         opsi: [
-            "Revolusi Industri di Inggris",
-            "Revolusi Perancis",
-            "Perang Dunia I",
-            "Perkembangan kapitalisme modern",
-            "Invasi Spanyol ke Amerika"
+            "Termasuk dalam kelompok ilmu sosial",
+            "Merupakan ilmu pengetahuan yang bersifat murni (pure science)",
+            "Merupakan ilmu pengetahuan yang bersifat normatif",
+            "Merupakan ilmu pengetahuan yang abstrak dan generalis",
+            "Bertujuan menghasilkan hukum alam yang terikat ruang dan waktu"
         ],
         jawabanBenar: [0, 1, 3],
-        pembahasan: "Kunci jawaban benar adalah opsi **A, B, dan D**. Revolusi Industri, Revolusi Perancis, dan munculnya kapitalisme modern memicu perubahan struktur sosial, pergeseran kelas, serta gejolak sosial mendasar di Eropa abad ke-19."
+        pembahasan: "Hakikat sosiologi adalah sebagai **ilmu sosial**, **ilmu murni** (dapat juga terapan), **kategori abstrak**, serta **generalis**. Sosiologi bersifat kategoris (bukan normatif)."
     },
     {
         id: 3,
-        kode: "003",
+        kode: "703",
         tipe: "Kategori",
-        teks: "Pemerintah kota memanfaatkan hasil kajian sosiologi untuk merencanakan relokasi pedagang kaki lima agar tidak menimbulkan gejolak sosial. Tentukan kesesuaian penerapan fungsi sosiologi berikut!",
+        teks: "Tentukan kesesuaian antara deskripsi penerapannya dengan kegunaan/manfaat ilmu sosiologi berikut!",
         pernyataan: [
-            "Kajian sosiologi berfungsi dalam tahap perencanaan pembangunan sosial.",
-            "Sosiologi bertindak sebagai penentu kebijakan akhir pemerintah secara mutlak.",
-            "Sosiologi memberikan data empiris mengenai kondisi sosial masyarakat."
+            "Menyediakan data empiris tentang kebutuhan warga sebelum pembangunan fasos dilakukan.",
+            "Memberikan evaluasi kritis terhadap pelaksanaan kebijakan relokasi pasar.",
+            "Memvonis secara mutlak bahwa kebudayaan suatu kelompok masyarakat itu menyimpang."
         ],
         kategori: ["Sesuai", "Tidak Sesuai"],
-        jawabanBenar: [0, 1, 0],
-        pembahasan: "Pernyataan 1 **Sesuai** (fungsi perencanaan), Pernyataan 2 **Tidak Sesuai** (sosiologi menyediakan rekomendasi/data, bukan pemutus mutlak kebijakan), Pernyataan 3 **Sesuai** (sosiologi menyediakan data lapangan berbasis empiris)."
+        jawabanBenar: [0, 0, 1],
+        pembahasan: "Pernyataan 1 dan 2 **Sesuai** (fungsi perencanaan & evaluasi). Pernyataan 3 **Tidak Sesuai** karena sosiologi bersifat *nonetis* (tidak memvonis/menilai baik-buruk moral masyarakat)."
     },
     {
         id: 4,
-        kode: "004",
+        kode: "048",
         tipe: "Sederhana",
-        teks: "Tokoh yang pertama kali menyusun konsep sosiologi secara sistematis dan dijuluki sebagai Bapak Sosiologi adalah ....",
-        opsi: ["Emile Durkheim", "Karl Marx", "Auguste Comte", "Max Weber", "Pitirim Sorokin"],
+        teks: "Perkembangan sosiologi pada abad ke-19 sangat dipengaruhi oleh Revolusi Industri di Inggris dan Revolusi Perancis. Tokoh yang pertama kali memperkenalkan istilah sosiologi dalam bukunya *Cours de Philosophie Positive* adalah ....",
+        opsi: ["Emile Durkheim", "Karl Marx", "Auguste Comte", "Max Weber", "Herbert Spencer"],
         jawabanBenar: 2,
-        pembahasan: "Jawaban benar adalah **Auguste Comte**. Ia memperkenalkan istilah 'Sosiologi' pertama kali dalam karyanya *Cours de Philosophie Positive*."
+        pembahasan: "Istilah 'Sosiologi' pertama kali dirumuskan oleh **Auguste Comte** sehingga ia dijuluki sebagai Bapak Sosiologi."
+    },
+
+    // --- 2. Konsep dan Bentuk Hubungan Sosial ---
+    {
+        id: 5,
+        kode: "916",
+        tipe: "Sederhana",
+        teks: "Dua kelompok warga yang sempat berselisih paham sepakat untuk menyelesaikannya melalui pihak ketiga yang netral dan keputusannya bersifat mengikat. Bentuk akomodasi ini disebut ....",
+        opsi: ["Mediasi", "Arbitrase", "Konsiliasi", "Kompromi", "Adjudikasi"],
+        jawabanBenar: 1,
+        pembahasan: "**Arbitrase** adalah penyelesaian konflik melalui pihak ketiga di mana keputusan pihak ketiga tersebut bersifat mengikat kedua belah pihak."
+    },
+    {
+        id: 6,
+        kode: "324",
+        tipe: "MCMA",
+        teks: "Manakah di antara interaksi berikut yang termasuk ke dalam proses sosial disosiatif?",
+        opsi: [
+            "Kompetisi memperebutkan beasiswa pendidikan",
+            "Kontravensi berupa kecemburuan sosial antarwilayah",
+            "Asimilasi budaya antar suku bangsa",
+            "Konflik antar pendukung tim sepak bola",
+            "Kooperasi dalam kegiatan kerja bakti"
+        ],
+        jawabanBenar: [0, 1, 3],
+        pembahasan: "Proses **disosiatif** mengarah pada perpecahan/persaingan, meliputi **Persaingan (Kompetisi)**, **Kontravensi**, dan **Konflik/Pertentangan**."
+    },
+    {
+        id: 7,
+        kode: "581",
+        tipe: "Kategori",
+        teks: "Tentukan apakah syarat terjadinya interaksi sosial berikut sudah tergolong 'Sesuai' atau 'Tidak Sesuai' berdasarkan konsep sosiologis!",
+        pernyataan: [
+            "Dua orang berpapasan di jalan tanpa saling menatap dan tidak memberi isyarat apa pun.",
+            "Seseorang membaca pesan singkat dari rekannya lalu membalas pesan tersebut.",
+            "Guru memberikan petunjuk tugas dan siswa mencatatnya di buku latihan."
+        ],
+        kategori: ["Sesuai", "Tidak Sesuai"],
+        jawabanBenar: [1, 0, 0],
+        pembahasan: "Pernyataan 1 **Tidak Sesuai** karena tidak ada kontak sosial dan komunikasi aksi-reaksi. Pernyataan 2 dan 3 **Sesuai** karena memenuhi syarat kontak dan komunikasi."
+    },
+    {
+        id: 8,
+        kode: "112",
+        tipe: "Sederhana",
+        teks: "Sikap mengagumi seorang figur publik secara berlebihan sehingga meniru tata cara berpakaian, gaya bicara, hingga gaya hidupnya secara berlebihan dinamakan ....",
+        opsi: ["Imitasi", "Sugesti", "Identifikasi", "Simpati", "Empati"],
+        jawabanBenar: 2,
+        pembahasan: "**Identifikasi** adalah kecenderungan atau keinginan dalam diri seseorang untuk menjadi sama (identik) dengan figur idolanya."
+    },
+
+    // --- 3. Lembaga Sosial dan Perannya ---
+    {
+        id: 9,
+        kode: "637",
+        tipe: "Sederhana",
+        teks: "Lembaga sosial yang terbentuk secara tidak sengaja dari kebiasaan-kebiasaan masyarakat yang tumbuh bertahap, seperti tata cara adat istiadat, dinamakan ....",
+        opsi: ["Enacted institution", "Crescive institution", "Basic institution", "Operative institution", "Restricted institution"],
+        jawabanBenar: 1,
+        pembahasan: "**Crescive institution** adalah lembaga primer yang tumbuh secara tidak sengaja dari adat/kebiasaan masyarakat."
+    },
+    {
+        id: 10,
+        kode: "405",
+        tipe: "MCMA",
+        teks: "Berikut ini yang merupakan fungsi laten (tersembunyi/tidak disadari) dari lembaga pendidikan adalah ....",
+        opsi: [
+            "Memperpanjang masa remaja dan menunda usia perkawinan",
+            "Transmisi kebudayaan masyarakat",
+            "Menjadi sarana pembangkangan/pembangkangan kritis terhadap status quo",
+            "Mengajarkan keterampilan dasar membaca dan berhitung",
+            "Mempertahankan sistem kelas sosial masyarakat"
+        ],
+        jawabanBenar: [0, 2, 4],
+        pembahasan: "Fungsi **laten** sekolah mencakup menunda usia perkawinan, pengurangan kontrol orang tua, sarana kritis/pembangkangan sosial, dan penjelas status kelas."
+    },
+    {
+        id: 11,
+        kode: "890",
+        tipe: "Kategori",
+        teks: "Tentukan peran lembaga sosial berikut terhadap keteraturan masyarakat!",
+        pernyataan: [
+            "Lembaga Keluarga: Menanamkan nilai dan norma dasar melalui proses sosialisasi primer.",
+            "Lembaga Agama: Memberikan pedoman moral dan kontrol perilaku individu berbasis nilai spiritual.",
+            "Lembaga Ekonomi: Mengatur tata tertib hukum penindakan kejahatan pidana."
+        ],
+        kategori: ["Sesuai", "Tidak Sesuai"],
+        jawabanBenar: [0, 0, 1],
+        pembahasan: "Pernyataan 1 dan 2 **Sesuai**. Pernyataan 3 **Tidak Sesuai** karena penindakan kejahatan pidana adalah ranah Lembaga Hukum/Politik, bukan Ekonomi."
+    },
+
+    // --- 4. Ragam Gejala Sosial ---
+    {
+        id: 12,
+        kode: "274",
+        tipe: "Sederhana",
+        teks: "Fenomena merebaknya perilaku konsumtif di kalangan remaja perkotaan akibat paparan tren di media sosial merupakan bentuk gejala sosial yang dipengaruhi oleh faktor ....",
+        opsi: ["Ekologis", "Kultural & Teknologi", "Demografis", "Biologis", "Geografis"],
+        jawabanBenar: 1,
+        pembahasan: "Gejala sosial tersebut dipengaruhi perkembangan **teknologi** komunikasi (media sosial) yang mengubah kebiasaan/gaya hidup (**kultural**)."
+    },
+    {
+        id: 13,
+        kode: "751",
+        tipe: "MCMA",
+        teks: "Manakah pernyataan di bawah ini yang merupakan karakteristik gejala sosial?",
+        opsi: [
+            "Berbeda-beda di setiap tempat dan era (dinamis)",
+            "Bersifat sangat konstan dan mudah diprediksi persis",
+            "Bersifat kompleks dan saling berkaitan satu sama lain",
+            "Tidak terikat oleh konteks kebudayaan setempat",
+            "Bersifat subyektif dan kualitatif"
+        ],
+        jawabanBenar: [0, 2, 4],
+        pembahasan: "Karakteristik gejala sosial: **dinamis/beragam**, **kompleks**, berskala **subyektif**, serta dipengaruhi konteks budaya masyarakat."
+    },
+    {
+        id: 14,
+        kode: "029",
+        tipe: "Kategori",
+        teks: "Tentukan apakah contoh fenomena berikut tergolong 'Gejala Sosial Micro' atau 'Gejala Sosial Macro'!",
+        pernyataan: [
+            "Interaksi dan komunikasi tatap muka antara dua kawan lama di kafe.",
+            "Kenaikan tingkat pengangguran nasional akibat krisis ekonomi global.",
+            "Pergerakan arus urbanisasi massal dari desa ke kota setelah hari raya."
+        ],
+        kategori: ["Gejala Sosial Micro", "Gejala Sosial Macro"],
+        jawabanBenar: [0, 1, 1],
+        pembahasan: "Interaksi individu tergolong **Micro**. Kenaikan pengangguran nasional dan urbanisasi massal berskala struktur masyarakat luas (**Macro**)."
+    },
+
+    // --- 5. Dinamika Masyarakat Multikultural ---
+    {
+        id: 15,
+        kode: "618",
+        tipe: "Sederhana",
+        teks: "Sikap atau pandangan yang menilai kebudayaan suku bangsa lain berdasarkan standar dan ukuran kebudayaannya sendiri dinamakan ....",
+        opsi: ["Chauvinisme", "Etnosentrisme", "Xenofobia", "Relativisme Kebudayaan", "Pluralisme"],
+        jawabanBenar: 1,
+        pembahasan: "**Etnosentrisme** adalah sikap menilai budaya lain memakai tolok ukur budayanya sendiri, sering kali menganggap budayanya superior."
+    },
+    {
+        id: 16,
+        kode: "943",
+        tipe: "MCMA",
+        teks: "Berikut ini yang merupakan faktor pendorong terciptanya integrasi sosial dalam masyarakat multikultural adalah ....",
+        opsi: [
+            "Sikap toleransi terhadap kebudayaan lain",
+            "Perkawinan silang antar suku (amalgamasi)",
+            "Sikap primordialisme yang sempit",
+            "Musuh bersama dari luar kelompok",
+            "Isolasi geografis antar pulau"
+        ],
+        jawabanBenar: [0, 1, 3],
+        pembahasan: "Faktor pendorong integrasi: **Toleransi**, **Amalgamasi**, dan adanya **Musuh bersama dari luar**. Primordialisme sempit dan isolasi justru menghambat integrasi."
+    },
+    {
+        id: 17,
+        kode: "185",
+        tipe: "Kategori",
+        teks: "Tentukan kesesuaian antara konsep dan realitas masyarakat multikultural berikut!",
+        pernyataan: [
+            "Konsolidasi: Terdapat penguatan hubungan silang antar keanggotaan suku dan profesi.",
+            "Interseksi: Persilangan keanggotaan individu dalam berbagai kelompok sosial yang berbeda.",
+            "Pluralisme: Sikap mengakui dan menghargai keberagaman suku, agama, dan budaya."
+        ],
+        kategori: ["Sesuai", "Tidak Sesuai"],
+        jawabanBenar: [1, 0, 0],
+        pembahasan: "Pernyataan 1 **Tidak Sesuai** (penguatan hubungan silang adalah *interseksi*, sedangkan konsolidasi adalah tumpang tindih parameter yang mempertegas perbedaan). Pernyataan 2 & 3 **Sesuai**."
+    },
+
+    // --- 6. Langkah dan Metode Penelitian Sosial ---
+    {
+        id: 18,
+        kode: "532",
+        tipe: "Sederhana",
+        teks: "Seorang peneliti ingin mengetahui mendalam tentang kebiasaan hidup suku terasing dengan cara tinggal bersama mereka selama 6 bulan. Metode penelitian yang digunakan adalah ....",
+        opsi: ["Survei Eksplanatif", "Eksperimen", "Studi Kasus / Etnografi", "Analisis Isi", "Kuantitatif Analitis"],
+        jawabanBenar: 2,
+        pembahasan: "**Etnografi / Studi Kasus** kualitatif memanfaatkan teknik *participant observation* (peneliti hidup langsung bersama subjek penelitian)."
+    },
+    {
+        id: 19,
+        kode: "806",
+        tipe: "MCMA",
+        teks: "Ciri-ciri utama dari pendekatan penelitian kualitatif dalam sosiologi adalah ....",
+        opsi: [
+            "Data berorientasi pada angka dan uji statistik",
+            "Mengutamakan kedalaman makna (*verstehen*) dan deskripsi kata-kata",
+            "Instrumen penelitian utama adalah peneliti itu sendiri",
+            "Desain penelitian bersifat sangat kaku dan tak dapat diubah",
+            "Bersifat induktif berdasarkan temuan lapangan"
+        ],
+        jawabanBenar: [1, 2, 4],
+        pembahasan: "Ciri **Kualitatif**: fokus makna (*verstehen*), *human instrument* (peneliti instrumen utama), dan bersifat **induktif**."
+    },
+    {
+        id: 20,
+        kode: "369",
+        tipe: "Kategori",
+        teks: "Tentukan jenis data penelitian sosial berikut!",
+        pernyataan: [
+            "Dokumen arsip jumlah penduduk dari kantor BPS.",
+            "Hasil wawancara mendalam langsung dengan tokoh masyarakat.",
+            "Catatan lembar kuesioner yang diisi sendiri oleh responden."
+        ],
+        kategori: ["Data Primer", "Data Sekunder"],
+        jawabanBenar: [1, 0, 0],
+        pembahasan: "Dokumen BPS tergolong **Data Sekunder** (diperoleh dari pihak kedua). Hasil wawancara dan kuesioner dari responden tergolong **Data Primer**."
+    },
+    {
+        id: 21,
+        kode: "217",
+        tipe: "Sederhana",
+        teks: "Dugaan sementara atau jawaban sementara terhadap rumusan masalah penelitian yang harus diuji kebenarannya melalui empiris disebut ....",
+        opsi: ["Asumsi", "Variabel", "Hipotesis", "Sampel", "Populasi"],
+        jawabanBenar: 2,
+        pembahasan: "**Hipotesis** adalah anggapan/jawaban sementara yang kebenarannya masih harus diuji secara ilmiah."
+    },
+
+    // --- 7. Kelompok Sosial dan Dinamikanya ---
+    {
+        id: 22,
+        kode: "690",
+        tipe: "Sederhana",
+        teks: "Ikatan lahir batin yang bersifat intim, privat, dan eksklusif seperti ikatan kekeluargaan atau kekerabatan menurut Ferdinand Tönnies disebut ....",
+        opsi: ["Gesellschaft", "Gemeinschaft", "Reference Group", "Membership Group", "Secondary Group"],
+        jawabanBenar: 1,
+        pembahasan: "**Gemeinschaft** (Paguyuban) merupakan bentuk kehidupan bersama di mana anggotanya diikat oleh hubungan batin yang murni, privat, dan abadi."
+    },
+    {
+        id: 23,
+        kode: "453",
+        tipe: "MCMA",
+        teks: "Di bawah ini yang termasuk kelompok sosial tak teratur (*unorganized group*) adalah ....",
+        opsi: [
+            "Kerumunan penonton pertunjukan musik (crowd)",
+            "Persatuan Guru Republik Indonesia (PGRI)",
+            "Publik pendengar siaran radio",
+            "Kelompok massa unjuk rasa di jalanan",
+            "Ikatan Dokter Indonesia (IDI)"
+        ],
+        jawabanBenar: [0, 2, 3],
+        pembahasan: "Kelompok tak teratur meliputi **Kerumunan (Crowd)**, **Massa**, dan **Publik**. PGRI dan IDI adalah organisasi formal/teratur."
+    },
+    {
+        id: 24,
+        kode: "978",
+        tipe: "Kategori",
+        teks: "Tentukan klasifikasi kelompok sosial berdasarkan sudut pandang anggotanya!",
+        pernyataan: [
+            "Perasaan 'kelompok kita' yang diwarnai oleh simpati dan kesetia kawanan.",
+            "Perasaan 'kelompok mereka' yang sering disertai prasangka atau kecemburuan.",
+            "Kelompok tempat seseorang secara fisik terdaftar resmi sebagai anggota."
+        ],
+        kategori: ["In-Group / Out-Group", "Membership Group"],
+        jawabanBenar: [0, 0, 1],
+        pembahasan: "Pernyataan 1 (*In-group*) dan Pernyataan 2 (*Out-group*) bersumber dari sudut pandang pembagian **In-Group / Out-Group**. Pernyataan 3 merujuk pada **Membership Group**."
+    },
+
+    // --- 8. Ketidaksetaraan dan Kesetaraan Sosial ---
+    {
+        id: 25,
+        kode: "104",
+        tipe: "Sederhana",
+        teks: "Sistem pelapisan sosial tertutup yang tidak memungkinkan individu berpindah posisi stratifikasinya secara vertikal dapat ditemukan pada masyarakat yang menganut ....",
+        opsi: ["Sistem Kasta", "Sistem Kelas Ekonomi", "Masyarakat Industri Modern", "Sistem Meritokrasi", "Sistem Demokrasi"],
+        jawabanBenar: 0,
+        pembahasan: "**Sistem Kasta** adalah bentuk stratifikasi tertutup; kedudukan diperoleh berdasarkan kelahiran (ascribed status) dan amat sulit berpindah."
+    },
+    {
+        id: 26,
+        kode: "762",
+        tipe: "MCMA",
+        teks: "Berikut ini yang merupakan upaya strategis pemerintah dalam mewujudkan kesetaraan sosial dan mengurangi ketimpangan adalah ....",
+        opsi: [
+            "Penyaluran beasiswa pendidikan bagi siswa berpenghasilan rendah",
+            "Pembangunan infrastruktur secara terpusat di pulau Jawa saja",
+            "Pemberdayaan ekonomi berbasis usaha mikro kecil menengah (UMKM)",
+            "Penyediaan akses layanan kesehatan gratis/terjangkau",
+            "Pemberian keistimewaan pajak bagi perusahaan multinasional semata"
+        ],
+        jawabanBenar: [0, 2, 3],
+        pembahasan: "Upaya mewujudkan **kesetaraan sosial**: pemerataan fasilitas pendidikan, kesehatan, dan pemberdayaan ekonomi rakyat (UMKM)."
+    },
+    {
+        id: 27,
+        kode: "521",
+        tipe: "Kategori",
+        teks: "Tentukan pembedaan bentuk diferensiasi sosial berdasarkan ciri-cirinya!",
+        pernyataan: [
+            "Pembedaan masyarakat berdasarkan warna kulit, bentuk rambut, dan struktur muka.",
+            "Pembedaan masyarakat berdasarkan agama, kepercayaan, dan ritual keyakinan.",
+            "Pembedaan masyarakat berdasarkan kepemilikan aset kekayaan dan pendapatan."
+        ],
+        kategori: ["Diferensiasi Sosial", "Stratifikasi Sosial"],
+        jawabanBenar: [0, 0, 1],
+        pembahasan: "Pembedaan ras (fisik) dan agama bersifat horisontal (**Diferensiasi Sosial**). Pembedaan tingkat kekayaan/pendapatan bertingkat vertikal (**Stratifikasi Sosial**)."
+    },
+
+    // --- 9. Konflik Sosial dan Penanganannya ---
+    {
+        id: 28,
+        kode: "389",
+        tipe: "Sederhana",
+        teks: "Upaya penghentian pertikaian antara dua pihak yang bersengketa dengan cara menunjuk lembaga peradilan resmi untuk memutuskan perkara dinamakan ....",
+        opsi: ["Konsiliasi", "Stalemate", "Adjudikasi", "Arbitrase", "Mediasi"],
+        jawabanBenar: 2,
+        pembahasan: "**Adjudikasi** adalah bentuk penyelesaian konflik/sengketa yang dilakukan melalui mekanisme pengadilan (jalur hukum formal)."
+    },
+    {
+        id: 29,
+        kode: "645",
+        tipe: "MCMA",
+        teks: "Faktor-faktor yang dapat memicu terjadinya konflik sosial di dalam masyarakat adalah ....",
+        opsi: [
+            "Perbedaan individu dalam hal pendirian dan perasaan",
+            "Perubahan sosial yang terjadi secara mendadak/cepat",
+            "Adanya kesamaan kepentingan dan tujuan hidup",
+            "Perbedaan latar belakang kebudayaan",
+            "Sikap keterbukaan dan toleransi antar warga"
+        ],
+        jawabanBenar: [0, 1, 3],
+        pembahasan: "Penyebab konflik: **Perbedaan pendirian/perasaan**, **Perbedaan budaya**, dan **Perubahan sosial yang terlalu cepat**."
+    },
+    {
+        id: 30,
+        kode: "830",
+        tipe: "Kategori",
+        teks: "Tentukan dampak dari konflik sosial berikut ini!",
+        pernyataan: [
+            "Meningkatnya solidaritas internal sesama anggota kelompok (*in-group solidarity*).",
+            "Kerusakan sarana prasarana fisik dan jatuhnya korban jiwa.",
+            "Anomalisasi dan jatuhnya efektivitas fungsi nilai serta norma masyarakat."
+        ],
+        kategori: ["Dampak Positif Konflik", "Dampak Negatif Konflik"],
+        jawabanBenar: [0, 1, 1],
+        pembahasan: "Meningkatnya solidaritas kelompok internal adalah **Dampak Positif**. Kerusakan fisik, korban jiwa, serta disintegrasi norma tergolong **Dampak Negatif**."
+    },
+    {
+        id: 31,
+        kode: "296",
+        tipe: "Sederhana",
+        teks: "Keadaan di mana dua pihak yang berkonflik memiliki kekuatan seimbang sehingga pertikaian terhenti dengan sendirinya dinamakan ....",
+        opsi: ["Coercion", "Stalemate", "Compromise", "Toleration", "Conciliation"],
+        jawabanBenar: 1,
+        pembahasan: "**Stalemate** adalah keadaan di mana pihak-pihak bertikai berhenti berkonflik karena kekuatan seimbang."
+    },
+
+    // --- 10. Perubahan Sosial dan Dampaknya ---
+    {
+        id: 32,
+        kode: "912",
+        tipe: "Sederhana",
+        teks: "Teori yang menyatakan bahwa perubahan sosial berputar melingkar melalui tahapan-tahapan tanpa batas akhir yang jelas (seperti siklus lahir, berkembang, dan runtuh) adalah ....",
+        opsi: ["Teori Linier", "Teori Siklus", "Teori Konflik", "Teori Fungsionalis", "Teori Evolusi Modern"],
+        jawabanBenar: 1,
+        pembahasan: "**Teori Siklus** memandang bahwa perubahan sosial berputar terus-menerus dan tidak menuju pada satu titik akhir tertentu."
+    },
+    {
+        id: 33,
+        kode: "147",
+        tipe: "MCMA",
+        teks: "Berikut ini yang merupakan faktor pendorong terjadinya perubahan sosial secara internal (dari dalam masyarakat) adalah ....",
+        opsi: [
+            "Bertambah atau berkurangnya jumlah penduduk (demogafi)",
+            "Bencana alam melanda kawasan permukiman",
+            "Penemuan-penemuan baru (inovasi/discovery)",
+            "Pemberontakan atau revolusi internal",
+            "Peperangan dengan negara tetangga"
+        ],
+        jawabanBenar: [0, 2, 3],
+        pembahasan: "Faktor **internal**: dinamika demografi, penemuan baru, serta pemberontakan/revolusi. Bencana alam dan perang lawan negara luar adalah faktor **eksternal**."
+    },
+    {
+        id: 34,
+        kode: "563",
+        tipe: "Kategori",
+        teks: "Tentukan bentuk perubahan sosial berdasarkan kecepatan dan jangkauannya!",
+        pernyataan: [
+            "Perubahan tata cara bertani tradisional menuju mekanisasi pertanian canggih.",
+            "Perubahan mode pakaian dan gaya rambut remaja.",
+            "Revolusi industri yang merombak tatanan ekonomi masyarakat global."
+        ],
+        kategori: ["Perubahan Besar / Mendasar", "Perubahan Kecil / Pengaruh Luas Rendah"],
+        jawabanBenar: [0, 1, 0],
+        pembahasan: "Mekanisasi pertanian dan Revolusi Industri memberi dampak mendasar (**Perubahan Besar**). Mode pakaian hanya mengubah bagian luar tanpa dampaknya pada struktur dasar (**Perubahan Kecil**)."
+    },
+
+    // --- 11. Pengaruh Globalisasi dan Dampaknya ---
+    {
+        id: 35,
+        kode: "784",
+        tipe: "Sederhana",
+        teks: "Kondisi guncangan budaya akibat masyarakat belum siap menerima unsur kebudayaan asing yang datang secara mendadak disebut ....",
+        opsi: ["Cultural Lag", "Cultural Shock", "Westernisasi", "Konsumerisme", "Anomi"],
+        jawabanBenar: 1,
+        pembahasan: "**Cultural Shock** (guncangan budaya) terjadi ketika seseorang/masyarakat terkejut dan tidak siap menghadapi budaya baru."
+    },
+    {
+        id: 36,
+        kode: "031",
+        tipe: "MCMA",
+        teks: "Dampak negatif dari arus globalisasi dibidang kebudayaan lokal adalah ....",
+        opsi: [
+            "Luntur dan terpinggirkannya kearifan lokal (*local wisdom*)",
+            "Munculnya sikap konsumerisme dan gaya hidup hedonis",
+            "Kemudahan transfer teknologi medis berteknologi tinggi",
+            "Erosi identitas kebudayaan nasional bagi generasi muda",
+            "Terbukanya peluang pasar ekspor bagi produk UMKM"
+        ],
+        jawabanBenar: [0, 1, 3],
+        pembahasan: "Dampak **negatif budaya**: lunturnya kearifan lokal, maraknya konsumerisme/hedonisme, dan hilangnya identitas nasional."
+    },
+    {
+        id: 37,
+        kode: "420",
+        tipe: "Kategori",
+        teks: "Tentukan keterkaitan istilah ketimpangan akibat globalisasi berikut!",
+        pernyataan: [
+            "Cultural Lag: Ketertinggalan unsur kebudayaan immaterial/pola pikir dibanding kemajuan teknologi material.",
+            "Westernisasi: Proses meniru gaya hidup dan budaya Barat tanpa memfilter kesesuaiannya.",
+            "Guns, Germs, and Steel: Pengikatan diri pada kearifan lokal tradisional secara kaku."
+        ],
+        kategori: ["Sesuai", "Tidak Sesuai"],
+        jawabanBenar: [0, 0, 1],
+        pembahasan: "Pernyataan 1 dan 2 **Sesuai**. Pernyataan 3 **Tidak Sesuai** (istilah tersebut adalah judul teori peradaban Jared Diamond, bukan pengikatan kearifan lokal kaku/glokalisasi)."
+    },
+
+    // --- 12. Fenomena Sosial Globalisasi secara Kritis ---
+    {
+        id: 38,
+        kode: "658",
+        tipe: "Sederhana",
+        teks: "Gaya hidup yang memprioritaskan pemenuhan barang-barang mewah dan kesenangan material sebagai tujuan utama hidup dinamakan ....",
+        opsi: ["Sekularisme", "Hedonisme", "Individualisme", "Materialisme", "Liberalisme"],
+        jawabanBenar: 1,
+        pembahasan: "**Hedonisme** adalah pandangan hidup yang menganggap bahwa kesenangan dan kenikmatan materi adalah tujuan utama."
+    },
+    {
+        id: 39,
+        kode: "899",
+        tipe: "MCMA",
+        teks: "Sikap kritis dan bijak yang perlu dikembangkan dalam menghadapi era pergaulan global adalah ....",
+        opsi: [
+            "Menutup diri rapat-rapat dari perkembangan ilmu dan teknologi asing",
+            "Menyaring (memfilter) budaya luar dengan Pancasila dan norma agama",
+            "Melestarikan dan mempromosikan kearifan lokal ke kancah internasional",
+            "Menerima seluruh tren budaya luar secara mentah tanpa pertimbangan",
+            "Memperkuat rasa cinta tanah air dan produk dalam negeri"
+        ],
+        jawabanBenar: [1, 2, 4],
+        pembahasan: "Sikap kritis: **memfilter budaya**, **melestarikan kearifan lokal**, serta **memperkuat cinta produk dalam negeri**. Menutup diri secara total atau menerima mentah-mentah tidak tepat."
+    },
+    {
+        id: 40,
+        kode: "235",
+        tipe: "Kategori",
+        teks: "Tentukan respons masyarakat (*glokalisasi* vs *homogenisasi*) terhadap pengaruh tren global berikut!",
+        pernyataan: [
+            "Perusahaan makanan cepat saji internasional mengeluarkan menu dengan cita rasa lokal rendang.",
+            "Seluruh anak muda di berbagai negara memakai gaya pakaian dan bahasa gaul identik yang sama persis.",
+            "Seni tari tradisional dikombinasikan dengan musik modern tanpa menghilangkan pakem aslinya."
+        ],
+        kategori: ["Glokalisasi (Penyesuaian Lokal)", "Homogenisasi (Penyeragaman Global)"],
+        jawabanBenar: [0, 1, 0],
+        pembahasan: "Pernyataan 1 & 3 tergolong **Glokalisasi** (perpaduan tren global dengan kearifan lokal). Pernyataan 2 tergolong **Homogenisasi** (penyeragaman budaya)."
+    },
+
+    // --- Lanjutan Penguatan Topik Gabungan (41-50) ---
+    {
+        id: 41,
+        kode: "714",
+        tipe: "Sederhana",
+        teks: "Masyarakat yang mendasarkan pembagian kerjanya pada spesialisasi keahlian dan hukum normatif formal (restitutif) menurut Durkheim terikat dalam ....",
+        opsi: ["Solidaritas Mekanik", "Solidaritas Organik", "Gemeinschaft", "Paguyuban", "Kelompok Primer"],
+        jawabanBenar: 1,
+        pembahasan: "**Solidaritas Organik** diikat oleh ketergantungan antar spesialisasi kerja dan hukum restitutif (ciri masyarakat modern)."
+    },
+    {
+        id: 42,
+        kode: "083",
+        tipe: "MCMA",
+        teks: "Di bawah ini yang merupakan ciri-ciri dari lembaga sosial adalah ....",
+        opsi: [
+            "Memiliki simbol atau lambang tersendiri",
+            "Memiliki tingkat kekekalan/daya tahan tertentu",
+            "Tidak memiliki norma yang tertulis maupun tidak tertulis",
+            "Memiliki tujuan yang jelas ingin dicapai",
+            "Bersifat sangat acak dan tidak memiliki struktur"
+        ],
+        jawabanBenar: [0, 1, 3],
+        pembahasan: "Ciri lembaga sosial: Memiliki **simbol/lambang**, **kekekalan relatif**, **tujuan**, serta **alat kelengkapan/norma**."
+    },
+    {
+        id: 43,
+        kode: "507",
+        tipe: "Kategori",
+        teks: "Tentukan teknik pengambilan sampel (sampling) berikut!",
+        pernyataan: [
+            "Peneliti mengambil sampel berdasarkan urutan nomor genap dari daftar anggota populasi.",
+            "Peneliti membagi populasi ke dalam tingkatan strata pendidikan sebelum mengambil sampel secara acak.",
+            "Peneliti memilih siapa saja responden yang kebetulan ditemuinya di lapangan."
+        ],
+        kategori: ["Probability Sampling", "Non-Probability Sampling"],
+        jawabanBenar: [0, 0, 1],
+        pembahasan: "Systematic sampling dan Stratified sampling tergolong **Probability Sampling**. Accidental sampling (kebetulan ditemui) tergolong **Non-Probability Sampling**."
+    },
+    {
+        id: 44,
+        kode: "961",
+        tipe: "Sederhana",
+        teks: "Upaya pencegahan konflik sosial sebelum pertikaian terjadi dengan menyebarkan nilai-nilai toleransi dan kedamaian dinamakan preventif. Sedangkan upaya setelah terjadi konflik disebut ....",
+        opsi: ["Kuratif / Represif", "Korektif", "Persuasif", "Coercion", "Rehabilitatif"],
+        jawabanBenar: 0,
+        pembahasan: "Penanganan konflik pasca-kejadian dinamakan upaya **Kuratif / Represif**."
+    },
+    {
+        id: 45,
+        kode: "348",
+        tipe: "MCMA",
+        teks: "Berikut ini yang termasuk ke dalam variabel penelitian kuantitatif yang bersifat saling mempengaruhi adalah ....",
+        opsi: [
+            "Variabel Bebas (Independent Variable)",
+            "Variabel Terikat (Dependent Variable)",
+            "Variabel Intervening / Antara",
+            "Variabel Etnografi",
+            "Variabel Kuantum"
+        ],
+        jawabanBenar: [0, 1, 2],
+        pembahasan: "Dalam analisis statistik kuantitatif dikenal variabel **Bebas (Independent)**, **Terikat (Dependent)**, serta variabel **Intervening/Kontrol**."
+    },
+    {
+        id: 46,
+        kode: "172",
+        tipe: "Kategori",
+        teks: "Tentukan bentuk saluran mobilitas sosial berikut!",
+        pernyataan: [
+            "Seseorang naik jabatan menjadi manajer setelah menyelesaikan pendidikan S2.",
+            "Prajurit TNI mendapat kenaikan pangkat luar biasa setelah berhasil menjalankan misi negara.",
+            "Seorang politisi menjadi anggota DPR setelah memenangkan Pemilu melalui partai politik."
+        ],
+        kategori: ["Saluran Pendidikan/Militer", "Saluran Politik"],
+        jawabanBenar: [0, 0, 1],
+        pembahasan: "Pernyataan 1 (Pendidikan) dan 2 (Militer) masuk kategori **Pendidikan/Militer**. Pernyataan 3 melalui Parpol tergolong saluran **Politik**."
+    },
+    {
+        id: 47,
+        kode: "825",
+        tipe: "Sederhana",
+        teks: "Sikap mementingkan diri sendiri serta tidak peduli terhadap urusan lingkungan masyarakat sekitar dinamakan ....",
+        opsi: ["Hedonisme", "Individualisme", "Materialisme", "Sekularisme", "Chauvinisme"],
+        jawabanBenar: 1,
+        pembahasan: "**Individualisme** adalah paham/sikap yang mementingkan hak dan kebebasan diri sendiri di atas kepentingan bersama."
+    },
+    {
+        id: 48,
+        kode: "439",
+        tipe: "MCMA",
+        teks: "Manakah yang merupakan wujud dari ketimpangan sosial di bidang ekonomi?",
+        opsi: [
+            "Ketimpangan pendapatan antara pekerja sektor formal dan informal",
+            "Konsentrasi kepemilikan aset ekonomi pada segmen konglomerasi",
+            "Saling menghargai ritual keagamaan antar umat beragama",
+            "Kesenjangan akses modal usaha bagi masyarakat pedesaan",
+            "Tersedianya sarana hiburan publik yang seimbang di seluruh pelosok"
+        ],
+        jawabanBenar: [0, 1, 3],
+        pembahasan: "Ketimpangan ekonomi mencakup **kesenjangan pendapatan**, **pemusatan aset**, dan **akses modal usaha yang terbatas**."
+    },
+    {
+        id: 49,
+        kode: "661",
+        tipe: "Kategori",
+        teks: "Tentukan tipe kepemimpinan kelompok sosial menurut Max Weber berikut!",
+        pernyataan: [
+            "Kepemimpinan yang didasarkan pada tradisi turun-temurun (misal: Keraton/Keturunan Raja).",
+            "Kepemimpinan yang bersumber dari keahlian hukum dan aturan tertulis yang disepakati.",
+            "Kepemimpinan yang bersumber dari daya tarik kewibawaan luar biasa seorang tokoh."
+        ],
+        kategori: ["Otoritas Tradisional", "Otoritas Legal-Rasional / Karismatik"],
+        jawabanBenar: [0, 1, 1],
+        pembahasan: "Pernyataan 1 tergolong **Otoritas Tradisional**. Pernyataan 2 (Legal-Rasional) dan Pernyataan 3 (Karismatik) tergolong kategori opsi kedua."
+    },
+    {
+        id: 50,
+        kode: "094",
+        tipe: "Sederhana",
+        teks: "Proses peleburan dua kebudayaan atau lebih yang saling mempengaruhi sehingga menghasilkan kebudayaan baru tanpa menghilangkan unsur kebudayaan aslinya dinamakan ....",
+        opsi: ["Asimilasi", "Akulturasi", "Amalgamasi", "Difusi", "Akomodasi"],
+        jawabanBenar: 1,
+        pembahasan: "**Akulturasi** adalah percampuran budaya yang menghasilkan budaya baru tanpa menghilangkan identitas kebudayaan aslinya."
     }
 ];
 
