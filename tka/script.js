@@ -60,7 +60,7 @@ const SOAL_ASLI = [
         tipe: "Sederhana",
         teks: "Dua kelompok warga yang sempat berselisih paham sepakat untuk menyelesaikannya melalui pihak ketiga yang netral dan keputusannya bersifat mengikat. Bentuk akomodasi ini disebut ....",
         opsi: ["Mediasi", "Arbitrase", "Konsiliasi", "Kompromi", "Adjudikasi"],
-        jawabanBenar: 1,
+        jawabanBenar: 0,
         pembahasan: "**Arbitrase** adalah penyelesaian konflik melalui pihak ketiga di mana keputusan pihak ketiga tersebut bersifat mengikat kedua belah pihak."
     },
     {
