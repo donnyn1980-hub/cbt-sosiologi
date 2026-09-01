@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ujian Sosiologi - Pembahasan Bersama</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="exam-wrapper">
+    <h1>📚 Sosiologi - Ujian CBT (Mode Pembahasan)</h1>
+
+    <!-- Inline Notification Alert Container -->
+    <div id="inlineAlert" class="alert-box" style="display: none;"></div>
+
+    <div id="identitySection" class="identity-card">
+        <h2 style="color: #3d2c1e; font-size: 1.3rem;">📋 Data Peserta Ujian</h2>
+        <div class="form-group">
+            <label for="namaLengkap">Nama Lengkap</label>
+            <input type="text" id="namaLengkap" class="form-input" placeholder="Masukkan nama lengkap..." autocomplete="off">
+        </div>
+        <div class="form-group">
+            <label for="nisnInput">NISN</label>
+            <input type="text" id="nisnInput" class="form-input" placeholder="Masukkan NISN..." autocomplete="off">
+        </div>
+        <button type="button" class="btn btn-primary" id="startExamBtn" style="margin-top: 0.5rem; justify-content: center;">🚀 Mulai Ujian (Layar Penuh)</button>
+    </div>
+
+    <div id="examSection" style="display: none;">
+        <div class="progress-info">
+            <span>📌 Progress Ujian</span>
+            <span class="progress-badge" id="progressBadge">0 / 0</span>
+        </div>
+
+        <div id="soalContainer" class="soal-container">
+        </div>
+
+        <div class="footer-note">Pastikan sudah mengonfirmasi jawaban sebelum melanjutkan atau membuka pembahasan.</div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
