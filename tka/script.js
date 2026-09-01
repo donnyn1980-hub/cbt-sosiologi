@@ -59,7 +59,6 @@ let jawabanUser = [];
 let savedNama = "";
 let savedNisn = "";
 let isConfirmed = false;
-let isVerifyingKode = false;
 
 // ELEMENT DOM
 const identitySection = document.getElementById('identitySection');
@@ -72,20 +71,23 @@ const progressBadge = document.getElementById('progressBadge');
 const inlineAlert = document.getElementById('inlineAlert');
 
 // INIT
-startExamBtn.addEventListener('click', startExam);
+if (startExamBtn) {
+    startExamBtn.addEventListener('click', startExam);
+}
 
-// NOTIFIKASI UTAMA (TANPA POPUP / ALERT)
+// NOTIFIKASI UTAMA (INLINE / TANPA POPUP)
 function showNotification(message, type = "warning") {
+    if (!inlineAlert) return;
     inlineAlert.className = `alert-box alert-${type}`;
     inlineAlert.innerHTML = `<span>${message}</span> <button style="background:none; border:none; cursor:pointer; font-weight:bold; color:inherit;" onclick="hideNotification()">✕</button>`;
     inlineAlert.style.display = "flex";
 }
 
 function hideNotification() {
-    inlineAlert.style.display = "none";
+    if (inlineAlert) inlineAlert.style.display = "none";
 }
 
-// FUNGSI SCREEN FULLSCREEN
+// FUNGSI LAYAR PENUH (FULLSCREEN MODE)
 function openFullscreen() {
     const elem = document.documentElement;
     if (elem.requestFullscreen) {
@@ -110,7 +112,7 @@ function startExam() {
     savedNama = nama;
     savedNisn = nisn;
 
-    // Masuk Tampilan Layar Penuh (Fullscreen)
+    // Aktifkan Layar Penuh saat Ujian Dimulai
     openFullscreen();
 
     identitySection.style.display = 'none';
@@ -125,10 +127,11 @@ function startExam() {
 function renderSoal() {
     hideNotification();
     isConfirmed = false;
-    isVerifyingKode = false;
     const soal = SOAL_ASLI[soalIndexSekarang];
 
-    progressBadge.textContent = `${soalIndexSekarang + 1} / ${SOAL_ASLI.length}`;
+    if (progressBadge) {
+        progressBadge.textContent = `${soalIndexSekarang + 1} / ${SOAL_ASLI.length}`;
+    }
 
     let htmlOpsi = '';
 
@@ -156,7 +159,7 @@ function renderSoal() {
             `;
         }).join('') + `</div>`;
     } else if (soal.tipe === "Kategori") {
-        // TAMPILAN TABEL KATEGORI SAMA SEPERTI MATRIKS
+        // TAMPILAN KATEGORI BERBENTUK TABEL MATRIKS
         const currentAns = jawabanUser[soalIndexSekarang] || new Array(soal.pernyataan.length).fill(null);
         
         htmlOpsi = `
@@ -237,7 +240,6 @@ function confirmJawaban() {
     const soal = SOAL_ASLI[soalIndexSekarang];
     const jawab = jawabanUser[soalIndexSekarang];
 
-    // Validasi Jawaban Belum Dipilih
     if (jawab === null || jawab === undefined) {
         showNotification("⚠️ Silakan pilih jawaban terlebih dahulu sebelum melanjutkan!", "warning");
         return;
@@ -258,11 +260,11 @@ function confirmJawaban() {
     hideNotification();
     isConfirmed = true;
 
-    // Nonaktifkan semua pilihan input
+    // Nonaktifkan opsi input
     const inputs = document.querySelectorAll('#opsiWrapper input');
     inputs.forEach(i => i.disabled = true);
 
-    // STEP 3: Tampilkan Opsi Buka Pembahasan atau Soal Berikutnya
+    // Opsi Buka Pembahasan atau Soal Berikutnya
     const actionArea = document.getElementById('actionArea');
     actionArea.innerHTML = `
         <div style="display:flex; justify-content:flex-end; gap:10px; flex-wrap:wrap;">
@@ -272,21 +274,43 @@ function confirmJawaban() {
     `;
 }
 
-// STEP 4b: FORM INPUT KODE VERIFIKASI INLINE (TANPA POPUP PROMPT)
+// STEP 4b: INPUT KODE VERIFIKASI (Mencegah Peringatan Sandi / Pita Autofill HP)
 function showInputKodePanel() {
     const interactiveArea = document.getElementById('interactiveArea');
+    
     interactiveArea.innerHTML = `
         <div class="verify-panel">
             <h4 style="color:#5d4430; margin-bottom:8px; font-size:1rem;">🔑 Verifikasi Kode Pembahasan</h4>
             <p style="font-size:0.9rem; color:#6f5b4a; margin-bottom:12px;">Masukkan 3 digit kode verifikasi untuk melihat pembahasan soal ini:</p>
-            <div style="display:flex; gap:10px; max-width:320px;">
-                <input type="text" id="kodeInput" class="form-input" maxlength="3" placeholder="Contoh: 001" autocomplete="off" style="text-align:center; letter-spacing:2px; font-weight:700;">
-                <button type="button" class="btn btn-primary" onclick="verifikasiKode()">Verifikasi</button>
-            </div>
+            <form action="javascript:void(0);" autocomplete="off" style="margin:0; padding:0;">
+                <div style="display:flex; gap:10px; max-width:320px;">
+                    <input 
+                        type="search" 
+                        id="kodeInput" 
+                        class="form-input" 
+                        maxlength="3" 
+                        placeholder="000" 
+                        autocomplete="chrome-off" 
+                        autocorrect="off" 
+                        autocapitalize="off" 
+                        spellcheck="false"
+                        data-lpignore="true"
+                        data-1p-ignore="true"
+                        readOnly
+                        onfocus="this.removeAttribute('readonly');"
+                        style="text-align:center; letter-spacing:2px; font-weight:700;"
+                    >
+                    <button type="button" class="btn btn-primary" onclick="verifikasiKode()">Verifikasi</button>
+                </div>
+            </form>
             <div id="kodeErrorMsg" style="margin-top:10px;"></div>
         </div>
     `;
-    document.getElementById('kodeInput').focus();
+    
+    setTimeout(() => {
+        const inputEl = document.getElementById('kodeInput');
+        if (inputEl) inputEl.focus();
+    }, 100);
 }
 
 function verifikasiKode() {
@@ -296,10 +320,8 @@ function verifikasiKode() {
     const kodeErrorMsg = document.getElementById('kodeErrorMsg');
 
     if (inputKode === soal.kode) {
-        // KODE BENAR -> Tampilkan Pembahasan
         showPembahasan();
     } else {
-        // KODE SALAH -> Tampilkan Opsi Retry atau Skip ke Soal Berikutnya
         kodeErrorMsg.innerHTML = `
             <div style="background:#fde8e8; color:#9b1c1c; padding:10px 14px; border-radius:10px; font-size:0.88rem; border:1px solid #f8b4b4;">
                 <strong>❌ Kode verifikasi salah!</strong>
@@ -317,7 +339,7 @@ function showPembahasan() {
     const actionArea = document.getElementById('actionArea');
     const interactiveArea = document.getElementById('interactiveArea');
 
-    actionArea.style.display = 'none';
+    if (actionArea) actionArea.style.display = 'none';
     interactiveArea.innerHTML = `
         <div class="pembahasan-panel">
             <h4 style="color:#2e7d32; margin-bottom:6px; font-size:1.05rem;">💡 Pembahasan & Alasan Kunci:</h4>
@@ -371,5 +393,5 @@ function hitungHasil() {
             <button type="button" class="btn btn-primary" style="margin-top:1.5rem;" onclick="location.reload()">🔄 Ulangi Ujian</button>
         </div>
     `;
-    progressBadge.textContent = "Selesai";
+    if (progressBadge) progressBadge.textContent = "Selesai";
 }
