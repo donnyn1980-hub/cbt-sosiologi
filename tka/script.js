@@ -75,7 +75,7 @@ if (startExamBtn) {
     startExamBtn.addEventListener('click', startExam);
 }
 
-// NOTIFIKASI UTAMA (INLINE / TANPA POPUP)
+// NOTIFIKASI UTAMA (INLINE)
 function showNotification(message, type = "warning") {
     if (!inlineAlert) return;
     inlineAlert.className = `alert-box alert-${type}`;
@@ -92,9 +92,9 @@ function openFullscreen() {
     const elem = document.documentElement;
     if (elem.requestFullscreen) {
         elem.requestFullscreen().catch(() => {});
-    } else if (elem.webkitRequestFullscreen) { /* Safari */
+    } else if (elem.webkitRequestFullscreen) {
         elem.webkitRequestFullscreen();
-    } else if (elem.msRequestFullscreen) { /* IE11 */
+    } else if (elem.msRequestFullscreen) {
         elem.msRequestFullscreen();
     }
 }
@@ -112,7 +112,6 @@ function startExam() {
     savedNama = nama;
     savedNisn = nisn;
 
-    // Aktifkan Layar Penuh saat Ujian Dimulai
     openFullscreen();
 
     identitySection.style.display = 'none';
@@ -159,7 +158,6 @@ function renderSoal() {
             `;
         }).join('') + `</div>`;
     } else if (soal.tipe === "Kategori") {
-        // TAMPILAN KATEGORI BERBENTUK TABEL MATRIKS
         const currentAns = jawabanUser[soalIndexSekarang] || new Array(soal.pernyataan.length).fill(null);
         
         htmlOpsi = `
@@ -235,7 +233,7 @@ function selectKategori(pIdx, kIdx) {
     jawabanUser[soalIndexSekarang] = arr;
 }
 
-// STEP 2: KONFIRMASI JAWABAN (VALIDASI INLINE)
+// STEP 2: KONFIRMASI JAWABAN
 function confirmJawaban() {
     const soal = SOAL_ASLI[soalIndexSekarang];
     const jawab = jawabanUser[soalIndexSekarang];
@@ -260,77 +258,172 @@ function confirmJawaban() {
     hideNotification();
     isConfirmed = true;
 
-    // Nonaktifkan opsi input
     const inputs = document.querySelectorAll('#opsiWrapper input');
     inputs.forEach(i => i.disabled = true);
 
-    // Opsi Buka Pembahasan atau Soal Berikutnya
     const actionArea = document.getElementById('actionArea');
     actionArea.innerHTML = `
         <div style="display:flex; justify-content:flex-end; gap:10px; flex-wrap:wrap;">
-            <button type="button" class="btn btn-secondary" onclick="showInputKodePanel()">💡 Buka Pembahasan</button>
+            <button type="button" class="btn btn-secondary" onclick="openModalVerifikasi()">💡 Buka Pembahasan</button>
             <button type="button" class="btn btn-primary" onclick="nextSoal()">Soal Berikutnya ➡️</button>
         </div>
     `;
 }
 
-// STEP 4b: INPUT KODE VERIFIKASI (Mencegah Peringatan Sandi / Pita Autofill HP)
-function showInputKodePanel() {
-    const interactiveArea = document.getElementById('interactiveArea');
-    
-    interactiveArea.innerHTML = `
-        <div class="verify-panel">
-            <h4 style="color:#5d4430; margin-bottom:8px; font-size:1rem;">🔑 Verifikasi Kode Pembahasan</h4>
-            <p style="font-size:0.9rem; color:#6f5b4a; margin-bottom:12px;">Masukkan 3 digit kode verifikasi untuk melihat pembahasan soal ini:</p>
-            <form action="javascript:void(0);" autocomplete="off" style="margin:0; padding:0;">
-                <div style="display:flex; gap:10px; max-width:320px;">
-                    <input 
-                        type="search" 
-                        id="kodeInput" 
-                        class="form-input" 
-                        maxlength="3" 
-                        placeholder="000" 
-                        autocomplete="chrome-off" 
-                        autocorrect="off" 
-                        autocapitalize="off" 
-                        spellcheck="false"
-                        data-lpignore="true"
-                        data-1p-ignore="true"
-                        readOnly
-                        onfocus="this.removeAttribute('readonly');"
-                        style="text-align:center; letter-spacing:2px; font-weight:700;"
-                    >
-                    <button type="button" class="btn btn-primary" onclick="verifikasiKode()">Verifikasi</button>
+// ============================================================
+// POPUP / MODAL KHUSUS VERIFIKASI PEMBAHASAN
+// ============================================================
+
+function openModalVerifikasi() {
+    // Hapus modal lama jika ada
+    closeModalVerifikasi();
+
+    const modalOverlay = document.createElement('div');
+    modalOverlay.id = 'modalVerifikasiOverlay';
+    modalOverlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(3px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        padding: 16px;
+        box-sizing: border-box;
+    `;
+
+    modalOverlay.innerHTML = `
+        <div style="
+            background: #ffffff;
+            border-radius: 18px;
+            max-width: 380px;
+            width: 100%;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+            animation: popupFadeIn 0.25s ease-out;
+        ">
+            <button type="button" onclick="closeModalVerifikasi()" style="
+                position: absolute;
+                top: 12px;
+                right: 14px;
+                background: none;
+                border: none;
+                font-size: 1.2rem;
+                cursor: pointer;
+                color: #888;
+                font-weight: bold;
+            ">✕</button>
+
+            <div style="font-size: 2.5rem; margin-bottom: 8px;">🔑</div>
+            <h3 style="color: #3d2c1e; margin-bottom: 6px; font-size: 1.2rem; font-weight: 700;">Verifikasi Pembahasan</h3>
+            <p style="font-size: 0.9rem; color: #6f5b4a; margin-bottom: 18px; line-height: 1.4;">
+                Masukkan <strong>3 digit kode verifikasi</strong> untuk membuka pembahasan soal ini:
+            </p>
+
+            <form action="javascript:void(0);" autocomplete="off" onsubmit="verifikasiKodePopup(); return false;" style="margin:0; padding:0;">
+                <input 
+                    type="search" 
+                    id="popupKodeInput" 
+                    maxlength="3" 
+                    placeholder="000" 
+                    autocomplete="chrome-off" 
+                    autocorrect="off" 
+                    autocapitalize="off" 
+                    spellcheck="false"
+                    data-lpignore="true"
+                    data-1p-ignore="true"
+                    readOnly
+                    onfocus="this.removeAttribute('readonly');"
+                    style="
+                        width: 100%;
+                        font-size: 1.5rem;
+                        text-align: center;
+                        letter-spacing: 6px;
+                        font-weight: 800;
+                        padding: 10px 14px;
+                        border: 2px solid #8b5e3c;
+                        border-radius: 12px;
+                        background: #fdfaf6;
+                        color: #2b1f15;
+                        box-sizing: border-box;
+                        margin-bottom: 16px;
+                        outline: none;
+                    "
+                >
+
+                <div id="popupErrorMsg" style="margin-bottom: 14px;"></div>
+
+                <div style="display: flex; gap: 10px;">
+                    <button type="button" onclick="closeModalVerifikasi()" class="btn btn-secondary" style="flex: 1; padding: 10px;">Batal</button>
+                    <button type="submit" class="btn btn-primary" style="flex: 1; padding: 10px;">Verifikasi</button>
                 </div>
             </form>
-            <div id="kodeErrorMsg" style="margin-top:10px;"></div>
         </div>
     `;
-    
+
+    // Tambahkan style animasi jika belum ada
+    if (!document.getElementById('modalAnimationStyles')) {
+        const styleEl = document.createElement('style');
+        styleEl.id = 'modalAnimationStyles';
+        styleEl.innerHTML = `
+            @keyframes popupFadeIn {
+                from { opacity: 0; transform: scale(0.9); }
+                to { opacity: 1; transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(styleEl);
+    }
+
+    document.body.appendChild(modalOverlay);
+
     setTimeout(() => {
-        const inputEl = document.getElementById('kodeInput');
+        const inputEl = document.getElementById('popupKodeInput');
         if (inputEl) inputEl.focus();
-    }, 100);
+    }, 150);
 }
 
-function verifikasiKode() {
+function closeModalVerifikasi() {
+    const modal = document.getElementById('modalVerifikasiOverlay');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+function verifikasiKodePopup() {
     const soal = SOAL_ASLI[soalIndexSekarang];
-    const inputEl = document.getElementById('kodeInput');
+    const inputEl = document.getElementById('popupKodeInput');
     const inputKode = inputEl ? inputEl.value.trim() : "";
-    const kodeErrorMsg = document.getElementById('kodeErrorMsg');
+    const errorMsgEl = document.getElementById('popupErrorMsg');
 
     if (inputKode === soal.kode) {
+        closeModalVerifikasi();
         showPembahasan();
     } else {
-        kodeErrorMsg.innerHTML = `
-            <div style="background:#fde8e8; color:#9b1c1c; padding:10px 14px; border-radius:10px; font-size:0.88rem; border:1px solid #f8b4b4;">
-                <strong>❌ Kode verifikasi salah!</strong>
-                <div style="margin-top:8px; display:flex; gap:8px;">
-                    <button type="button" class="btn btn-outline" style="padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="showInputKodePanel()">🔄 Ulangi Input Kode</button>
-                    <button type="button" class="btn btn-primary" style="padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="nextSoal()">Lanjut Soal Berikutnya ➡️</button>
+        if (errorMsgEl) {
+            errorMsgEl.innerHTML = `
+                <div style="
+                    background: #fde8e8; 
+                    color: #9b1c1c; 
+                    padding: 8px 12px; 
+                    border-radius: 8px; 
+                    font-size: 0.85rem; 
+                    border: 1px solid #f8b4b4;
+                    text-align: center;
+                ">
+                    ❌ Kode verifikasi salah! Silakan coba lagi.
                 </div>
-            </div>
-        `;
+            `;
+        }
+        if (inputEl) {
+            inputEl.value = "";
+            inputEl.focus();
+        }
     }
 }
 
