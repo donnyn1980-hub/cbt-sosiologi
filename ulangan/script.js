@@ -3,305 +3,247 @@
 // ============================================================
 
 const SOAL_ASLI = [
-    // ===== TIPE 1: SEDERHANA (Pilihan Ganda Biasa) =====
+// ==========================================
+    // TIPE 1: SEDERHANA (10 Soal)
+    // ==========================================
     {
         id: 1,
         tipe: "Sederhana",
-        teks: "Seorang sosiolog melakukan penelitian di sebuah desa. Ia mengamati kegiatan warga ketika bekerja sama membangun jembatan. Warga tampak antusias dan bersemangat meskipun mereka tidak mendapatkan imbalan. Semua warga ikut membantu karena merasa bagian dari masyarakat. Dari ilustrasi tersebut, dapat diketahui bahwa sosiologi adalah ilmu yang ....",
+        teks: "Sekelompok ibu-ibu di perumahan rutin mengadakan arisan setiap bulan untuk mempererat silaturahim. Kegiatan ini dilandasi oleh ikatan batin yang kuat dan rasa kekeluargaan yang mendalam tanpa ikatan birokrasi formal. Berdasarkan ilustrasi tersebut, bentuk kelompok sosial yang dimaksud adalah ....",
         opsi: [
-            "fokus pada hukum dan ketertiban",
-            "membahas kebijakan ekonomi suatu negara",
-            "mempelajari perilaku individu dalam keluarga",
-            "mempelajari masyarakat dan interaksi sosial di dalamnya",
-            "hanya mempelajari tentang struktur pemerintahan dan politik"
+            "in-group",
+            "out-group",
+            "paguyuban (gemeinschaft)",
+            "patembayan (gesellschaft)",
+            "kelompok primer formal"
+        ],
+        jawabanBenar: 2
+    },
+    {
+        id: 2,
+        tipe: "Sederhana",
+        teks: "Para pendukung klub sepak bola Persija Jakarta sering kali menganggap kelompok mereka lebih unggul dibandingkan suporter klub lain. Sikap mengidentifikasikan diri dengan kelompok sendiri dan memandang rendah kelompok luar disebut sebagai ....",
+        opsi: [
+            "etnosentrisme",
+            "stereotip kelompok",
+            "out-group feeling",
+            "in-group feeling",
+            "primordialisme sempit"
         ],
         jawabanBenar: 3
     },
     {
         id: 3,
         tipe: "Sederhana",
-        teks: "Pak Heri adalah guru baru. Ia menyapa siswa dan mengajak berdiskusi aktif. Murid menjadi lebih semangat belajar. Interaksi sosial antara Pak Heri dan siswa terjadi karena adanya ....",
+        teks: "Sebuah perusahaan multinasional mempekerjakan karyawan dari berbagai latar belakang suku, agama, dan ras yang berbeda namun dipimpin oleh sistem kerja profesional. Kondisi masyarakat majemuk dengan struktur sosial bersilang (cross-cutting affiliations) ini ditandai oleh ....",
         opsi: [
-            "sifat ramah seorang guru",
-            "penerapan nilai dan norma",
-            "motivasi tinggi dalam belajar",
-            "kontak sosial dan komunikasi",
-            "semangat siswa dalam belajar"
+            "integrasi sosial yang rapuh",
+            "potensi konflik horizontal yang tinggi",
+            "solidaritas mekanis yang mengikat kuat",
+            "terjalinnya ikatan sosial lintas kelompok",
+            "dominasi mutlak kelompok mayoritas"
         ],
         jawabanBenar: 3
     },
     {
         id: 4,
         tipe: "Sederhana",
-        teks: "Seorang sosiolog melakukan penelitian tentang kenakalan remaja di suatu daerah. Ia melihat kenakalan remaja terjadi sebagai akibat lemahnya kontrol sosial. Berdasarkan ilustrasi tersebut, paradigma yang digunakan peneliti tersebut adalah ....",
+        teks: "Dalam sistem pelapisan sosial masyarakat feodal tradisional, kedudukan seseorang ditentukan secara mutlak oleh garis keturunan bangsawan sejak ia lahir. Bentuk stratifikasi sosial tertutup semacam ini mengakibatkan ....",
         opsi: [
-            "paradigma ekonomi",
-            "paradigma psikologi",
-            "paradigma fakta sosial",
-            "paradigma definisi sosial",
-            "paradigma perilaku sosial"
+            "mobilitas sosial vertikal sangat terbuka",
+            "terjadinya persaingan bebas antarkelas",
+            "tertutupnya peluang perpindahan status sosial",
+            "kesetaraan hak bagi setiap warga masyarakat",
+            "penghargaan didasarkan pada prestasi individu"
+        ],
+        jawabanBenar: 2
+    },
+    {
+        id: 5,
+        tipe: "Sederhana",
+        teks: "Rudi berhasil merintis usaha digital hingga menjadi pengusaha sukses dan dihormati warga kampungnya yang dulu meremehkannya. Peristiwa tersebut mencerminkan terjadinya bentuk mobilitas sosial vertikal naik karena faktor ....",
+        opsi: [
+            "perubahan standar kekayaan",
+            "saluran mobilitas pendidikan",
+            "keberhasilan perjuangan individu",
+            "kebijakan pemerintah daerah",
+            "perubahan struktur ekonomi makro"
         ],
         jawabanBenar: 2
     },
     {
         id: 6,
         tipe: "Sederhana",
-        teks: "Suatu peristiwa kematian kepala suku disambut dengan upacara besar oleh satu komunitas, namun dianggap biasa oleh komunitas lain. Ilustrasi tersebut menunjukkan adanya ....",
+        teks: "Masyarakat nelayan di pesisir pantai umumnya memiliki pola solidaritas yang didasarkan pada kesamaan pekerjaan, tradisi leluhur, dan tingkat kesadaran kolektif yang sangat tinggi. Menurut Émile Durkheim, jenis solidaritas sosial yang mendasari masyarakat tersebut adalah ....",
         opsi: [
-            "persamaan budaya",
-            "ketimpangan budaya",
-            "adanya penyimpangan sosial",
-            "adanya konflik nilai di masyarakat",
-            "perbedaan tata nilai dalam masyarakat"
+            "solidaritas organik",
+            "solidaritas mekanis",
+            "solidaritas fungsional",
+            "solidaritas kontraktual",
+            "solidaritas struktural"
         ],
-        jawabanBenar: 4
+        jawabanBenar: 1
+    },
+    {
+        id: 7,
+        tipe: "Sederhana",
+        teks: "Sekelompok dokter spesialis mendirikan organisasi ikatan profesi guna menjaga kode etik dan standar pelayanan medis di rumah sakit. Berdasarkan kriteria pembentukannya, asosiasi formal tersebut tergolong sebagai ....",
+        opsi: [
+            "membership group",
+            "reference group",
+            "primary group",
+            "in-group",
+            "voluntary association"
+        ],
+        jawabanBenar: 0
     },
     {
         id: 8,
         tipe: "Sederhana",
-        teks: "Seorang siswa melakukan observasi tentang gelandangan di perkotaan. Permasalahan sosial yang bisa dirumuskan dari ilustrasi tersebut adalah ....",
+        teks: "Seorang remaja sering meniru gaya berpakaian, potongan rambut, dan cara bicara idola K-Pop favoritnya meskipun ia tidak pernah tergabung dalam agensi tersebut. Kelompok idola yang dijadikan acuan berperilaku bagi remaja tersebut dinamakan ....",
         opsi: [
-            "kurangnya minat kerja masyarakat",
-            "pemerintah tidak peduli dengan gelandangan",
-            "ketimpangan sosial sebagai penyebab kemiskinan",
-            "budaya konsumtif menyebabkan ketimpangan sosial",
-            "kepadatan penduduk menyebabkan permasalahan sosial"
+            "primary group",
+            "reference group",
+            "membership group",
+            "formal group",
+            "out-group"
         ],
-        jawabanBenar: 2
-    },
-    {
-        id: 12,
-        tipe: "Sederhana",
-        teks: "Dalam masyarakat adat, kegiatan panen bersama disertai upacara tradisional. Hal ini menunjukkan lembaga sosial berperan dalam ….",
-        opsi: [
-            "menciptakan konflik",
-            "mengatur kekuasaan",
-            "menjaga sistem ekonomi",
-            "melestarikan budaya dan nilai",
-            "menyebarkan ideologi baru"
-        ],
-        jawabanBenar: 3
-    },
-    {
-        id: 14,
-        tipe: "Sederhana",
-        teks: "Maraknya kasus pembegalan yang terjadi di jalan pedesaan saat malam hari meresahkan warga. Berikut salah satu upaya yang tepat untuk mengatasi masalah tersebut adalah ….",
-        opsi: [
-            "melakukan sweeping warga",
-            "mengadakan demo masyarakat",
-            "menyebarkan berita di media sosial",
-            "meningkatkan patroli keamanan desa",
-            "membiarkan aparat bertindak sendiri"
-        ],
-        jawabanBenar: 3
-    },
-    {
-        id: 16,
-        tipe: "Sederhana",
-        teks: "Setelah konflik antarwarga karena perbedaan pendapat, mereka akhirnya menyadari pentingnya gotong royong dan membuat aturan baru bersama. Dampak positif konflik sosial dalam masyarakat berdasarkan ilustrasi tersebut adalah ....",
-        opsi: [
-            "penurunan moral",
-            "munculnya kekacauan",
-            "berhentinya proses interaksi",
-            "terjadinya perubahan sosial",
-            "munculnya kelompok radikal"
-        ],
-        jawabanBenar: 3
-    },
-    {
-        id: 17,
-        tipe: "Sederhana",
-        teks: "Ketimpangan akses layanan kesehatan terjadi karena masyarakat miskin sulit menjangkau fasilitas yang layak. Teori yang sesuai untuk menjelaskan kekerasan struktural dalam masyarakat adalah ....",
-        opsi: [
-            "teori revolusi sosial",
-            "teori sistem sosial",
-            "teori konflik sosial",
-            "struktural fungsional",
-            "interaksionisme simbolik"
-        ],
-        jawabanBenar: 2
-    },
-    {
-        id: 18,
-        tipe: "Sederhana",
-        teks: "Di sekolah, terdapat ketua OSIS, pengurus, dan anggota. Mereka memiliki peran dan kedudukan berbeda, mencerminkan struktur sosial yang bersifat ....",
-        opsi: [
-            "acak",
-            "fleksibel",
-            "komunal",
-            "stratifikasi",
-            "horizontal"
-        ],
-        jawabanBenar: 3
-    },
-    {
-        id: 19,
-        tipe: "Sederhana",
-        teks: "Dalam masyarakat modern, profesi seperti Youtuber atau Content Creator mulai diterima sejajar dengan dokter dan guru. Ini menunjukkan adanya ....",
-        opsi: [
-            "disintegrasi sosial antar profesi",
-            "mobilitas sosial turun dialami dokter dan guru",
-            "perubahan status ekonomi profesi dokter dan guru",
-            "dinamika struktur sosial akibat perubahan nilai profesi",
-            "konflik sosial antar profesi lama dengan profesi baru"
-        ],
-        jawabanBenar: 3
-    },
-    {
-        id: 25,
-        tipe: "Sederhana",
-        teks: "Saat ini produk budaya dari negara maju menyebar cepat ke berbagai belahan dunia, sehingga memengaruhi gaya hidup masyarakat lokal. Teori globalisasi yang tepat untuk menjelaskan fenomena pada ilustrasi tersebut adalah ....",
-        opsi: [
-            "teori kesenjangan",
-            "teori institusi",
-            "teori sistem dunia",
-            "teori mcdonaldisasi",
-            "teori interaksi simbolik"
-        ],
-        jawabanBenar: 3
-    },
-    {
-        id: 29,
-        tipe: "Sederhana",
-        teks: "Masa pandemi Covid-19 memaksa dunia pendidikan untuk menerapkan sistem pembelajaran daring. Dari pernyataan dalam teks, dapat disimpulkan bahwa pembelajaran daring memberikan dampak ganda terhadap pendidikan Indonesia. Tindakan apakah yang paling tepat dilakukan oleh pemangku kebijakan pendidikan berdasarkan situasi tersebut?",
-        opsi: [
-            "Mewajibkan siswa membeli perangkat digital dan kuota internet sendiri.",
-            "Mengabaikan dampak negatif karena teknologi sudah menjadi kebutuhan zaman.",
-            "Mengembangkan sistem blended learning yang menggabungkan daring dan luring.",
-            "Menghentikan penggunaan teknologi agar siswa fokus pada pembelajaran tatap muka.",
-            "Menjadikan pembelajaran daring sebagai metode utama meskipun banyak kekurangannya."
-        ],
-        jawabanBenar: 2
-    },
-
-    // ===== TIPE 2: MCMA (Multiple Choice Multiple Answer) =====
-    {
-        id: 2,
-        tipe: "MCMA",
-        teks: "Di sebuah desa, jabatan kepala adat secara otomatis diberikan kepada anak tertua dari kepala adat sebelumnya. Jabatan tersebut tidak perlu diperebutkan atau diperoleh melalui pemilihan, melainkan diwariskan secara turun-temurun sesuai tradisi yang berlaku. Berdasarkan ilustrasi tersebut, pernyataan yang tepat mengenai jenis status sosial yang dimiliki oleh anak kepala adat adalah ....",
-        opsi: [
-            "diperoleh karena hasil kerja keras individu",
-            "bisa berubah tergantung prestasi individu",
-            "tersebut merupakan contoh ascribed status",
-            "diberikan sejak lahir karena faktor keturunan",
-            "diberikan masyarakat melalui pengangkatan formal"
-        ],
-        jawabanBenar: [2, 3]
-    },
-    {
-        id: 5,
-        tipe: "MCMA",
-        teks: "Seorang influencer dengan jutaan pengikut tampil di media sosial mengenakan pakaian minim saat berada di pesta malam. Dalam unggahan videonya, ia memamerkan kemewahan hidup dari minuman mahal, mobil sport, hingga pesta tanpa batas. Perilaku tersebut telah melanggar norma ....",
-        opsi: [
-            "agama",
-            "hukum",
-            "ekonomi",
-            "kesusilaan",
-            "kesopanan"
-        ],
-        jawabanBenar: [0, 3, 4]
-    },
-    {
-        id: 7,
-        tipe: "MCMA",
-        teks: "Dalam satu tahun terakhir, sebuah lembaga nasional mencatat bahwa kasus penyalahgunaan narkoba di kalangan remaja meningkat hingga 30%. Fakta ini mengkhawatirkan banyak pihak, termasuk orang tua, sekolah, dan pemerintah. Di sisi lain, pengaruh media sosial, tekanan lingkungan, dan kurangnya edukasi diduga menjadi pemicu utama. Banyak yang mulai mempertanyakan efektivitas program pencegahan narkoba yang selama ini dijalankan. Berdasarkan ilustrasi tersebut, manakah kesimpulan dan tindakan paling tepat yang seharusnya dilakukan berbagai pihak?",
-        opsi: [
-            "Menghukum remaja yang terlibat agar menimbulkan efek jera.",
-            "Mengurangi akses remaja terhadap media sosial dan internet.",
-            "Pemerintah perlu mengevaluasi ulang strategi penanggulangan narkoba.",
-            "Meningkatkan edukasi tentang bahaya narkoba di sekolah dan lingkungan.",
-            "Membiarkan kasus berjalan agar menjadi pelajaran alami bagi generasi muda."
-        ],
-        jawabanBenar: [2, 3]
+        jawabanBenar: 1
     },
     {
         id: 9,
-        tipe: "MCMA",
-        teks: "Di sebuah sekolah terdapat kelompok belajar, kelompok olahraga, dan kelompok seni. Kelompok-kelompok sosial tersebut termasuk jenis kelompok berdasarkan ....",
+        tipe: "Sederhana",
+        teks: "Struktur masyarakat multikultural di Indonesia sering kali digambarkan memiliki dua ciri sekaligus, yaitu secara horizontal terbagi oleh suku/agama dan secara vertikal terbagi oleh tingkat kekayaan atau jabatan. Konsep sosiologis untuk menggambarkan struktur sosial majemuk tersebut adalah ....",
         opsi: [
-            "tujuan atau minat tertentu",
-            "kesamaan agama dan kepercayaan",
-            "aktivitas fungsional yang terorganisir",
-            "hubungan pribadi yang intens dan mendalam",
-            "keanggotaan sukarela berdasarkan hobi atau bakat"
+            "interseksi dan konsolidasi",
+            "diferensiasi dan stratifikasi",
+            "asimilasi dan akulturasi",
+            "mobilitas dan stratifikasi",
+            "integrasi dan disintegrasi"
         ],
-        jawabanBenar: [0, 2, 4]
+        jawabanBenar: 1
     },
     {
         id: 10,
-        tipe: "MCMA",
-        teks: "Munculnya kelompok-kelompok seperti Ikatan Keluarga Banyumas, Paguyuban Wong Cirebon, Ikatan Keluarga Madura, dan lain sebagainya di Jakarta terbentuk karena adanya ....",
+        tipe: "Sederhana",
+        teks: "Konflik antar-etnis yang pernah terjadi di beberapa daerah di Indonesia kerap dipicu oleh menguatnya ikatan kesukuan yang berlebihan tanpa diimbangi toleransi antarkelompok. Gejala sosial yang menunjukkan pemujaan berlebihan terhadap suku sendiri ini disebut ....",
         opsi: [
-            "kesamaan tempat kerja",
-            "kesamaan pendidikan formal",
-            "kesamaan latar belakang daerah asal",
-            "solidaritas kedaerahan dan kekeluargaan",
-            "kesamaan ekonomi dan tingkat kesejahteraan"
+            "etnosentrisme",
+            "kolusi sosial",
+            "diskriminasi",
+            "stereotip",
+            "xenofobia"
         ],
-        jawabanBenar: [2, 3]
+        jawabanBenar: 0
     },
+
+    // ==========================================
+    // TIPE 2: KATEGORI (10 Soal)
+    // ==========================================
     {
         id: 11,
-        tipe: "MCMA",
-        teks: "Suatu pagi, Andi menemukan sebuah dompet di jalan saat perjalanan ke sekolah. Di dalam dompet tersebut terdapat kartu identitas, uang, dan surat penting. Tanpa ragu, Andi berinisiatif menghubungi pemilik dompet berdasarkan informasi pada KTP, lalu mengembalikannya secara langsung. Berdasarkan ilustrasi tersebut, tindakan Andi mencerminkan penerapan nilai dan norma sebagai berikut ....",
-        opsi: [
-            "norma hukum",
-            "nilai material",
-            "nilai kejujuran",
-            "norma kesopanan",
-            "penerapan nilai moral"
+        tipe: "Kategori",
+        teks: "Perhatikan berbagai bentuk pengelompokan dalam masyarakat! Pengelompokan sosial dapat dibedakan berdasarkan erat tidaknya hubungan antaranggota serta tingkat formalitas organisasinya.",
+        pernyataan: [
+            "Keluarga inti merupakan contoh nyata dari kelompok primer.",
+            "Ikatan pegawai kantor dalam satu divisi tergolong kelompok primer.",
+            "Paguyuban warga desa mencerminkan ciri kelompok sekunder."
         ],
-        jawabanBenar: [2, 4]
+        kategori: ["Sesuai", "Tidak Sesuai"],
+        jawabanBenar: [0, 1, 1]
+    },
+    {
+        id: 12,
+        tipe: "Kategori",
+        teks: "Analisis struktur sosial masyarakat majemuk menunjukkan adanya dua dimensi utama, yaitu diferensiasi sosial dan stratifikasi sosial. Dimensi-dimensi ini membentuk pola hubungan yang unik di dalam kehidupan bernegara.",
+        pernyataan: [
+            "Perbedaan suku bangsa dan ras di Indonesia merupakan bentuk diferensiasi sosial.",
+            "Perbedaan jabatan manajer dan staf rendahan merupakan bentuk diferensiasi sosial.",
+            "Penggolongan masyarakat berdasarkan kepemilikan modal disebut stratifikasi sosial."
+        ],
+        kategori: ["Sesuai", "Tidak Sesuai"],
+        jawabanBenar: [0, 1, 0]
     },
     {
         id: 13,
-        tipe: "MCMA",
-        teks: "Seiring perkembangan zaman, banyak keluarga lebih memilih pengasuh atau daycare daripada mengasuh anak sendiri. Sikap lembaga keluarga yang tepat menyikapi perubahan tersebut adalah ....",
-        opsi: [
-            "menyerahkan sepenuhnya pengasuhan kepada daycare",
-            "tetap membina komunikasi emosional dengan anak",
-            "menganggap daycare sebagai pengganti utama keluarga",
-            "menyesuaikan diri dengan tetap menjalankan fungsi pengasuhan",
-            "kepribadian anak menjadi tanggung jawab pengasuh dan daycare"
+        tipe: "Kategori",
+        teks: "Mobilitas sosial dalam struktur masyarakat modern dapat terjadi melalui berbagai saluran atau lift sosial yang tersedia. Saluran-saluran tersebut memberikan kesempatan bagi individu untuk memperbaiki kedudukan sosialnya.",
+        pernyataan: [
+            "Lembaga pendidikan tinggi merupakan saluran mobilitas sosial vertikal naik.",
+            "Partai politik dan organisasi profesi dapat menjadi sarana mobilitas sosial.",
+            "Sistem kasta tertutup memberikan kebebasan penuh dalam saluran mobilitas."
         ],
-        jawabanBenar: [1, 3]
+        kategori: ["Sesuai", "Tidak Sesuai"],
+        jawabanBenar: [0, 0, 1]
     },
     {
-        id: 21,
-        tipe: "MCMA",
-        teks: "Di sebuah sekolah dasar, pihak sekolah mulai menerapkan pelajaran karakter dan etika sejak kelas 1 SD. Pelajaran ini disampaikan melalui cerita, permainan peran, dan kegiatan proyek yang melatih empati, tanggung jawab, dan sikap jujur. Tujuannya agar peserta didik terbiasa dengan nilai-nilai positif sebelum mereka menghadapi tantangan sosial di masyarakat. Berdasarkan ilustrasi tersebut, tindakan yang dilakukan sekolah termasuk ke dalam pengendalian sosial yang memiliki ciri-ciri ....",
-        opsi: [
-            "merupakan bentuk pengendalian sosial preventif",
-            "melibatkan internalisasi nilai melalui proses pendidikan",
-            "dilakukan melalui pendekatan kekuasaan dan sanksi tegas",
-            "diterapkan setelah terjadi pelanggaran norma oleh peserta didik",
-            "bertujuan untuk mencegah terjadinya penyimpangan sosial sejak dini"
+        id: 14,
+        tipe: "Kategori",
+        teks: "Kelompok sosial tidak resmi atau informal sering kali terbentuk secara spontan di tengah masyarakat tanpa struktur organisasi yang kaku. Karakteristik kelompok ini sangat bergantung pada kedekatan personal.",
+        pernyataan: [
+            "Kelompok penonton bioskop yang mengantri tiket adalah contoh kerumunan (crowd).",
+            "Geng motor liar yang melakukan balap liar tergolong kelompok sosial teratur.",
+            "Sekelompok sahabat karib sejak masa SMP merupakan contoh kelompok informal."
         ],
-        jawabanBenar: [0, 1, 4]
+        kategori: ["Sesuai", "Tidak Sesuai"],
+        jawabanBenar: [0, 1, 0]
     },
-    {
-        id: 26,
-        tipe: "MCMA",
-        teks: "Dalam menghadapi isu polusi udara di kota besar, pemerintah daerah menggelar forum diskusi yang melibatkan para ilmuwan, akademisi, dan lembaga penelitian. Mereka menyusun kebijakan berdasarkan data hasil penelitian tentang emisi kendaraan bermotor dan dampaknya terhadap kesehatan. Masyarakat pun mulai terbiasa membaca laporan resmi dan mengikuti panduan berbasis data sebelum mengambil sikap, ketimbang hanya mengandalkan mitos atau informasi dari media sosial. Berdasarkan ilustrasi tersebut, ciri masyarakat modern yang tampak adalah ....",
-        opsi: [
-            "masyarakat menghindari semua bentuk tradisi dan budaya lama",
-            "proses pengambilan kebijakan dilakukan secara rasional dan logis",
-            "diskusi dan pemecahan masalah dilakukan berdasarkan hasil penelitian",
-            "masyarakat mengambil keputusan berdasarkan pendekatan ilmiah dan data",
-            "masyarakat hanya mempercayai informasi yang bersifat emosional dan opini pribadi"
-        ],
-        jawabanBenar: [1, 2, 3]
-    },
-
-    // ===== TIPE 3: KATEGORI (Tabel dengan 2 pilihan) =====
     {
         id: 15,
         tipe: "Kategori",
-        teks: "Indonesia adalah negara kepulauan yang terdiri atas puluhan ribu pulau yang dipisahkan oleh lautan. Setiap pulau memiliki kondisi alam yang berbeda, seperti suhu, curah hujan, dan bentuk permukaan tanah. Kondisi ini mendorong munculnya keanekaragaman budaya, bahasa, dan kebiasaan di setiap daerah. Selain itu, letak geografis Indonesia yang strategis di antara dua benua dan dua samudra menjadikan Indonesia sebagai jalur lalu lintas perdagangan internasional, yang juga berkontribusi pada masuknya berbagai pengaruh budaya asing. Manakah pernyataan berikut ini yang merupakan faktor penyebab keberagaman sosial budaya di Indonesia yang sesuai dengan ilustrasi tersebut?",
+        teks: "Konsep solidaritas sosial menurut sosiolog klasik membedakan antara masyarakat tradisional dan masyarakat modern. Perbedaan tersebut didasarkan pada tingkat pembagian kerja dan kesadaran kolektif warganya.",
         pernyataan: [
-            "Perbedaan kondisi alam antarwilayah menyebabkan variasi cara hidup dan budaya masyarakat.",
-            "Indonesia menjadi jalur migrasi dan interaksi global yang memperkaya budaya lokal.",
-            "Persamaan bentuk geografis di seluruh Indonesia mendorong homogenitas budaya masyarakat."
+            "Solidaritas mekanis dicirikan oleh pembagian kerja yang sangat kompleks dan spesifik.",
+            "Solidaritas organik didasarkan pada saling ketergantungan fungsional antarbidang pekerjaan.",
+            "Masyarakat modern perkotaan umumnya didominasi oleh bentuk solidaritas organik."
+        ],
+        kategori: ["Sesuai", "Tidak Sesuai"],
+        jawabanBenar: [1, 0, 0]
+    },
+    {
+        id: 16,
+        tipe: "Kategori",
+        teks: "Dalam kehidupan bermasyarakat, individu sering kali dihadapkan pada dinamika keanggotaan kelompok sosial. Keanggotaan ini dapat bersifat sukarela maupun melekat sejak lahir.",
+        pernyataan: [
+            "Membership group adalah kelompok di mana seseorang secara resmi tercatat sebagai anggota.",
+            "Reference group selalu sama persis dengan membership group seseorang.",
+            "Seseorang dapat menjadikan kelompok lain yang bukan anggotanya sebagai acuan berperilaku."
+        ],
+        kategori: ["Sesuai", "Tidak Sesuai"],
+        jawabanBenar: [0, 1, 0]
+    },
+    {
+        id: 17,
+        tipe: "Kategori",
+        teks: "Struktur masyarakat majemuk dapat mengalami konsolidasi atau persilangan keanggotaan apabila tidak dikelola dengan bijak. Hal ini berdampak langsung pada stabilitas integrasi sosial nasional.",
+        pernyataan: [
+            "Konsolidasi sosial terjadi jika parameter suku, agama, dan ras saling memperkuat dalam satu garis.",
+            "Cross-cutting affiliation memperkecil potensi terjadinya disintegrasi bangsa.",
+            "Konsolidasi kelompok memperkuat solidaritas antarberbagai golongan yang berbeda."
+        ],
+        kategori: ["Sesuai", "Tidak Sesuai"],
+        jawabanBenar: [0, 0, 1]
+    },
+    {
+        id: 18,
+        tipe: "Kategori",
+        teks: "Bentuk-bentuk mobilitas sosial sangat beragam bergantung pada arah perpindahan status dan pelakunya. Analisis mobilitas membantu memahami dinamika kelas dalam struktur masyarakat.",
+        pernyataan: [
+            "Seorang kepala dinas yang diturunkan jabatannya karena melanggar aturan mengalami mobilitas vertikal turun.",
+            "Anak seorang petani yang berhasil menjadi dokter spesialis mengalami mobilitas intergenerasi.",
+            "Pindah domisili dari kota A ke kota B dengan jabatan setara dinamakan mobilitas vertikal naik."
+        ],
+        kategori: ["Sesuai", "Tidak Sesuai"],
+        jawabanBenar: [0, 0, 1]
+    },
+    {
+        id: 19,
+        tipe: "Kategori",
+        teks: "Gemeinschaft dan Gesellschaft adalah konsep sosiologis yang dikemukakan oleh Ferdinand Tönnies untuk mengklasifikasikan tipe ikatan kelompok sosial. Klasifikasi ini melihat perbedaan nilai orientasi di dalamnya.",
+        pernyataan: [
+            "Gemeinschaft didasarkan pada ikatan batin yang murni, bersifat alamiah, dan kekal.",
+            "Gesellschaft bercirikan hubungan kontrak yang bersifat pamrih dan berorientasi ekonomi.",
+            "Hubungan antar-pegawai di kantor perusahaan modern lebih mencerminkan Gemeinschaft."
         ],
         kategori: ["Sesuai", "Tidak Sesuai"],
         jawabanBenar: [0, 0, 1]
@@ -309,88 +251,83 @@ const SOAL_ASLI = [
     {
         id: 20,
         tipe: "Kategori",
-        teks: "Perhatikan Ilustrasi berikut! Seseorang dengan penghasilan tinggi menggunakan mobil mewah, seseorang dengan penghasilan sedang menggunakan motor, seseorang dengan penghasilan rendah berjalan kaki. Kriteria yang digunakan pada stratifikasi sosial pada ilustrasi tersebut adalah ....",
+        teks: "Kemajemukan sosial di Indonesia menghasilkan bentuk diferensiasi masyarakat berdasarkan berbagai ciri fisik maupun kultural. Pemahaman mengenai ciri-ciri ini penting untuk merawat kerukunan hidup.",
         pernyataan: [
-            "Kasta sosial",
-            "Kriteria sosial",
-            "Kriteria politik",
-            "Kriteria ekonomi",
-            "Ilmu pengetahuan"
+            "Diferensiasi ras didasarkan pada ciri-ciri fisik biologis seperti warna kulit dan bentuk rambut.",
+            "Diferensiasi agama menempatkan suatu golongan agama lebih unggul daripada agama lain.",
+            "Diferensiasi klan didasarkan pada garis keturunan yang sama baik unilateral maupun bilateral."
         ],
-        kategori: ["Benar", "Salah"],
-        jawabanBenar: [1, 1, 1, 0, 1]
+        kategori: ["Sesuai", "Tidak Sesuai"],
+        jawabanBenar: [0, 1, 0]
+    },
+
+    // ==========================================
+    // TIPE 3: MCMA (5 Soal)
+    // ==========================================
+    {
+        id: 21,
+        tipe: "MCMA",
+        teks: "Sebuah komunitas pedesaan mengadakan kerja bakti memperbaiki saluran irigasi sawah secara rutin setiap menjelang musim tanam. Warga terlibat aktif didasari rasa tanggung jawab bersama tanpa mengharapkan upah finansial. Berdasarkan ilustrasi tersebut, karakteristik kelompok sosial gemeinschaft (paguyuban) yang tampak adalah ....",
+        opsi: [
+            "hubungan antaranggota bersifat intim dan personal",
+            "orientasi hubungan bersifat untung-rugi secara ekonomi",
+            "didasari oleh rasa cinta kasih dan ikatan batin yang kuat",
+            "kehidupan kelompok bersifat informal dan tradisional",
+            "sifat hubungan diatur secara ketat oleh hukum kontrak formal"
+        ],
+        jawabanBenar: [0, 2, 3]
     },
     {
         id: 22,
-        tipe: "Kategori",
-        teks: "Pemerintah berencana menerapkan kebijakan pendidikan gratis untuk tingkat SMA/SMK negeri di Sumatera Utara mulai tahun ajaran 2025/2026. Selain itu, Pemerintah Provinsi DKI Jakarta akan melakukan uji coba sekolah swasta gratis di beberapa wilayah pada tahun ajaran yang sama. Tujuan dari kebijakan ini adalah mengurangi angka putus sekolah dan memastikan seluruh siswa, terutama dari keluarga kurang mampu, mendapatkan akses pendidikan yang layak dan merata. Berdasarkan ilustrasi tersebut, manakah pernyataan yang sesuai untuk menggambarkan bentuk perubahan sosial yang terjadi?",
-        pernyataan: [
-            "Kebijakan tersebut merupakan contoh perubahan struktural karena melibatkan sistem pendidikan dan intervensi negara.",
-            "Uji coba sekolah swasta gratis di Jakarta merupakan contoh perubahan kecil yang tidak memengaruhi sistem sosial.",
-            "Tujuan mengurangi angka putus sekolah termasuk dalam perubahan proses karena memerlukan tahapan bertahap."
+        tipe: "MCMA",
+        teks: "Pak Joko memulai karirnya dari staf administrasi biasa di sebuah perusahaan swasta berkat ketekunannya. Setelah sepuluh tahun menunjukkan kinerja luar biasa, ia dipromosikan menjadi manajer operasional dan kini disegani rekan kerjanya. Berdasarkan ilustrasi tersebut, bentuk dan saluran mobilitas sosial yang dialami Pak Joko meliputi ....",
+        opsi: [
+            "mobilitas sosial horizontal",
+            "mobilitas sosial vertikal naik (social climbing)",
+            "organisasi perusahaan sebagai saluran mobilitas ekonomi",
+            "mobilitas antargenerasi turun",
+            "keberhasilan individu sebagai faktor pendorong mobilitas"
         ],
-        kategori: ["Sesuai", "Tidak Sesuai"],
-        jawabanBenar: [0, 1, 0]
+        jawabanBenar: [1, 2, 4]
     },
     {
         id: 23,
-        tipe: "Kategori",
-        teks: "Perkembangan teknologi menyebabkan munculnya layanan transportasi online seperti ojek dan taksi daring. Inovasi ini memudahkan masyarakat dalam melakukan mobilitas tanpa harus memiliki kendaraan pribadi. Penggunaan layanan transportasi online kini telah menjadi bagian dari gaya hidup masyarakat modern, khususnya di daerah perkotaan. Berdasarkan ilustrasi tersebut, manakah pernyataan berikut yang tepat untuk menggambarkan perubahan sosial yang terjadi?",
-        pernyataan: [
-            "Perubahan ini merupakan bentuk perubahan sosial terencana karena hasil dari penemuan baru.",
-            "Perubahan tersebut memberikan dampak yang sangat kecil terhadap kehidupan sosial masyarakat.",
-            "Perubahan ini mencerminkan proses modernisasi yang memudahkan kehidupan masyarakat."
+        tipe: "MCMA",
+        teks: "Di kota-kota besar, masyarakat majemuk terdiri dari beragam suku, agama, profesi, dan tingkat ekonomi yang saling berinteraksi di ruang publik. Agar tidak terjadi disintegrasi sosial di tengah pluralitas tersebut, maka diperlukan adanya upaya penguatan ikatan sosial berupa ....",
+        opsi: [
+            "penerapan sikap toleransi dan empati multikultural",
+            "penguatan sikap etnosentrisme pada kelompok masing-masing",
+            "pembangunan titik-titik temu budaya dan dialog lintas agama",
+            "peningkatan interaksi melalui struktur silang (cross-cutting affiliations)",
+            "pemisahan wilayah permukiman secara ketat berdasarkan suku"
         ],
-        kategori: ["Sesuai", "Tidak Sesuai"],
-        jawabanBenar: [1, 1, 0]
+        jawabanBenar: [0, 2, 3]
     },
     {
         id: 24,
-        tipe: "Kategori",
-        teks: "Pada masa lalu, peran perempuan dalam masyarakat Indonesia sering kali dibatasi, tidak mendapatkan kedudukan dan kesempatan yang setara dengan laki-laki. Namun, seiring perkembangan zaman dan perubahan pola pikir masyarakat, perempuan mulai memiliki akses yang lebih luas dalam pendidikan, pekerjaan, dan posisi kepemimpinan. Sementara itu, laki-laki juga mulai terbuka terhadap peran-peran domestik yang dulu dianggap hanya milik perempuan. Manakah pernyataan berikut yang tepat menggambarkan bentuk perubahan sosial yang terjadi berdasarkan ilustrasi tersebut?",
-        pernyataan: [
-            "Perubahan peran gender terjadi secara bertahap mengikuti perkembangan pola pikir masyarakat.",
-            "Perubahan peran perempuan dan laki-laki menunjukkan perubahan yang bersifat revolusioner.",
-            "Perubahan ini merupakan contoh dari perubahan sosial kecil karena hanya terjadi di lingkungan tertentu."
+        tipe: "MCMA",
+        teks: "Sekelompok suporter sepak bola fanatik melakukan konvoi di jalan raya sambil meneriakkan yel-yel provokatif kepada kelompok suporter lain yang kebetulan berpapasan, sehingga memicu kericuhan di jalan. Berdasarkan bentuk interaksi kerumunan (crowd), perilaku kelompok tersebut dikategorikan sebagai ....",
+        opsi: [
+            "inconvenient crowd (kerumunan yang kurang menyenangkan)",
+            "acting lawless crowds (kerumunan yang melakukan tindakan melanggar hukum)",
+            "expressive crowds (kerumunan yang melampiaskan ketegangan)",
+            "spectator crowds (kerumunan penonton yang pasif)",
+            "immoral crowds (kerumunan yang bertentangan dengan norma moral)"
         ],
-        kategori: ["Sesuai", "Tidak Sesuai"],
-        jawabanBenar: [0, 1, 1]
+        jawabanBenar: [1, 4]
     },
     {
-        id: 27,
-        tipe: "Kategori",
-        teks: "Di era kemajuan teknologi digital ini media sosial menjadi mudah diakses oleh berbagai kalangan terutama para remaja. Selain berdampak positif, hal tersebut juga dapat berpengaruh negatif di kalangan remaja. Banyak remaja yang terpengaruh tren negatif di media sosial sehingga memunculkan kekhawatiran masyarakat. Manakah pernyataan berikut yang termasuk bentuk antisipasi yang dapat dilakukan oleh pihak sekolah dan keluarga?",
-        pernyataan: [
-            "Memberikan edukasi nilai moral dan etika sejak usia dini.",
-            "Mendorong peran aktif orang tua dan guru mengawasi penggunaan media sosial.",
-            "Menutup akses internet secara total agar remaja tidak bisa mengakses media sosial."
+        id: 25,
+        tipe: "MCMA",
+        teks: "Dalam suatu sistem pelapisan sosial terbuka (open stratification), setiap anggota masyarakat memiliki kesempatan untuk melakukan perpindahan status, baik naik maupun turun. Faktor-faktor utama yang memfasilitasi terjadinya mobilitas sosial terbuka tersebut adalah ....",
+        opsi: [
+            "sistem pendidikan yang merata dan berkualitas",
+            "garis keturunan bangsawan yang tertutup mutlak",
+            "luasnya kesempatan kerja dan pertumbuhan ekonomi",
+            "sikap diskriminatif berdasarkan ras dan golongan",
+            "kecakapan dan prestasi individu dalam bidang keahlian"
         ],
-        kategori: ["Sesuai", "Tidak Sesuai"],
-        jawabanBenar: [0, 0, 1]
-    },
-    {
-        id: 28,
-        tipe: "Kategori",
-        teks: "Masa pandemi COVID-19 pada tahun 2020 menjadi tantangan tersendiri bagi dunia pendidikan karena adanya kebijakan yang melarang kegiatan pembelajaran atau pertemuan langsung secara fisik di suatu tempat, seperti sekolah atau kantor. Hal tersebut memunculkan penerapan kegiatan pembelajaran secara online atau daring untuk menggantikan pertemuan langsung secara fisik. Belajar daring mempunyai dua dampak yang berlawanan bagi dunia pendidikan. Dampak positifnya mengenalkan lebih cepat dunia teknologi (internet) dengan informasi yang berlimpah, siswa dapat mengakses materi pembelajaran kapan saja, guru lebih kreatif dalam merancang model pembelajaran dengan memanfaatkan fitur-fitur aplikasi online, serta dapat memotivasi melalui masa-masa sulit untuk terus mencapai tujuan pendidikan Indonesia yang lebih maju. Dampak negatifnya, materi pembelajaran tidak tersampaikan secara tuntas, siswa kadang kesulitan mengakses materi pembelajaran karena keterbatasan hp android maupun jaringan internet, serta pendidikan karakter siswa menjadi sedikit terabaikan. Karena dengan daring dipaksa transfer pengetahuan saja, tidak termasuk nilai lain seperti etika, disiplin, dan sosial. Manakah yang merupakan dampak nyata dari pembelajaran daring pada masa pandemi COVID-19 menurut ilustrasi tersebut?",
-        pernyataan: [
-            "Pembelajaran daring mempercepat literasi teknologi di kalangan siswa dan guru.",
-            "Semua siswa dapat mengakses pembelajaran daring dengan mudah tanpa kendala.",
-            "Guru dituntut lebih kreatif dalam merancang metode pembelajaran melalui aplikasi digital."
-        ],
-        kategori: ["Sesuai", "Tidak Sesuai"],
-        jawabanBenar: [0, 1, 0]
-    },
-    {
-        id: 30,
-        tipe: "Kategori",
-        teks: "Rencana pembangunan jalan tol Yogyakarta-Bawen diharapkan memudahkan akses perekonomian masyarakat. Terutama di daerah yang dilintasi tol, seperti Kabupaten Semarang. Analis Kebijakan Ahli Madya Setda Provinsi Jateng Bambang Herwanto mengatakan, dengan adanya jalan tol akan membawa dampak positif bagi pembangunan daerah. Di antaranya di Desa Kebondalem, Kecamatan Jambu, Kabupaten Semarang. \"Dengan adanya jalan tol akan mempermudah akses perekonomian karena masyarakat pasti akan mudah untuk menjangkau.\" Manakah pernyataan yang mencerminkan dampak perubahan sosial akibat pembangunan jalan tol Yogyakarta-Bawen?",
-        pernyataan: [
-            "Akses yang lebih mudah tidak memengaruhi interaksi sosial antarmasyarakat.",
-            "Jalan tol dapat menimbulkan perubahan gaya hidup masyarakat menjadi lebih konsumtif.",
-            "Perubahan struktur ekonomi dari agraris menjadi jasa dapat terjadi akibat pembangunan jalan tol."
-        ],
-        kategori: ["Sesuai", "Tidak Sesuai"],
-        jawabanBenar: [1, 0, 0]
+        jawabanBenar: [0, 2, 4]
     }
 ];
 
