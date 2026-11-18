@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Ujian - Sosiologi Simulasi TKA</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .portal-card {
+            background: #fcf8f4;
+            border-radius: 28px;
+            padding: 2.2rem 2rem;
+            box-shadow: inset 0 2px 6px rgba(90, 60, 40, 0.06), 0 8px 18px rgba(60, 40, 25, 0.08);
+            border: 1px solid #eee5db;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 1.3rem;
+        }
+        .schedule-badge {
+            background: #e7ddd2;
+            color: #3f2e1f;
+            padding: 0.5rem 1.4rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border: 1px solid #d6c6b8;
+        }
+        .status-box {
+            width: 100%;
+            padding: 1.2rem 1.5rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+        .status-locked {
+            background: #fdecea;
+            color: #922b21;
+            border: 1.5px solid #f5b7b1;
+        }
+        .status-open {
+            background: #eafaf1;
+            color: #1e8449;
+            border: 1.5px solid #a9dfbf;
+        }
+        .clock-display {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #5d4430;
+            background: #f3ede7;
+            padding: 0.6rem 1.5rem;
+            border-radius: 30px;
+            border: 1px dashed #c9b6a2;
+        }
+        .portal-actions {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 0.4rem;
+        }
+        .portal-actions .btn {
+            width: 100%;
+            max-width: 340px;
+            justify-content: center;
+            padding: 0.85rem 1.8rem;
+            font-size: 1.05rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="exam-wrapper">
+        <h1>📚 Sosiologi - Simulasi TKA</h1>
+
+        <div class="portal-card">
+            <div class="schedule-badge">
+                📅 Jadwal Aktif Ujian: <strong>19 November 2027</strong>
+            </div>
+
+            <div id="clockDisplay" class="clock-display">
+                Memuat waktu sistem...
+            </div>
+
+            <div id="statusBox" class="status-box status-locked">
+                Memeriksa jadwal pelaksanaan ujian...
+            </div>
+
+            <div class="portal-actions">
+                <button type="button" class="btn btn-primary" id="btnMasukUjian" disabled>
+                    🔒 Menunggu Jadwal Ujian
+                </button>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            Pastikan tanggal dan waktu pada perangkat Anda sudah sesuai.
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // Konfigurasi tanggal aktif: 19 November 2027
+            // Catatan: Bulan di JavaScript berbasis 0 (0 = Januari, 10 = November)
+            const TARGET_TAHUN = 2027;
+            const TARGET_BULAN = 10;
+            const TARGET_TANGGAL = 19;
+            const HALAMAN_UJIAN = 'ujian.html';
+
+            const clockDisplay = document.getElementById('clockDisplay');
+            const statusBox = document.getElementById('statusBox');
+            const btnMasukUjian = document.getElementById('btnMasukUjian');
+
+            const NAMA_HARI = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const NAMA_BULAN = [
+                'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+            ];
+
+            let sudahRedirect = false;
+
+            function formatWaktu(dateObj) {
+                const hari = NAMA_HARI[dateObj.getDay()];
+                const tanggal = dateObj.getDate();
+                const bulan = NAMA_BULAN[dateObj.getMonth()];
+                const tahun = dateObj.getFullYear();
+                const jam = String(dateObj.getHours()).padStart(2, '0');
+                const menit = String(dateObj.getMinutes()).padStart(2, '0');
+                const detik = String(dateObj.getSeconds()).padStart(2, '0');
+                return `🕒 ${hari}, ${tanggal} ${bulan} ${tahun} | ${jam}:${menit}:${detik}`;
+            }
+
+            function periksaJadwal() {
+                const sekarang = new Date();
+                clockDisplay.textContent = formatWaktu(sekarang);
+
+                const isTanggalSesuai = (
+                    sekarang.getFullYear() === TARGET_TAHUN &&
+                    sekarang.getMonth() === TARGET_BULAN &&
+                    sekarang.getDate() === TARGET_TANGGAL
+                );
+
+                if (isTanggalSesuai) {
+                    statusBox.className = 'status-box status-open';
+                    statusBox.innerHTML = '✅ <strong>Jadwal Ujian Aktif!</strong><br>Anda akan diarahkan ke halaman ujian secara otomatis...';
+                    
+                    btnMasukUjian.disabled = false;
+                    btnMasukUjian.className = 'btn btn-success';
+                    btnMasukUjian.textContent = '🚀 Masuk ke Halaman Ujian';
+
+                    if (!sudahRedirect) {
+                        sudahRedirect = true;
+                        setTimeout(() => {
+                            window.location.href = HALAMAN_UJIAN;
+                        }, 1500);
+                    }
+                } else {
+                    statusBox.className = 'status-box status-locked';
+                    statusBox.innerHTML = '⛔ <strong>Akses Ujian Ditutup</strong><br>Halaman ujian hanya dapat diakses pada tanggal <strong>19 November 2027</strong>.';
+                    
+                    btnMasukUjian.disabled = true;
+                    btnMasukUjian.className = 'btn btn-primary';
+                    btnMasukUjian.textContent = '🔒 Ujian Belum Dibuka / Telah Berakhir';
+                }
+            }
+
+            btnMasukUjian.addEventListener('click', function() {
+                const sekarang = new Date();
+                if (
+                    sekarang.getFullYear() === TARGET_TAHUN &&
+                    sekarang.getMonth() === TARGET_BULAN &&
+                    sekarang.getDate() === TARGET_TANGGAL
+                ) {
+                    window.location.href = HALAMAN_UJIAN;
+                }
+            });
+
+            // Jalankan saat halaman dimuat dan perbarui setiap 1 detik
+            periksaJadwal();
+            setInterval(periksaJadwal, 1000);
+        })();
+    </script>
+</body>
+</html>
