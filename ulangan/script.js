@@ -22,7 +22,7 @@ const SOAL_ASLI = [
     {
         id: 2,
         tipe: "Sederhana",
-        teks: "Para pendukung klub sepak bola Persija Jakarta sering kali menganggap kelompok mereka jauh lebih unggul dibandingkan suporter klub lain. Sikap mengidentifikasikan diri secara berlebihan dengan kelompok sendiri dan memandang rendah kelompok luar ini di dalam sosiologi disebut sebagai ....",
+        teks: "Para pendukung klub sepak bola tertentu sering kali menganggap kelompok mereka jauh lebih unggul dibandingkan suporter klub lain. Sikap mengidentifikasikan diri secara berlebihan dengan kelompok sendiri dan memandang rendah kelompok luar ini di dalam sosiologi disebut sebagai ....",
         opsi: [
             "etnosentrisme",
             "stereotip kelompok",
