@@ -3,7 +3,7 @@
 // ============================================================
 
 const SOAL_ASLI = [
-// ==========================================
+    // ==========================================
     // TIPE 1: SEDERHANA (10 Soal)
     // ==========================================
 {
@@ -205,7 +205,7 @@ const SOAL_ASLI = [
         tipe: "Kategori",
         teks: "Ferdinand Tönnies mengklasifikasikan bentuk kehidupan bersama dalam masyarakat berdasarkan kualitas ikatan batin dan orientasi tujuan anggotanya. Ikatan sosial tersebut terbagi menjadi kelompok yang terbentuk secara alami karena hubungan darah/batin serta kelompok yang dibentuk berdasarkan perhitungan rasional dan kontrak kerja. Pasangkanlah ilustrasi kelompok sosial berikut ke dalam kategori yang sesuai!",
         pernyataan: [
-            "Paguyuban perantau asal Minangkabau yang saling membantu karena ikatan daerah asal.",
+            "Komunitas perantau asal Minangkabau yang saling membantu karena ikatan daerah asal.",
             "Perseroan Terbatas (PT) yang mengikat karyawannya melalui surat perjanjian kontrak kerja.",
             "Ikatan keluarga besar trah keturunan yang rutin berkumpul menjaga silaturahim."
         ],
