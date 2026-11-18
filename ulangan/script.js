@@ -6,10 +6,10 @@ const SOAL_ASLI = [
 // ==========================================
     // TIPE 1: SEDERHANA (10 Soal)
     // ==========================================
-    {
+{
         id: 1,
         tipe: "Sederhana",
-        teks: "Sekelompok ibu-ibu di perumahan rutin mengadakan arisan setiap bulan untuk mempererat silaturahim. Kegiatan ini dilandasi oleh ikatan batin yang kuat dan rasa kekeluargaan yang mendalam tanpa ikatan birokrasi formal. Berdasarkan ilustrasi tersebut, bentuk kelompok sosial yang dimaksud adalah ....",
+        teks: "Sekelompok ibu-ibu di perumahan rutin mengadakan arisan setiap bulan untuk mempererat tali silaturahim antarwarga. Kegiatan ini dilandasi oleh ikatan batin yang kuat dan rasa kekeluargaan yang mendalam tanpa ikatan birokrasi formal. Berdasarkan konsep sosiologis, bentuk kelompok sosial apakah yang tergambar dalam ilustrasi tersebut?",
         opsi: [
             "in-group",
             "out-group",
@@ -22,7 +22,7 @@ const SOAL_ASLI = [
     {
         id: 2,
         tipe: "Sederhana",
-        teks: "Para pendukung klub sepak bola Persija Jakarta sering kali menganggap kelompok mereka lebih unggul dibandingkan suporter klub lain. Sikap mengidentifikasikan diri dengan kelompok sendiri dan memandang rendah kelompok luar disebut sebagai ....",
+        teks: "Para pendukung klub sepak bola Persija Jakarta sering kali menganggap kelompok mereka jauh lebih unggul dibandingkan suporter klub lain. Sikap mengidentifikasikan diri secara berlebihan dengan kelompok sendiri dan memandang rendah kelompok luar ini di dalam sosiologi disebut sebagai ....",
         opsi: [
             "etnosentrisme",
             "stereotip kelompok",
@@ -35,7 +35,7 @@ const SOAL_ASLI = [
     {
         id: 3,
         tipe: "Sederhana",
-        teks: "Sebuah perusahaan multinasional mempekerjakan karyawan dari berbagai latar belakang suku, agama, dan ras yang berbeda namun dipimpin oleh sistem kerja profesional. Kondisi masyarakat majemuk dengan struktur sosial bersilang (cross-cutting affiliations) ini ditandai oleh ....",
+        teks: "Sebuah perusahaan multinasional mempekerjakan karyawan dari berbagai latar belakang suku, agama, dan ras yang berbeda namun dipersatukan dalam sistem kerja profesional. Kondisi masyarakat majemuk dengan struktur sosial bersilang semacam ini ditandai oleh adanya ....",
         opsi: [
             "integrasi sosial yang rapuh",
             "potensi konflik horizontal yang tinggi",
@@ -48,7 +48,7 @@ const SOAL_ASLI = [
     {
         id: 4,
         tipe: "Sederhana",
-        teks: "Dalam sistem pelapisan sosial masyarakat feodal tradisional, kedudukan seseorang ditentukan secara mutlak oleh garis keturunan bangsawan sejak ia lahir. Bentuk stratifikasi sosial tertutup semacam ini mengakibatkan ....",
+        teks: "Dalam sistem pelapisan sosial masyarakat feodal tradisional, kedudukan seseorang ditentukan secara mutlak oleh garis keturunan bangsawan sejak ia lahir ke dunia. Bentuk stratifikasi sosial tertutup semacam ini berakibat pada kenyataan bahwa ....",
         opsi: [
             "mobilitas sosial vertikal sangat terbuka",
             "terjadinya persaingan bebas antarkelas",
@@ -61,7 +61,7 @@ const SOAL_ASLI = [
     {
         id: 5,
         tipe: "Sederhana",
-        teks: "Rudi berhasil merintis usaha digital hingga menjadi pengusaha sukses dan dihormati warga kampungnya yang dulu meremehkannya. Peristiwa tersebut mencerminkan terjadinya bentuk mobilitas sosial vertikal naik karena faktor ....",
+        teks: "Rudi berhasil merintis usaha digital hingga menjadi pengusaha sukses dan dihormati oleh warga kampungnya yang dulu sempat meremehkannya. Peristiwa perubahan status tersebut mencerminkan terjadinya bentuk mobilitas sosial vertikal naik karena faktor ....",
         opsi: [
             "perubahan standar kekayaan",
             "saluran mobilitas pendidikan",
@@ -74,7 +74,7 @@ const SOAL_ASLI = [
     {
         id: 6,
         tipe: "Sederhana",
-        teks: "Masyarakat nelayan di pesisir pantai umumnya memiliki pola solidaritas yang didasarkan pada kesamaan pekerjaan, tradisi leluhur, dan tingkat kesadaran kolektif yang sangat tinggi. Menurut Émile Durkheim, jenis solidaritas sosial yang mendasari masyarakat tersebut adalah ....",
+        teks: "Masyarakat nelayan di pesisir pantai umumnya memiliki pola solidaritas yang didasarkan pada kesamaan pekerjaan, tradisi leluhur, dan tingkat kesadaran kolektif yang sangat tinggi. Menurut pandangan Émile Durkheim, jenis solidaritas sosial apakah yang mendasari kehidupan masyarakat tersebut?",
         opsi: [
             "solidaritas organik",
             "solidaritas mekanis",
@@ -87,7 +87,7 @@ const SOAL_ASLI = [
     {
         id: 7,
         tipe: "Sederhana",
-        teks: "Sekelompok dokter spesialis mendirikan organisasi ikatan profesi guna menjaga kode etik dan standar pelayanan medis di rumah sakit. Berdasarkan kriteria pembentukannya, asosiasi formal tersebut tergolong sebagai ....",
+        teks: "Sekelompok dokter spesialis mendirikan organisasi ikatan profesi guna menjaga kode etik dan standar pelayanan medis di berbagai rumah sakit. Berdasarkan kriteria pembentukannya dalam sosiologi, asosiasi formal tersebut tergolong sebagai ....",
         opsi: [
             "membership group",
             "reference group",
@@ -100,7 +100,7 @@ const SOAL_ASLI = [
     {
         id: 8,
         tipe: "Sederhana",
-        teks: "Seorang remaja sering meniru gaya berpakaian, potongan rambut, dan cara bicara idola K-Pop favoritnya meskipun ia tidak pernah tergabung dalam agensi tersebut. Kelompok idola yang dijadikan acuan berperilaku bagi remaja tersebut dinamakan ....",
+        teks: "Seorang remaja sering meniru gaya berpakaian, potongan rambut, dan cara bicara idola K-Pop favoritnya meskipun ia tidak pernah tergabung dalam agensi tersebut. Kelompok idola yang dijadikan acuan berperilaku bagi remaja tersebut dinamakan sebagai ....",
         opsi: [
             "primary group",
             "reference group",
@@ -113,7 +113,7 @@ const SOAL_ASLI = [
     {
         id: 9,
         tipe: "Sederhana",
-        teks: "Struktur masyarakat multikultural di Indonesia sering kali digambarkan memiliki dua ciri sekaligus, yaitu secara horizontal terbagi oleh suku/agama dan secara vertikal terbagi oleh tingkat kekayaan atau jabatan. Konsep sosiologis untuk menggambarkan struktur sosial majemuk tersebut adalah ....",
+        teks: "Struktur masyarakat multikultural di Indonesia digambarkan memiliki dua ciri sekaligus, yaitu secara horizontal terbagi oleh suku/agama dan secara vertikal terbagi oleh tingkat kekayaan atau jabatan. Konsep sosiologis untuk menggambarkan struktur sosial majemuk tersebut adalah ....",
         opsi: [
             "interseksi dan konsolidasi",
             "diferensiasi dan stratifikasi",
@@ -126,7 +126,7 @@ const SOAL_ASLI = [
     {
         id: 10,
         tipe: "Sederhana",
-        teks: "Konflik antar-etnis yang pernah terjadi di beberapa daerah di Indonesia kerap dipicu oleh menguatnya ikatan kesukuan yang berlebihan tanpa diimbangi toleransi antarkelompok. Gejala sosial yang menunjukkan pemujaan berlebihan terhadap suku sendiri ini disebut ....",
+        teks: "Konflik antar-etnis yang pernah terjadi di beberapa daerah kerap dipicu oleh menguatnya ikatan kesukuan yang berlebihan tanpa diimbangi toleransi antarkelompok. Gejala sosial yang menunjukkan pemujaan berlebihan terhadap suku sendiri ini disebut sebagai ....",
         opsi: [
             "etnosentrisme",
             "kolusi sosial",
@@ -140,124 +140,124 @@ const SOAL_ASLI = [
     // ==========================================
     // TIPE 2: KATEGORI (10 Soal)
     // ==========================================
-    {
+{
         id: 11,
         tipe: "Kategori",
-        teks: "Perhatikan berbagai bentuk pengelompokan dalam masyarakat! Pengelompokan sosial dapat dibedakan berdasarkan erat tidaknya hubungan antaranggota serta tingkat formalitas organisasinya.",
+        teks: "Dalam kehidupan bermasyarakat, individu tergabung ke dalam berbagai bentuk kelompok sosial dengan tingkat keintiman dan formalitas interaksi yang berbeda-beda. Berdasarkan teori kelompok sosial menurut Charles Horton Cooley, interaksi tersebut terbagi ke dalam dua klasifikasi utama. Pasangkanlah contoh-contoh kelompok sosial berikut ke dalam kategori yang paling tepat!",
         pernyataan: [
-            "Keluarga inti merupakan contoh nyata dari kelompok primer.",
-            "Ikatan pegawai kantor dalam satu divisi tergolong kelompok primer.",
-            "Paguyuban warga desa mencerminkan ciri kelompok sekunder."
+            "Ikatan batin yang hangat dan intim di dalam lingkungan keluarga inti.",
+            "Hubungan kerja profesional antara direktur dan staf di perusahaan multinasional.",
+            "Kelompok sahabat karib sejak masa kecil yang saling berbagi cerita pribadi."
         ],
-        kategori: ["Sesuai", "Tidak Sesuai"],
-        jawabanBenar: [0, 1, 1]
+        kategori: ["Kelompok Primer", "Kelompok Sekunder"],
+        jawabanBenar: [0, 1, 0]
     },
     {
         id: 12,
         tipe: "Kategori",
-        teks: "Analisis struktur sosial masyarakat majemuk menunjukkan adanya dua dimensi utama, yaitu diferensiasi sosial dan stratifikasi sosial. Dimensi-dimensi ini membentuk pola hubungan yang unik di dalam kehidupan bernegara.",
+        teks: "Struktur sosial dalam masyarakat majemuk tersusun atas pengelompokan warga yang dapat dilihat secara horizontal maupun secara vertikal. Konsep sosiologis membedakan pengelompokan sejajar berdasarkan ciri kultural/fisik dengan penggolongan bertingkat berdasarkan kepemilikan sesuatu yang dihargai. Tentukanlah kategori struktur sosial yang sesuai untuk masing-masing fenomena berikut!",
         pernyataan: [
-            "Perbedaan suku bangsa dan ras di Indonesia merupakan bentuk diferensiasi sosial.",
-            "Perbedaan jabatan manajer dan staf rendahan merupakan bentuk diferensiasi sosial.",
-            "Penggolongan masyarakat berdasarkan kepemilikan modal disebut stratifikasi sosial."
+            "Keberagaman suku bangsa, bahasa daerah, dan agama di wilayah Nusantara.",
+            "Pembagian kelas masyarakat berdasarkan tingkat kekayaan dan kepemilikan modal.",
+            "Penggolongan profesi warga negara antara dokter, guru, nelayan, dan pedagang."
         ],
-        kategori: ["Sesuai", "Tidak Sesuai"],
+        kategori: ["Diferensiasi Sosial", "Stratifikasi Sosial"],
         jawabanBenar: [0, 1, 0]
     },
     {
         id: 13,
         tipe: "Kategori",
-        teks: "Mobilitas sosial dalam struktur masyarakat modern dapat terjadi melalui berbagai saluran atau lift sosial yang tersedia. Saluran-saluran tersebut memberikan kesempatan bagi individu untuk memperbaiki kedudukan sosialnya.",
+        teks: "Perpindahan posisi atau kedudukan seseorang dalam struktur sosial masyarakat dapat terjadi secara vertikal maupun horizontal sesuai dengan kondisi yang dialaminya. Dalam kajian mobilitas sosial, arah perpindahan status ini menentukan apakah seseorang mengalami peningkatan derajat, penurunan, atau sekadar perpindahan wilayah tanpa perubahan status. Klasifikasikanlah kasus-kasus mobilitas sosial di bawah ini ke dalam kategori yang sesuai!",
         pernyataan: [
-            "Lembaga pendidikan tinggi merupakan saluran mobilitas sosial vertikal naik.",
-            "Partai politik dan organisasi profesi dapat menjadi sarana mobilitas sosial.",
-            "Sistem kasta tertutup memberikan kebebasan penuh dalam saluran mobilitas."
+            "Seorang guru dipromosikan menjadi kepala sekolah setelah lulus seleksi kompetensi.",
+            "Seorang kepala cabang bank dipindahtugaskan ke kota lain dengan jabatan yang tetap sama.",
+            "Seorang pengusaha tekstil mengalami kebangkrutan sehingga harus berjualan di pasar tradisional."
         ],
-        kategori: ["Sesuai", "Tidak Sesuai"],
-        jawabanBenar: [0, 0, 1]
+        kategori: ["Mobilitas Vertikal", "Mobilitas Horizontal"],
+        jawabanBenar: [0, 1, 0]
     },
     {
         id: 14,
         tipe: "Kategori",
-        teks: "Kelompok sosial tidak resmi atau informal sering kali terbentuk secara spontan di tengah masyarakat tanpa struktur organisasi yang kaku. Karakteristik kelompok ini sangat bergantung pada kedekatan personal.",
+        teks: "Setiap kelompok sosial memiliki kriteria keanggotaan dan fungsi psikologis yang berbeda bagi perilaku individu di dalamnya. Sosiologi membedakan antara kelompok di mana seseorang tercatat secara resmi dengan kelompok luar yang justru dijadikan standar atau panutan dalam bertindak. Tentukanlah kategori kelompok sosial yang tepat untuk setiap kasus berikut ini!",
         pernyataan: [
-            "Kelompok penonton bioskop yang mengantri tiket adalah contoh kerumunan (crowd).",
-            "Geng motor liar yang melakukan balap liar tergolong kelompok sosial teratur.",
-            "Sekelompok sahabat karib sejak masa SMP merupakan contoh kelompok informal."
+            "Seorang mahasiswa tercatat secara resmi sebagai pengurus Badan Eksekutif Mahasiswa (BEM) di kampusnya.",
+            "Seorang remaja meniru gaya berpakaian dan cara bicara atlet idola dunia meski bukan bagian dari tim tersebut.",
+            "Seorang dokter terdaftar memiliki kartu anggota resmi Ikatan Dokter Indonesia (IDI)."
         ],
-        kategori: ["Sesuai", "Tidak Sesuai"],
+        kategori: ["Membership Group", "Reference Group"],
         jawabanBenar: [0, 1, 0]
     },
     {
         id: 15,
         tipe: "Kategori",
-        teks: "Konsep solidaritas sosial menurut sosiolog klasik membedakan antara masyarakat tradisional dan masyarakat modern. Perbedaan tersebut didasarkan pada tingkat pembagian kerja dan kesadaran kolektif warganya.",
+        teks: "Perubahan pola pembagian kerja dari masyarakat tradisional menuju masyarakat industri modern turut mengubah bentuk ikatan solidaritas antarwarganya. Menurut Émile Durkheim, ikatan tersebut dapat bertumpu pada kesamaan kesadaran kolektif atau pada saling ketergantungan fungsional antarspesialisasi pekerjaan. Kelompokkanlah karakteristik masyarakat berikut ke dalam jenis solidaritas sosial yang tepat!",
         pernyataan: [
-            "Solidaritas mekanis dicirikan oleh pembagian kerja yang sangat kompleks dan spesifik.",
-            "Solidaritas organik didasarkan pada saling ketergantungan fungsional antarbidang pekerjaan.",
-            "Masyarakat modern perkotaan umumnya didominasi oleh bentuk solidaritas organik."
+            "Masyarakat desa agraris yang memiliki kesamaan pekerjaan, adat istiadat, dan kesadaran kolektif tinggi.",
+            "Masyarakat perkotaan industri di mana tiap individu bergantung pada keahlian profesi orang lain.",
+            "Sistem hukum yang bersifat menindak (represif) untuk memulihkan pelanggaran terhadap nilai bersama."
         ],
-        kategori: ["Sesuai", "Tidak Sesuai"],
-        jawabanBenar: [1, 0, 0]
+        kategori: ["Solidaritas Mekanis", "Solidaritas Organik"],
+        jawabanBenar: [0, 1, 0]
     },
     {
         id: 16,
         tipe: "Kategori",
-        teks: "Dalam kehidupan bermasyarakat, individu sering kali dihadapkan pada dinamika keanggotaan kelompok sosial. Keanggotaan ini dapat bersifat sukarela maupun melekat sejak lahir.",
+        teks: "Ferdinand Tönnies mengklasifikasikan bentuk kehidupan bersama dalam masyarakat berdasarkan kualitas ikatan batin dan orientasi tujuan anggotanya. Ikatan sosial tersebut terbagi menjadi kelompok yang terbentuk secara alami karena hubungan darah/batin serta kelompok yang dibentuk berdasarkan perhitungan rasional dan kontrak kerja. Pasangkanlah ilustrasi kelompok sosial berikut ke dalam kategori yang sesuai!",
         pernyataan: [
-            "Membership group adalah kelompok di mana seseorang secara resmi tercatat sebagai anggota.",
-            "Reference group selalu sama persis dengan membership group seseorang.",
-            "Seseorang dapat menjadikan kelompok lain yang bukan anggotanya sebagai acuan berperilaku."
+            "Paguyuban perantau asal Minangkabau yang saling membantu karena ikatan daerah asal.",
+            "Perseroan Terbatas (PT) yang mengikat karyawannya melalui surat perjanjian kontrak kerja.",
+            "Ikatan keluarga besar trah keturunan yang rutin berkumpul menjaga silaturahim."
         ],
-        kategori: ["Sesuai", "Tidak Sesuai"],
+        kategori: ["Gemeinschaft (Paguyuban)", "Gesellschaft (Patembayan)"],
         jawabanBenar: [0, 1, 0]
     },
     {
         id: 17,
         tipe: "Kategori",
-        teks: "Struktur masyarakat majemuk dapat mengalami konsolidasi atau persilangan keanggotaan apabila tidak dikelola dengan bijak. Hal ini berdampak langsung pada stabilitas integrasi sosial nasional.",
+        teks: "Dalam masyarakat yang majemuk, konfigurasi hubungan antarkelompok dapat mengarah pada penguatan identitas eksklusif atau justru pembauran lintas batas sosial. Dinamika struktur sosial ini dikenal sebagai proses penguatan identitas secara tumpang tindih atau persilangan keanggotaan dalam berbagai kelompok. Tentukanlah kategori konfigurasi struktur sosial yang sesuai untuk fenomena berikut!",
         pernyataan: [
-            "Konsolidasi sosial terjadi jika parameter suku, agama, dan ras saling memperkuat dalam satu garis.",
-            "Cross-cutting affiliation memperkecil potensi terjadinya disintegrasi bangsa.",
-            "Konsolidasi kelompok memperkuat solidaritas antarberbagai golongan yang berbeda."
+            "Warga dari suku X yang beragama Y membentuk organisasi eksklusif yang hanya menerima golongan mereka.",
+            "Seorang pegawai bersuku Jawa menjadi rekan kerja satu tim dengan warga bersuku Batak dan Bugis di kantor.",
+            "Terjadinya persilangan keanggotaan dalam organisasi hobi yang mempertemukan berbagai latar belakang agama."
         ],
-        kategori: ["Sesuai", "Tidak Sesuai"],
-        jawabanBenar: [0, 0, 1]
+        kategori: ["Konsolidasi Sosial", "Interseksi Sosial"],
+        jawabanBenar: [0, 1, 1]
     },
     {
         id: 18,
         tipe: "Kategori",
-        teks: "Bentuk-bentuk mobilitas sosial sangat beragam bergantung pada arah perpindahan status dan pelakunya. Analisis mobilitas membantu memahami dinamika kelas dalam struktur masyarakat.",
+        teks: "Sifat sistem pelapisan sosial dalam suatu masyarakat sangat menentukan peluang anggotanya untuk berpindah dari satu lapisan ke lapisan lainnya. Sistem stratifikasi ini dibedakan berdasarkan keluwesan batas antarkelas, yakni ada yang memberi ruang kebebasan untuk berprestasi dan ada pula yang mengunci status sejak lahir. Klasifikasikanlah kasus pelapisan sosial berikut ke dalam sifat stratifikasi yang tepat!",
         pernyataan: [
-            "Seorang kepala dinas yang diturunkan jabatannya karena melanggar aturan mengalami mobilitas vertikal turun.",
-            "Anak seorang petani yang berhasil menjadi dokter spesialis mengalami mobilitas intergenerasi.",
-            "Pindah domisili dari kota A ke kota B dengan jabatan setara dinamakan mobilitas vertikal naik."
+            "Sistem kasta tradisional yang melarang perkawinan dan perpindahan status antargolongan keturunan.",
+            "Masyarakat demokratis modern yang memberi kesempatan kepada siapa saja menjadi pemimpin lewat pendidikan.",
+            "Kedudukan bangsawan kerajaan feodal yang diwariskan secara mutlak melalui garis darah."
         ],
-        kategori: ["Sesuai", "Tidak Sesuai"],
-        jawabanBenar: [0, 0, 1]
+        kategori: ["Stratifikasi Tertutup", "Stratifikasi Terbuka"],
+        jawabanBenar: [0, 1, 0]
     },
     {
         id: 19,
         tipe: "Kategori",
-        teks: "Gemeinschaft dan Gesellschaft adalah konsep sosiologis yang dikemukakan oleh Ferdinand Tönnies untuk mengklasifikasikan tipe ikatan kelompok sosial. Klasifikasi ini melihat perbedaan nilai orientasi di dalamnya.",
+        teks: "Di ruang publik perkotaan, sering kali terbentuk perkumpulan manusia yang bersifat sementara tanpa adanya pengorganisasian yang tetap dan terstruktur. Berdasarkan teori kelompok sosial tidak teratur, perkumpulan ini dibedakan menjadi kelompok yang berkumpul secara fisik di satu lokasi dan kelompok yang terhubung melalui media massa tanpa tatap muka. Pasangkanlah fenomena berikut ke dalam kategori kelompok tidak teratur yang sesuai!",
         pernyataan: [
-            "Gemeinschaft didasarkan pada ikatan batin yang murni, bersifat alamiah, dan kekal.",
-            "Gesellschaft bercirikan hubungan kontrak yang bersifat pamrih dan berorientasi ekonomi.",
-            "Hubungan antar-pegawai di kantor perusahaan modern lebih mencerminkan Gemeinschaft."
+            "Ratusan warga berkumpul di pinggir jalan raya untuk menyaksikan proses evakuasi kecelakaan lalu lintas.",
+            "Jutaan pemirsa di seluruh Indonesia menyaksikan siaran langsung pertandingan final tim nasional di televisi.",
+            "Para penonton yang mengantre secara fisik di depan loket tiket bioskop pada akhir pekan."
         ],
-        kategori: ["Sesuai", "Tidak Sesuai"],
-        jawabanBenar: [0, 0, 1]
+        kategori: ["Kerumunan (Crowd)", "Publik"],
+        jawabanBenar: [0, 1, 0]
     },
     {
         id: 20,
         tipe: "Kategori",
-        teks: "Kemajemukan sosial di Indonesia menghasilkan bentuk diferensiasi masyarakat berdasarkan berbagai ciri fisik maupun kultural. Pemahaman mengenai ciri-ciri ini penting untuk merawat kerukunan hidup.",
+        teks: "Perasaan solidaritas internal di dalam kelompok sering kali memunculkan batas psikologis yang tegas antara anggota kelompok sendiri dengan pihak luar. Dalam sosiologi, sikap identifikasi diri ini membedakan kelompok tempat seseorang merasa memiliki ikatan emosional dengan kelompok lain yang dianggap sebagai saingan atau lawan. Tentukanlah kategori kelompok yang tergambar pada setiap pernyataan berikut!",
         pernyataan: [
-            "Diferensiasi ras didasarkan pada ciri-ciri fisik biologis seperti warna kulit dan bentuk rambut.",
-            "Diferensiasi agama menempatkan suatu golongan agama lebih unggul daripada agama lain.",
-            "Diferensiasi klan didasarkan pada garis keturunan yang sama baik unilateral maupun bilateral."
+            "Rasa bangga dan kekompakan pelajar SMA Negeri 2 saat mendukung tim basket sekolahnya bertanding.",
+            "Anggapan bahwa tim suporter sekolah lawan merupakan rival yang harus dikalahkan dalam kompetisi.",
+            "Sikap saling melindungi antaranggota tim relawan bencana alam yang bertugas di satu posko yang sama."
         ],
-        kategori: ["Sesuai", "Tidak Sesuai"],
+        kategori: ["In-Group", "Out-Group"],
         jawabanBenar: [0, 1, 0]
     },
 
@@ -267,7 +267,7 @@ const SOAL_ASLI = [
     {
         id: 21,
         tipe: "MCMA",
-        teks: "Sebuah komunitas pedesaan mengadakan kerja bakti memperbaiki saluran irigasi sawah secara rutin setiap menjelang musim tanam. Warga terlibat aktif didasari rasa tanggung jawab bersama tanpa mengharapkan upah finansial. Berdasarkan ilustrasi tersebut, karakteristik kelompok sosial gemeinschaft (paguyuban) yang tampak adalah ....",
+        teks: "Sebuah komunitas pedesaan mengadakan kerja bakti memperbaiki saluran irigasi sawah secara rutin setiap menjelang musim tanam tiba. Warga terlibat aktif didasari rasa tanggung jawab bersama tanpa mengharapkan upah finansial sedikit pun. Berdasarkan ilustrasi tersebut, karakteristik kelompok sosial gemeinschaft (paguyuban) yang tampak meliputi ....",
         opsi: [
             "hubungan antaranggota bersifat intim dan personal",
             "orientasi hubungan bersifat untung-rugi secara ekonomi",
@@ -280,7 +280,7 @@ const SOAL_ASLI = [
     {
         id: 22,
         tipe: "MCMA",
-        teks: "Pak Joko memulai karirnya dari staf administrasi biasa di sebuah perusahaan swasta berkat ketekunannya. Setelah sepuluh tahun menunjukkan kinerja luar biasa, ia dipromosikan menjadi manajer operasional dan kini disegani rekan kerjanya. Berdasarkan ilustrasi tersebut, bentuk dan saluran mobilitas sosial yang dialami Pak Joko meliputi ....",
+        teks: "Pak Joko memulai karirnya dari staf administrasi biasa di sebuah perusahaan swasta berkat ketekunannya. Setelah sepuluh tahun menunjukkan kinerja luar biasa, ia dipromosikan menjadi manajer operasional dan kini disegani rekan kerjanya. Berdasarkan ilustrasi tersebut, bentuk dan saluran mobilitas sosial yang dialami Pak Joko mencakup ....",
         opsi: [
             "mobilitas sosial horizontal",
             "mobilitas sosial vertikal naik (social climbing)",
@@ -306,7 +306,7 @@ const SOAL_ASLI = [
     {
         id: 24,
         tipe: "MCMA",
-        teks: "Sekelompok suporter sepak bola fanatik melakukan konvoi di jalan raya sambil meneriakkan yel-yel provokatif kepada kelompok suporter lain yang kebetulan berpapasan, sehingga memicu kericuhan di jalan. Berdasarkan bentuk interaksi kerumunan (crowd), perilaku kelompok tersebut dikategorikan sebagai ....",
+        teks: "Sekelompok suporter sepak bola fanatik melakukan konvoi di jalan raya sambil meneriakkan yel-yel provokatif kepada kelompok suporter lain yang berpapasan, sehingga memicu kericuhan fisik di jalan. Berdasarkan bentuk interaksi kerumunan (crowd) dalam sosiologi, perilaku kelompok tersebut dikategorikan sebagai ....",
         opsi: [
             "inconvenient crowd (kerumunan yang kurang menyenangkan)",
             "acting lawless crowds (kerumunan yang melakukan tindakan melanggar hukum)",
@@ -319,7 +319,7 @@ const SOAL_ASLI = [
     {
         id: 25,
         tipe: "MCMA",
-        teks: "Dalam suatu sistem pelapisan sosial terbuka (open stratification), setiap anggota masyarakat memiliki kesempatan untuk melakukan perpindahan status, baik naik maupun turun. Faktor-faktor utama yang memfasilitasi terjadinya mobilitas sosial terbuka tersebut adalah ....",
+        teks: "Dalam suatu sistem pelapisan sosial terbuka (open stratification), setiap anggota masyarakat memiliki kesempatan untuk melakukan perpindahan status, baik naik maupun turun. Berdasarkan teori mobilitas sosial, faktor-faktor utama yang memfasilitasi terjadinya mobilitas tersebut adalah ....",
         opsi: [
             "sistem pendidikan yang merata dan berkualitas",
             "garis keturunan bangsawan yang tertutup mutlak",
@@ -330,7 +330,6 @@ const SOAL_ASLI = [
         jawabanBenar: [0, 2, 4]
     }
 ];
-
 // ============================================================
 // QR CODE GENERATOR
 // ============================================================
